@@ -4,7 +4,7 @@
   "description": "",
   "main": "test.js",
   "scripts": {
-    "test": "jest",
+    "test": "jest --watch",
     "test:staged": "jest",
     "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,md}\""
   },
