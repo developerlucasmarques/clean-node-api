@@ -1,12 +1,13 @@
-export default {
+module.exports = {
   roots: ['<rootDir>/src'],
   clearMocks: true,
-  collectCoverage: true,
   collectCoverageFrom: ['<rootDir>/src/**/*.ts'],
-  coverageDirectory: 'coverage',
-  coverageProvider: 'v8',
   testEnvironment: 'node',
   transform: {
     '.+\\.ts$': 'ts-jest'
-  }
+  },
+  coveragePathIgnorePatterns: [
+    'presentation/protocols/index.ts',
+    'controllers/signup/signup-protocols.ts'
+  ]
 }
