@@ -4,8 +4,12 @@
   "description": "",
   "main": "test.js",
   "scripts": {
-    "test": "jest --watch --coverage=false",
-    "test:staged": "jest",
+    "test": "jest --passWithNoTests --silent --noStackTrace --runInBand",
+    "test:verbose": "jest --passWithNoTests --runInBand",
+    "test:unit": "npm test -- --watch -c jest-unit-config.js",
+    "test:integration": "npm test -- --watch -c jest-integration-config.js",
+    "test:staged": "npm test -- --findRelatedTests",
+    "test:ci": "npm test -- --coverage",
     "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,md}\""
   },
   "keywords": [],
