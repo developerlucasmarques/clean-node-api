@@ -3,7 +3,10 @@ import { MongoClient, Collection, InsertOneResult } from 'mongodb'
 export const MongoHelper = {
   client: null as unknown as MongoClient,
 
-  async connect (url: string): Promise<void> {
+  async connect (url: string | undefined): Promise<void> {
+    if (!url) {
+      url = 'mongodb://localhost:27017'
+    }
     this.client = await MongoClient.connect(url)
   },
 
