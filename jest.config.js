@@ -1,7 +1,10 @@
 module.exports = {
   roots: ['<rootDir>/src'],
   clearMocks: true,
-  collectCoverageFrom: ['<rootDir>/src/**/*.ts'],
+  collectCoverageFrom: [
+    '<rootDir>/src/**/*.ts',
+    '!<rootDir>/src/main/**'
+  ],
   testEnvironment: 'node',
   preset: '@shelf/jest-mongodb',
   transform: {
