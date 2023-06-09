@@ -5,9 +5,10 @@ export const MongoHelper = {
 
   async connect (url: string | undefined): Promise<void> {
     if (!url) {
-      url = 'mongodb://localhost:27017'
+      url = 'mongodb://127.0.0.1:27017/clean-node-api'
     }
     this.client = await MongoClient.connect(url)
+    console.log(`MongoDB running at ${url}`)
   },
 
   async disconnect (): Promise<void> {
