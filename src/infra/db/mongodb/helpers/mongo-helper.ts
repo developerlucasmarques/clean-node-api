@@ -20,9 +20,9 @@ export const MongoHelper = {
   },
 
   map (result: InsertOneResult<Document>, data: any): any {
-    return {
-      id: result.insertedId.toHexString(),
-      ...data
+    if (data._id) {
+      delete data._id
     }
+    return Object.assign({}, data, { id: result.insertedId.toHexString() })
   }
 }
