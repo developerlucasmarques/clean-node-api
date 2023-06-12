@@ -2,13 +2,16 @@ import { MongoClient, Collection, InsertOneResult } from 'mongodb'
 
 export const MongoHelper = {
   client: null as unknown as MongoClient | null,
+  uri: null as unknown as string,
 
-  async connect (url: string | undefined): Promise<void> {
-    if (!url) {
-      url = 'mongodb://127.0.0.1:27017/clean-node-api'
+  async connect (uri: string | undefined): Promise<void> {
+    if (!uri) {
+      this.uri = 'mongodb://127.0.0.1:27017/clean-node-api'
+    } else {
+      this.uri = uri
     }
-    this.client = await MongoClient.connect(url)
-    console.log(`MongoDB running at ${url}`)
+    this.client = await MongoClient.connect(this.uri)
+    console.log(`MongoDB running at ${this.uri}`)
   },
 
   async disconnect (): Promise<void> {
@@ -19,8 +22,8 @@ export const MongoHelper = {
   },
 
   async getCollection (name: string): Promise<Collection> {
-    if (!this.client) {
-      this.client = await MongoClient.connect(process.env.MONGO_URL ?? 'mongodb://127.0.0.1:27017/clean-node-api')
+    if (!this.client?.db) {
+      this.client = await MongoClient.connect(this.uri)
     }
     return this.client.db().collection(name)
   },
