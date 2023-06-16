@@ -27,4 +27,9 @@ describe('Name Value Object', () => {
     const sut = Name.create('invalid_name')
     expect(sut.value).toEqual(new InvalidNameError('invalid_name'))
   })
+
+  test('Should return an Name if name is valid', () => {
+    const sut = Name.create('valid name')
+    expect(sut.value).toEqual({ name: 'valid name' })
+  })
 })
