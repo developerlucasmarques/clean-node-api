@@ -14,7 +14,7 @@ export class Name {
   }
 
   static validade (name: string): boolean {
-    if (name.length < 3) {
+    if (name.length < 3 || name.length > 50) {
       return false
     }
     return true
