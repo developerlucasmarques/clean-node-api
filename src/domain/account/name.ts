@@ -18,8 +18,8 @@ export class Name {
     if (!name || name.length < 3 || name.length > 50) {
       return false
     }
-    const containNumbersRegex = /[0-9]/g
-    if (containNumbersRegex.test(name)) {
+    const regex = /^.*[!@#$%^&*(),.?":{}|<>0-9_].*$/
+    if (regex.test(name)) {
       return false
     }
     return true
