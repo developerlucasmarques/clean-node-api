@@ -1,6 +1,8 @@
+import { AuthenticationError } from '../../../domain/errors/authentication-error'
 import { Authentication, LoginModel } from '../../../domain/usecases/authentication'
+import { Either, left, right } from '../../../shared/either'
 import { InvalidParamError, MissingParamError } from '../../errors'
-import { badRequest, serverError } from '../../helpers/http-helper'
+import { badRequest, serverError, unauthorized } from '../../helpers/http-helper'
 import { EmailValidator, HttpRequest } from '../signup/signup-protocols'
 import { LoginController } from './login'
 
@@ -15,8 +17,8 @@ const makeEmailValidatorStub = (): EmailValidator => {
 
 const makeAuthenticationStub = (): Authentication => {
   class AuthenticationStub implements Authentication {
-    async auth (loginData: LoginModel): Promise<string> {
-      return await Promise.resolve('any_token')
+    async auth (loginData: LoginModel): Promise<Either<AuthenticationError, string>> {
+      return await Promise.resolve(right('any_token'))
     }
   }
   return new AuthenticationStub()
@@ -100,5 +102,16 @@ describe('LoginController', () => {
       email: 'any_email@mail.com',
       password: 'any_password'
     })
+  })
+
+  test('Should return 401 if invalid credentials are provided', async () => {
+    const { sut, authenticationStub } = makeSut()
+    jest.spyOn(authenticationStub, 'auth').mockImplementationOnce(
+      async (loginData: LoginModel): Promise<Either<AuthenticationError, string>> => {
+        return await Promise.resolve(left(new AuthenticationError()))
+      }
+    )
+    const httpResponse = await sut.handle(makeFakeRequest())
+    expect(httpResponse).toEqual(unauthorized(new AuthenticationError()))
   })
 })
