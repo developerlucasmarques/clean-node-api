@@ -7,4 +7,10 @@ describe('Name Value Object', () => {
     const sut = Name.create('ab')
     expect(sut).toEqual(left(new InvalidNameError('ab')))
   })
+
+  test('Should return InvalidNameError if length of name is greater than 50 caracters', () => {
+    const name = 'any_name_any_name_any_name_any_name_any_name_any_na'
+    const sut = Name.create(name)
+    expect(sut).toEqual(left(new InvalidNameError(name)))
+  })
 })
