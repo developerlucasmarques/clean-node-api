@@ -11,6 +11,7 @@ export class Name {
       return left(new InvalidNameError(name))
     }
     name = name.trim()
+    name = name.replace(/\s+/g, ' ')
     return right(new Name(name))
   }
 
