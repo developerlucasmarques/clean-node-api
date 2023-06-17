@@ -1,4 +1,5 @@
 import { left } from '../../shared/either'
+import { InvalidEmailError } from '../errors/invalid-email-error'
 import { InvalidNameError } from '../errors/invalid-name-error'
 import { AddAccountModel } from '../usecases/add-account'
 import { Account } from './account'
@@ -30,5 +31,13 @@ describe('Account', () => {
     const createEmailSpy = jest.spyOn(Email, 'create')
     Account.create(makeFakeAccountData())
     expect(createEmailSpy).toHaveBeenCalledWith('any_email@mail.com')
+  })
+
+  test('Should return InvalidEmailError if Email return InvalidEmailError', () => {
+    jest.spyOn(Email, 'create').mockReturnValueOnce(
+      left(new InvalidEmailError('invalid_email@mail.com'))
+    )
+    const sut = Account.create(makeFakeAccountData())
+    expect(sut.value).toEqual(new InvalidEmailError('invalid_email@mail.com'))
   })
 })
