@@ -13,9 +13,12 @@ export class Account {
 
   static create (accountData: AddAccountModel): Either<InvalidNameError, Account> {
     const nameOrError = Name.create(accountData.name)
-    Email.create(accountData.email)
+    const emailOrError = Email.create(accountData.email)
     if (nameOrError.isLeft()) {
       return left(nameOrError.value)
+    }
+    if (emailOrError.isLeft()) {
+      return left(emailOrError.value)
     }
     const name = nameOrError.value
     return right(new Account(name))
