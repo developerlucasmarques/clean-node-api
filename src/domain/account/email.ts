@@ -8,14 +8,16 @@ export class Email {
     if (!this.validate(email)) {
       return left(new InvalidEmailError(email))
     }
+    email = email.trim()
     return right(new Email(email))
   }
 
   private static validate (email: string): boolean {
-    const regexTester = /^[-!#$%&'*+/0-9=?A-Z^_a-z`{|}~](\.?[-!#$%&'*+/0-9=?A-Z^_a-z`{|}~])*@[a-zA-Z0-9](-*\.?[a-zA-Z0-9])*\.[a-zA-Z](-?[a-zA-Z0-9])+$/
     if (!email) {
       return false
     }
+    email = email.trim()
+    const regexTester = /^[-!#$%&'*+/0-9=?A-Z^_a-z`{|}~](\.?[-!#$%&'*+/0-9=?A-Z^_a-z`{|}~])*@[a-zA-Z0-9](-*\.?[a-zA-Z0-9])*\.[a-zA-Z](-?[a-zA-Z0-9])+$/
     if (!regexTester.test(email)) {
       return false
     }
