@@ -15,7 +15,7 @@ export class Password {
   }
 
   private static validate (password: string): boolean {
-    if (!password || password.length < 8) {
+    if (!password || password.length < 8 || password.length > 128) {
       return false
     }
     return true
