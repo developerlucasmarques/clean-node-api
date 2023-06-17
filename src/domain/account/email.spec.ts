@@ -18,4 +18,9 @@ describe('Email Value Object', () => {
     const sut = Email.create(email)
     expect(sut.value).toEqual(new InvalidEmailError(email))
   })
+
+  test('Should return InvalidEmailError if email empty local part', () => {
+    const sut = Email.create('@mail.com')
+    expect(sut.value).toEqual(new InvalidEmailError('@mail.com'))
+  })
 })
