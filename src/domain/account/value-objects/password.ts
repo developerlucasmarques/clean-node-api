@@ -18,6 +18,10 @@ export class Password {
     if (!password || password.length < 8 || password.length > 128) {
       return false
     }
+    const regexTester = /^(?=.*[a-zA-Z])(?=.*\d).+$/
+    if (!regexTester.test(password)) {
+      return false
+    }
     return true
   }
 }
