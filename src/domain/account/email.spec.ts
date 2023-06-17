@@ -38,4 +38,11 @@ describe('Email Value Object', () => {
     const sut = Email.create('anyemail.@mail.com')
     expect(sut.value).toEqual(new InvalidEmailError('anyemail.@mail.com'))
   })
+
+  test('Should return InvalidEmailError if email more than 63 characters on domain part', () => {
+    const domain = 'c'.repeat(64)
+    const email = 'anyemial@' + domain + '.com'
+    const sut = Email.create(email)
+    expect(sut.value).toEqual(new InvalidEmailError(email))
+  })
 })
