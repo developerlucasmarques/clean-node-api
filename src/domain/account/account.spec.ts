@@ -1,6 +1,7 @@
 import { left } from '../../shared/either'
 import { InvalidEmailError } from '../errors/invalid-email-error'
 import { InvalidNameError } from '../errors/invalid-name-error'
+import { InvalidPasswordError } from '../errors/invalid-password-error'
 import { AddAccountModel } from '../usecases/add-account'
 import { Account } from './account'
 import { Email } from './value-objects/email'
@@ -42,9 +43,17 @@ describe('Account', () => {
     expect(sut.value).toEqual(new InvalidEmailError('invalid_email@mail.com'))
   })
 
-  test('Should vall Password with correct value', () => {
+  test('Should call Password with correct value', () => {
     const createPasswordSpy = jest.spyOn(Password, 'create')
     Account.create(makeFakeAccountData())
     expect(createPasswordSpy).toHaveBeenCalledWith('password1234')
+  })
+
+  test('Should return InvalidPasswordError if Password return InvalidPasswordError', () => {
+    jest.spyOn(Password, 'create').mockReturnValueOnce(
+      left(new InvalidPasswordError('invalid_passowrd_1234'))
+    )
+    const sut = Account.create(makeFakeAccountData())
+    expect(sut.value).toEqual(new InvalidPasswordError('invalid_passowrd_1234'))
   })
 })
