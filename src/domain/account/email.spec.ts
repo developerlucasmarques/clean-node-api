@@ -33,4 +33,9 @@ describe('Email Value Object', () => {
     const sut = Email.create('.anyemail@mail.com')
     expect(sut.value).toEqual(new InvalidEmailError('.anyemail@mail.com'))
   })
+
+  test('Should return InvalidEmailError if sending a dot as the last character of the email in the local part', () => {
+    const sut = Email.create('anyemail.@mail.com')
+    expect(sut.value).toEqual(new InvalidEmailError('anyemail.@mail.com'))
+  })
 })
