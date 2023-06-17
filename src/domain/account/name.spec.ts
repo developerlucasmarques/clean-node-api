@@ -28,6 +28,11 @@ describe('Name Value Object', () => {
     expect(sut.value).toEqual(new InvalidNameError('invalid_name'))
   })
 
+  test('Should remove spaces between words if have any', () => {
+    const sut = Name.create('any  name    any  name')
+    expect(sut.value).toEqual({ name: 'any name any name' })
+  })
+
   test('Should return an Name if name is valid', () => {
     const sut = Name.create('valid name')
     expect(sut.value).toEqual({ name: 'valid name' })
