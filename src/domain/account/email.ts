@@ -13,7 +13,14 @@ export class Email {
 
   private static validate (email: string): boolean {
     const regexTester = /^[-!#$%&'*+/0-9=?A-Z^_a-z`{|}~](\.?[-!#$%&'*+/0-9=?A-Z^_a-z`{|}~])*@[a-zA-Z0-9](-*\.?[a-zA-Z0-9])*\.[a-zA-Z](-?[a-zA-Z0-9])+$/
+    if (!email) {
+      return false
+    }
     if (!regexTester.test(email)) {
+      return false
+    }
+    const [account, address] = email.split('@')
+    if (account.length > 64) {
       return false
     }
     return true
