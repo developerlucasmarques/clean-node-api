@@ -27,4 +27,9 @@ describe('Password Value Object', () => {
     const sut = Password.create('abcdefgh')
     expect(sut.value).toEqual(new InvalidPasswordError('abcdefgh'))
   })
+
+  test('Should return Password if passowrd is valid', () => {
+    const sut = Password.create('abcd1234')
+    expect(sut.value).toEqual({ password: 'abcd1234' })
+  })
 })
