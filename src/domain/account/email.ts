@@ -23,6 +23,10 @@ export class Email {
     if (account.length > 64) {
       return false
     }
+    const domainParts = address.split('.')
+    if (domainParts[0].length > 63) {
+      return false
+    }
     return true
   }
 }
