@@ -1,5 +1,7 @@
 import { Either, left, right } from '../../shared/either'
 import { InvalidNameError } from '../errors/invalid-name-error'
+import { AddAccountModel } from '../usecases/add-account'
+import { Email } from './value-objects/email'
 import { Name } from './value-objects/name'
 
 export class Account {
@@ -9,8 +11,9 @@ export class Account {
     Object.freeze(this)
   }
 
-  static create (nameData: string): Either<InvalidNameError, Account> {
-    const nameOrError = Name.create(nameData)
+  static create (accountData: AddAccountModel): Either<InvalidNameError, Account> {
+    const nameOrError = Name.create(accountData.name)
+    Email.create(accountData.email)
     if (nameOrError.isLeft()) {
       return left(nameOrError.value)
     }
