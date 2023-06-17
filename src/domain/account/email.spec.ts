@@ -12,7 +12,7 @@ describe('Email Value Object', () => {
     expect(sut.value).toEqual(new InvalidEmailError('any_emailmail.com'))
   })
 
-  test('Should return InvalidEmailError if email more than 64 chars on account part', () => {
+  test('Should return InvalidEmailError if email more than 64 characters on account part', () => {
     const accountPart = 'a'.repeat(65)
     const email = accountPart + '@mail.com'
     const sut = Email.create(email)
@@ -22,5 +22,10 @@ describe('Email Value Object', () => {
   test('Should return InvalidEmailError if email empty local part', () => {
     const sut = Email.create('@mail.com')
     expect(sut.value).toEqual(new InvalidEmailError('@mail.com'))
+  })
+
+  test('Should return InvalidEmailError if email invalid character local part', () => {
+    const sut = Email.create('any email@mail.com')
+    expect(sut.value).toEqual(new InvalidEmailError('any email@mail.com'))
   })
 })
