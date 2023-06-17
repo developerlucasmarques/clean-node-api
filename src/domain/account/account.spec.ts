@@ -5,6 +5,7 @@ import { AddAccountModel } from '../usecases/add-account'
 import { Account } from './account'
 import { Email } from './value-objects/email'
 import { Name } from './value-objects/name'
+import { Password } from './value-objects/password'
 
 const makeFakeAccountData = (): AddAccountModel => ({
   name: 'any name',
@@ -39,5 +40,11 @@ describe('Account', () => {
     )
     const sut = Account.create(makeFakeAccountData())
     expect(sut.value).toEqual(new InvalidEmailError('invalid_email@mail.com'))
+  })
+
+  test('Should vall Password with correct value', () => {
+    const createPasswordSpy = jest.spyOn(Password, 'create')
+    Account.create(makeFakeAccountData())
+    expect(createPasswordSpy).toHaveBeenCalledWith('password1234')
   })
 })
