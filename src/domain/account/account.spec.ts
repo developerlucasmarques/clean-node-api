@@ -56,4 +56,13 @@ describe('Account', () => {
     const sut = Account.create(makeFakeAccountData())
     expect(sut.value).toEqual(new InvalidPasswordError('invalid_passowrd_1234'))
   })
+
+  test('Should return Account if values valid', () => {
+    const sut = Account.create(makeFakeAccountData())
+    expect(sut.value).toEqual({
+      name: Name.create('any name').value,
+      email: Email.create('any_email@mail.com').value,
+      password: Password.create('password1234').value
+    })
+  })
 })
