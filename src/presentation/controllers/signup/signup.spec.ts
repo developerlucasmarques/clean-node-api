@@ -1,4 +1,5 @@
-import { right } from '../../../shared/either'
+import { InvalidNameError } from '../../../domain/entities/account/errors/invalid-name-error'
+import { left, right } from '../../../shared/either'
 import { InvalidParamError, MissingParamError, ServerError } from '../../errors'
 import { badRequest, ok, serverError } from '../../helpers/http-helper'
 import { SignUpController } from './signup'
@@ -119,6 +120,15 @@ describe('SignUp Controller', () => {
       email: 'any_email',
       password: 'password1234'
     })
+  })
+
+  test('Should return InvalidNameError if AddAccount return InvalidNameError', async () => {
+    const { sut, addAccountStub } = makeSut()
+    jest.spyOn(addAccountStub, 'add').mockReturnValueOnce(
+      Promise.resolve(left(new InvalidNameError('invalid name')))
+    )
+    const httpResponse = await sut.handle(makeFakeRequest())
+    expect(httpResponse).toEqual(badRequest(new InvalidNameError('invalid name')))
   })
 
   test('Should return 500 if AddAccount throws', async () => {
