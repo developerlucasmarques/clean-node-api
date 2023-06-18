@@ -1,5 +1,6 @@
 import { InvalidEmailError } from '../../../domain/entities/account/errors/invalid-email-error'
 import { InvalidNameError } from '../../../domain/entities/account/errors/invalid-name-error'
+import { InvalidPasswordError } from '../../../domain/entities/account/errors/invalid-password-error'
 import { left, right } from '../../../shared/either'
 import { InvalidParamError, MissingParamError, ServerError } from '../../errors'
 import { badRequest, ok, serverError } from '../../helpers/http-helper'
@@ -139,6 +140,15 @@ describe('SignUp Controller', () => {
     )
     const httpResponse = await sut.handle(makeFakeRequest())
     expect(httpResponse).toEqual(badRequest(new InvalidEmailError('invalid_email@mail.com')))
+  })
+
+  test('Should return InvalidPasswordError if AddAccount return InvalidPasswordError', async () => {
+    const { sut, addAccountStub } = makeSut()
+    jest.spyOn(addAccountStub, 'add').mockReturnValueOnce(
+      Promise.resolve(left(new InvalidPasswordError('invalidPassword1234')))
+    )
+    const httpResponse = await sut.handle(makeFakeRequest())
+    expect(httpResponse).toEqual(badRequest(new InvalidPasswordError('invalidPassword1234')))
   })
 
   test('Should return 500 if AddAccount throws', async () => {
