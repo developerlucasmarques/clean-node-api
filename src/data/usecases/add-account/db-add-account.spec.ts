@@ -5,6 +5,7 @@ import { left } from '../../../shared/either'
 import { InvalidNameError } from '../../../domain/entities/account/errors/invalid-name-error'
 import { AccountModel } from '../../../domain/models/account'
 import { InvalidEmailError } from '../../../presentation/errors'
+import { InvalidPasswordError } from '../../../domain/entities/account'
 
 const makeEncrypter = (): Encrypter => {
   class EncrypterStub implements Encrypter {
@@ -78,6 +79,15 @@ describe('DbAddAccount UseCase', () => {
     )
     const response = await sut.add(makeFakeAccountData())
     expect(response.value).toEqual(new InvalidEmailError('invalid_email@mail.com'))
+  })
+
+  test('Should return InvalidPasswordError if Account return InvalidPasswordError', async () => {
+    const { sut } = makeSut()
+    jest.spyOn(Account, 'create').mockReturnValueOnce(
+      left(new InvalidPasswordError('invalid_password1'))
+    )
+    const response = await sut.add(makeFakeAccountData())
+    expect(response.value).toEqual(new InvalidPasswordError('invalid_password1'))
   })
 
   test('Should call Encrypter with correct passwod', async () => {
