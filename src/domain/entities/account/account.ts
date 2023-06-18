@@ -1,5 +1,5 @@
 import { left, right } from '../../../shared/either'
-import { AddAccountModel } from '../../usecases/add-account'
+import { AccountData } from '../../usecases/add-account'
 import { AccountResponse } from './account-response'
 import { Email } from './value-objects/email'
 import { Name } from './value-objects/name'
@@ -14,7 +14,7 @@ export class Account {
     Object.freeze(this)
   }
 
-  static create (accountData: AddAccountModel): AccountResponse {
+  static create (accountData: AccountData): AccountResponse {
     const nameOrError = Name.create(accountData.name)
     const emailOrError = Email.create(accountData.email)
     const passwordOrError = Password.create(accountData.password)
