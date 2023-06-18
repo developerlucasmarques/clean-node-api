@@ -1,8 +1,9 @@
-import { AccountModel, AccountData, AddAccountRepository, Encrypter } from './db-add-account-protocols'
+import { AccountData, AddAccountRepository, Encrypter } from '.'
 import { DbAddAccount } from './db-add-account'
 import { Account } from '../../../domain/entities/account/account'
 import { left } from '../../../shared/either'
 import { InvalidNameError } from '../../../domain/entities/account/errors/invalid-name-error'
+import { AccountModel } from '../../../domain/models/account'
 
 const makeEncrypter = (): Encrypter => {
   class EncrypterStub implements Encrypter {

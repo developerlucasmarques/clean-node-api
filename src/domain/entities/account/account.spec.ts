@@ -1,12 +1,7 @@
 import { left } from '../../../shared/either'
-import { InvalidEmailError } from './errors/invalid-email-error'
-import { InvalidNameError } from './errors/invalid-name-error'
-import { InvalidPasswordError } from './errors/invalid-password-error'
+import { InvalidEmailError, InvalidNameError, InvalidPasswordError, Email, Name, Password } from '.'
 import { AccountData } from '../../usecases/add-account'
 import { Account } from './account'
-import { Email } from './value-objects/email'
-import { Name } from './value-objects/name'
-import { Password } from './value-objects/password'
 
 const makeFakeAccountData = (): AccountData => ({
   name: 'any name',

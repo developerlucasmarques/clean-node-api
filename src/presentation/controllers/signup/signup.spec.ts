@@ -1,6 +1,4 @@
-import { InvalidEmailError } from '../../../domain/entities/account/errors/invalid-email-error'
-import { InvalidNameError } from '../../../domain/entities/account/errors/invalid-name-error'
-import { InvalidPasswordError } from '../../../domain/entities/account/errors/invalid-password-error'
+import { InvalidEmailError, InvalidNameError, InvalidPasswordError } from '../../../domain/entities/account'
 import { left, right } from '../../../shared/either'
 import { InvalidParamError, MissingParamError, ServerError } from '../../errors'
 import { badRequest, ok, serverError } from '../../helpers/http-helper'

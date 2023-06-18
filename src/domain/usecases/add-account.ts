@@ -1,7 +1,5 @@
 import { Either } from '../../shared/either'
-import { InvalidEmailError } from '../entities/account/errors/invalid-email-error'
-import { InvalidNameError } from '../entities/account/errors/invalid-name-error'
-import { InvalidPasswordError } from '../entities/account/errors/invalid-password-error'
+import { InvalidEmailError, InvalidNameError, InvalidPasswordError } from '../entities/account'
 import { AccountModel } from '../models/account'
 
 export interface AccountData {

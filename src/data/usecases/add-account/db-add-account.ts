@@ -1,6 +1,6 @@
-import { Account } from '../../../domain/entities/account/account'
 import { left, right } from '../../../shared/either'
-import { AddAccount, AccountData, Encrypter, AddAccountRepository, AddAccountResponse } from './db-add-account-protocols'
+import { Account } from '../../../domain/entities/account'
+import { Encrypter, AddAccountRepository, AccountData, AddAccount, AddAccountResponse } from '.'
 
 export class DbAddAccount implements AddAccount {
   constructor (

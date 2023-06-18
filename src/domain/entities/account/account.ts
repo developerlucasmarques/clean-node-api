@@ -1,9 +1,6 @@
 import { left, right } from '../../../shared/either'
+import { Email, Name, Password, AccountResponse } from '.'
 import { AccountData } from '../../usecases/add-account'
-import { AccountResponse } from './account-response'
-import { Email } from './value-objects/email'
-import { Name } from './value-objects/name'
-import { Password } from './value-objects/password'
 
 export class Account {
   private constructor (
