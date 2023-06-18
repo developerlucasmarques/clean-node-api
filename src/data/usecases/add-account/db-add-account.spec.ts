@@ -1,5 +1,6 @@
 import { AccountModel, AccountData, AddAccountRepository, Encrypter } from './db-add-account-protocols'
 import { DbAddAccount } from './db-add-account'
+import { Account } from '../../../domain/entities/account/account'
 
 const makeEncrypter = (): Encrypter => {
   class EncrypterStub implements Encrypter {
@@ -50,6 +51,13 @@ const makeSut = (): SutTypes => {
 }
 
 describe('DbAddAccount UseCase', () => {
+  test('Should call Account with correct accout data', async () => {
+    const { sut } = makeSut()
+    const createSpy = jest.spyOn(Account, 'create')
+    await sut.add(makeFakeAccountData())
+    expect(createSpy).toHaveBeenCalledWith(makeFakeAccountData())
+  })
+
   test('Should call Encrypter with correct passwod', async () => {
     const { sut, encrypterStub } = makeSut()
     const encryptSpy = jest.spyOn(encrypterStub, 'encrypt')
