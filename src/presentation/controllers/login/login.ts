@@ -1,4 +1,4 @@
-import { Authentication, EmailValidator, Controller, HttpRequest, HttpResponse } from './login-protocols'
+import { Authentication, EmailValidator, Controller, HttpRequest, HttpResponse } from '.'
 import { InvalidParamError, MissingParamError } from '../../errors'
 import { badRequest, ok, serverError, unauthorized } from '../../helpers/http-helper'
 

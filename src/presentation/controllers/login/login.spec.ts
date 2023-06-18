@@ -1,4 +1,4 @@
-import { Authentication, EmailValidator, HttpRequest, LoginModel, AuthenticationError } from './login-protocols'
+import { Authentication, EmailValidator, HttpRequest, LoginModel, AuthenticationError } from '.'
 import { Either, left, right } from '../../../shared/either'
 import { InvalidParamError, MissingParamError } from '../../errors'
 import { badRequest, ok, serverError, unauthorized } from '../../helpers/http-helper'

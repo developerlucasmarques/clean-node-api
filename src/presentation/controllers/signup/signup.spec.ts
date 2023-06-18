@@ -3,7 +3,7 @@ import { left, right } from '../../../shared/either'
 import { InvalidParamError, MissingParamError, ServerError } from '../../errors'
 import { badRequest, ok, serverError } from '../../helpers/http-helper'
 import { SignUpController } from './signup'
-import { AccountData, AccountModel, AddAccount, AddAccountResponse, HttpRequest } from './signup-protocols'
+import { AccountData, AccountModel, AddAccount, AddAccountResponse, HttpRequest } from '.'
 
 interface SutTypes {
   sut: SignUpController
