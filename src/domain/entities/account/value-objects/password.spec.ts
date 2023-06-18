@@ -1,4 +1,4 @@
-import { InvalidPasswordError } from '../../errors/invalid-password-error'
+import { InvalidPasswordError } from '../errors/invalid-password-error'
 import { Password } from './password'
 
 describe('Password Value Object', () => {

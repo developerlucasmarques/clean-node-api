@@ -1,5 +1,5 @@
-import { left, right } from '../../shared/either'
-import { AddAccountModel } from '../usecases/add-account'
+import { left, right } from '../../../shared/either'
+import { AddAccountModel } from '../../usecases/add-account'
 import { AccountResponse } from './account-response'
 import { Email } from './value-objects/email'
 import { Name } from './value-objects/name'

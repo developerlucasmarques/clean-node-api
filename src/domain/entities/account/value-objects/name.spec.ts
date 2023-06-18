@@ -1,4 +1,4 @@
-import { InvalidNameError } from '../../errors/invalid-name-error'
+import { InvalidNameError } from '../errors/invalid-name-error'
 import { Name } from './name'
 
 describe('Name Value Object', () => {
