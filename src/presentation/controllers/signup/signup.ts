@@ -23,7 +23,11 @@ export class SignUpController implements Controller {
       if (account.isLeft()) {
         return badRequest(account.value)
       }
-      return ok(account.value)
+      return ok({
+        id: account.value.id,
+        name: account.value.name,
+        email: account.value.email
+      })
     } catch (error: any) {
       return serverError(error)
     }
