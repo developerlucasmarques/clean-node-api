@@ -1,5 +1,6 @@
 import { Account } from '../../../domain/entities/account/account'
-import { AddAccount, AccountData, AccountModel, Encrypter, AddAccountRepository } from './db-add-account-protocols'
+import { left, right } from '../../../shared/either'
+import { AddAccount, AccountData, Encrypter, AddAccountRepository, AddAccountResponse } from './db-add-account-protocols'
 
 export class DbAddAccount implements AddAccount {
   constructor (
@@ -7,12 +8,15 @@ export class DbAddAccount implements AddAccount {
     private readonly addAccountRepository: AddAccountRepository
   ) {}
 
-  async add (accountData: AccountData): Promise<AccountModel> {
-    Account.create(accountData)
+  async add (accountData: AccountData): Promise<AddAccountResponse> {
+    const accountOrError = Account.create(accountData)
+    if (accountOrError.isLeft()) {
+      return left(accountOrError.value)
+    }
     const hashedPassword = await this.encrypter.encrypt(accountData.password)
     const account = await this.addAccountRepository.add(
       Object.assign({}, accountData, { password: hashedPassword })
     )
-    return account
+    return right(account)
   }
 }

@@ -1,6 +1,8 @@
 import { AccountModel, AccountData, AddAccountRepository, Encrypter } from './db-add-account-protocols'
 import { DbAddAccount } from './db-add-account'
 import { Account } from '../../../domain/entities/account/account'
+import { left } from '../../../shared/either'
+import { InvalidNameError } from '../../../domain/entities/account/errors/invalid-name-error'
 
 const makeEncrypter = (): Encrypter => {
   class EncrypterStub implements Encrypter {
@@ -22,15 +24,15 @@ const makeAddAccountRepository = (): AddAccountRepository => {
 
 const makeFakeAccount = (): AccountModel => ({
   id: 'valid_id',
-  name: 'valid_name',
+  name: 'valid name',
   email: 'valid_email@mail.com',
   password: 'hashed_password'
 })
 
 const makeFakeAccountData = (): AccountData => ({
-  name: 'valid_name',
+  name: 'valid name',
   email: 'valid_email@mail.com',
-  password: 'valid_password'
+  password: 'password1234'
 })
 
 interface SutTypes {
@@ -58,11 +60,20 @@ describe('DbAddAccount UseCase', () => {
     expect(createSpy).toHaveBeenCalledWith(makeFakeAccountData())
   })
 
+  test('Should return InvalidNameError with Account return InvalidEmailError', async () => {
+    const { sut } = makeSut()
+    jest.spyOn(Account, 'create').mockReturnValueOnce(
+      left(new InvalidNameError('invalid name'))
+    )
+    const response = await sut.add(makeFakeAccountData())
+    expect(response.value).toEqual(new InvalidNameError('invalid name'))
+  })
+
   test('Should call Encrypter with correct passwod', async () => {
     const { sut, encrypterStub } = makeSut()
     const encryptSpy = jest.spyOn(encrypterStub, 'encrypt')
     await sut.add(makeFakeAccountData())
-    expect(encryptSpy).toHaveBeenCalledWith('valid_password')
+    expect(encryptSpy).toHaveBeenCalledWith('password1234')
   })
 
   test('Should throw if Encrypter throws', async () => {
@@ -79,7 +90,7 @@ describe('DbAddAccount UseCase', () => {
     const addSpy = jest.spyOn(addAccountRepositoryStub, 'add')
     await sut.add(makeFakeAccountData())
     expect(addSpy).toHaveBeenCalledWith({
-      name: 'valid_name',
+      name: 'valid name',
       email: 'valid_email@mail.com',
       password: 'hashed_password'
     })
@@ -97,6 +108,6 @@ describe('DbAddAccount UseCase', () => {
   test('Shound return an account on success', async () => {
     const { sut } = makeSut()
     const account = await sut.add(makeFakeAccountData())
-    expect(account).toEqual(makeFakeAccount())
+    expect(account.value).toEqual(makeFakeAccount())
   })
 })

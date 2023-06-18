@@ -42,7 +42,7 @@ const makeSut = (): SutTypes => {
 const makeFakeRequest = (): HttpRequest => ({
   body: {
     email: 'any_email@mail.com',
-    password: 'any_password'
+    password: 'password1234'
   }
 })
 
@@ -51,7 +51,7 @@ describe('LoginController', () => {
     const { sut } = makeSut()
     const httpRequest = {
       body: {
-        password: 'any_password'
+        password: 'password1234'
       }
     }
     const httpResponse = await sut.handle(httpRequest)
@@ -98,7 +98,7 @@ describe('LoginController', () => {
     await sut.handle(makeFakeRequest())
     expect(authSpy).toHaveBeenCalledWith({
       email: 'any_email@mail.com',
-      password: 'any_password'
+      password: 'password1234'
     })
   })
 

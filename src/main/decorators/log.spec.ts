@@ -24,18 +24,18 @@ const makeLogErrorRepository = (): LogErrorRepository => {
 
 const makeFakeRequest = (): HttpRequest => ({
   body: {
-    name: 'any_name',
+    name: 'any name',
     email: 'any_email',
-    password: 'any_password',
-    passwordConfirmation: 'any_password'
+    password: 'password1234',
+    passwordConfirmation: 'password1234'
   }
 })
 
 const makeFakeAccount = (): AccountModel => ({
   id: 'valid_id',
-  name: 'valid_name',
+  name: 'valid name',
   email: 'valid_email@mail.com',
-  password: 'valid_password'
+  password: 'password1234'
 })
 
 const makeFakeServerError = (): HttpResponse => {

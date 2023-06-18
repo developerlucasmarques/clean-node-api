@@ -22,14 +22,14 @@ describe('Account Mongo Repository', () => {
   test('Should return an account on success', async () => {
     const sut = makeSut()
     const account = await sut.add({
-      name: 'any_name',
+      name: 'any name',
       email: 'any_email@mail.com',
-      password: 'any_password'
+      password: 'password1234'
     })
     expect(account).toBeTruthy()
     expect(account.id).toBeTruthy()
-    expect(account.name).toBe('any_name')
+    expect(account.name).toBe('any name')
     expect(account.email).toBe('any_email@mail.com')
-    expect(account.password).toBe('any_password')
+    expect(account.password).toBe('password1234')
   })
 })
