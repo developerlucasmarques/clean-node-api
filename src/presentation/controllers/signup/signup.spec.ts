@@ -1,3 +1,4 @@
+import { InvalidEmailError } from '../../../domain/entities/account/errors/invalid-email-error'
 import { InvalidNameError } from '../../../domain/entities/account/errors/invalid-name-error'
 import { left, right } from '../../../shared/either'
 import { InvalidParamError, MissingParamError, ServerError } from '../../errors'
@@ -129,6 +130,15 @@ describe('SignUp Controller', () => {
     )
     const httpResponse = await sut.handle(makeFakeRequest())
     expect(httpResponse).toEqual(badRequest(new InvalidNameError('invalid name')))
+  })
+
+  test('Should return InvalidEmailError if AddAccount return InvalidEmailError', async () => {
+    const { sut, addAccountStub } = makeSut()
+    jest.spyOn(addAccountStub, 'add').mockReturnValueOnce(
+      Promise.resolve(left(new InvalidEmailError('invalid_email@mail.com')))
+    )
+    const httpResponse = await sut.handle(makeFakeRequest())
+    expect(httpResponse).toEqual(badRequest(new InvalidEmailError('invalid_email@mail.com')))
   })
 
   test('Should return 500 if AddAccount throws', async () => {
