@@ -1,13 +1,15 @@
 import { InvalidEmailError, InvalidNameError, InvalidPasswordError } from '../../../domain/entities/account'
-import { left, right } from '../../../shared/either'
+import { Either, left, right } from '../../../shared/either'
 import { InvalidParamError, MissingParamError, ServerError } from '../../errors'
 import { badRequest, ok, serverError } from '../../helpers/http-helper'
 import { SignUpController } from './signup'
 import { AccountData, AccountModel, AddAccount, AddAccountResponse, HttpRequest } from '.'
+import { Validation } from '../../helpers/validators/validation'
 
 interface SutTypes {
   sut: SignUpController
   addAccountStub: AddAccount
+  validationStub: Validation
 }
 
 const makeAddAccount = (): AddAccount => {
@@ -19,12 +21,23 @@ const makeAddAccount = (): AddAccount => {
   return new AddAccountStub()
 }
 
+const makeValidation = (): Validation => {
+  class ValidationStub implements Validation {
+    validate (input: any): Either<Error, null> {
+      return right(null)
+    }
+  }
+  return new ValidationStub()
+}
+
 const makeSut = (): SutTypes => {
   const addAccountStub = makeAddAccount()
-  const sut = new SignUpController(addAccountStub)
+  const validationStub = makeValidation()
+  const sut = new SignUpController(addAccountStub, validationStub)
   return {
     sut,
-    addAccountStub
+    addAccountStub,
+    validationStub
   }
 }
 
@@ -167,5 +180,12 @@ describe('SignUp Controller', () => {
       name: 'valid name',
       email: 'valid_email@mail.com'
     }))
+  })
+
+  test('Should call Validation with correct values', async () => {
+    const { sut, validationStub } = makeSut()
+    const validateSpy = jest.spyOn(validationStub, 'validate')
+    await sut.handle(makeFakeRequest())
+    expect(validateSpy).toHaveBeenCalledWith(makeFakeRequest().body)
   })
 })
