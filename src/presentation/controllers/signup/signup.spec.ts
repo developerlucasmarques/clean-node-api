@@ -1,10 +1,10 @@
+import { AccountData, AccountModel, AddAccount, AddAccountResponse, HttpRequest } from '.'
 import { InvalidEmailError, InvalidNameError, InvalidPasswordError } from '../../../domain/entities/account'
 import { Either, left, right } from '../../../shared/either'
-import { InvalidParamError, MissingParamError, ServerError } from '../../errors'
+import { MissingParamError, ServerError } from '../../errors'
 import { badRequest, ok, serverError } from '../../helpers/http-helper'
-import { SignUpController } from './signup'
-import { AccountData, AccountModel, AddAccount, AddAccountResponse, HttpRequest } from '.'
 import { Validation } from '../../helpers/validators/validation'
+import { SignUpController } from './signup'
 
 interface SutTypes {
   sut: SignUpController
@@ -58,20 +58,6 @@ const makeFakeRequest = (): HttpRequest => ({
 })
 
 describe('SignUp Controller', () => {
-  test('Should return 400 if password confirmation fails', async () => {
-    const { sut } = makeSut()
-    const httpRequest = {
-      body: {
-        email: 'any_email@mail.com',
-        name: 'any name',
-        password: 'password1234',
-        passwordConfirmation: 'invalid_password'
-      }
-    }
-    const httpResponse = await sut.handle(httpRequest)
-    expect(httpResponse).toEqual(badRequest(new InvalidParamError('passwordConfirmation')))
-  })
-
   test('Should call AddAccount with correct values', async () => {
     const { sut, addAccountStub } = makeSut()
     const addSpy = jest.spyOn(addAccountStub, 'add')

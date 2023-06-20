@@ -1,6 +1,5 @@
-import { Controller, HttpResponse, HttpRequest, AddAccount, Validation } from '.'
-import { InvalidParamError } from '../../errors'
-import { badRequest, serverError, ok } from '../../helpers/http-helper'
+import { AddAccount, Controller, HttpRequest, HttpResponse, Validation } from '.'
+import { badRequest, ok, serverError } from '../../helpers/http-helper'
 
 export class SignUpController implements Controller {
   constructor (
@@ -14,10 +13,7 @@ export class SignUpController implements Controller {
       if (validation.isLeft()) {
         return badRequest(validation.value)
       }
-      const { name, email, password, passwordConfirmation } = httpRequest.body
-      if (password !== passwordConfirmation) {
-        return badRequest(new InvalidParamError('passwordConfirmation'))
-      }
+      const { name, email, password } = httpRequest.body
       const account = await this.addAccount.add({ name, email, password })
       if (account.isLeft()) {
         return badRequest(account.value)
