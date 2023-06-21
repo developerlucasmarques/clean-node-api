@@ -1,0 +1,10 @@
+import { MissingParamError } from '../../errors'
+import { RequiredFieldValidation } from './required-field-validation'
+
+describe('RequiredField Validation', () => {
+  test('Should return a MissinParamError if input not contain field name', () => {
+    const sut = new RequiredFieldValidation('field')
+    const result = sut.validate({ name: 'any name' })
+    expect(result.value).toEqual(new MissingParamError('field'))
+  })
+})
