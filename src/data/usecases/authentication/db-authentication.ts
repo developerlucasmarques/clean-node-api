@@ -16,10 +16,13 @@ export class DbAuthentication implements Authentication {
     if (accountOrError.isLeft()) {
       return left(new AuthenticationError())
     }
-    await this.hashComparer.comparer({
+    const comparerResult = await this.hashComparer.comparer({
       value: password,
       hash: accountOrError.value.password
     })
+    if (!comparerResult) {
+      return left(new AuthenticationError())
+    }
     return right('access_token')
   }
 }
