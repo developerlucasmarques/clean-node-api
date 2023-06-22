@@ -1,6 +1,5 @@
+import { Validation, InvalidParamError } from '.'
 import { Either, left, right } from '../../../shared/either'
-import { InvalidParamError } from '../../errors'
-import { Validation } from '../../protocols/validation'
 
 export class CompareFieldsValidation implements Validation {
   constructor (

@@ -1,6 +1,5 @@
+import { Validation, MissingParamError } from '.'
 import { Either, left, right } from '../../../shared/either'
-import { MissingParamError } from '../../errors'
-import { Validation } from '../../protocols/validation'
 
 export class RequiredFieldValidation implements Validation {
   constructor (private readonly fieldName: string) {}
