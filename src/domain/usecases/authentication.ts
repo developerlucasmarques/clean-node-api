@@ -6,6 +6,7 @@ export interface AuthenticationModel {
   password: string
 }
 
+export type AuthenticationResponse = Either<AuthenticationError, string>
 export interface Authentication {
-  auth: (authenticationData: AuthenticationModel) => Promise<Either<AuthenticationError, string>>
+  auth: (authenticationData: AuthenticationModel) => Promise<AuthenticationResponse>
 }
