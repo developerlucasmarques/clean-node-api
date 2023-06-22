@@ -2,7 +2,7 @@ import { AccountData, AccountModel, AddAccount, AddAccountResponse, HttpRequest 
 import { InvalidEmailError, InvalidNameError, InvalidPasswordError } from '../../../domain/entities/account'
 import { Either, left, right } from '../../../shared/either'
 import { MissingParamError, ServerError } from '../../errors'
-import { badRequest, ok, serverError } from '../../helpers/http-helper'
+import { badRequest, ok, serverError } from '../../helpers/http/http-helper'
 import { Validation } from '../../helpers/validators/validation'
 import { SignUpController } from './signup'
 
