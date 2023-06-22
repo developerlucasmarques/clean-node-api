@@ -1,11 +1,11 @@
 import { Either } from '../../shared/either'
 import { AuthenticationError } from '../errors/authentication-error'
 
-export interface LoginModel {
+export interface AuthenticationModel {
   email: string
   password: string
 }
 
 export interface Authentication {
-  auth: (loginData: LoginModel) => Promise<Either<AuthenticationError, string>>
+  auth: (authenticationData: AuthenticationModel) => Promise<Either<AuthenticationError, string>>
 }
