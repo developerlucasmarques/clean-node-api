@@ -6,7 +6,7 @@ export class DbAuthentication implements Authentication {
   constructor (private readonly loadAccountByEmailRepository: LoadAccountByEmailRepository) {}
 
   async auth (authenticationData: AuthenticationData): Promise<AuthenticationResponse> {
-    this.loadAccountByEmailRepository.load(authenticationData.email)
-    return await Promise.resolve(right('access_token'))
+    await this.loadAccountByEmailRepository.load(authenticationData.email)
+    return right('access_token')
   }
 }
