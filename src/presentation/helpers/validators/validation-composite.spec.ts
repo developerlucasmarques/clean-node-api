@@ -1,6 +1,6 @@
 import { Either, left, right } from '../../../shared/either'
 import { MissingParamError } from '../../errors'
-import { Validation } from './validation'
+import { Validation } from '../../protocols/validation'
 import { ValidationComposite } from './validation-composite'
 
 const makeValidationStub = (): Validation => {

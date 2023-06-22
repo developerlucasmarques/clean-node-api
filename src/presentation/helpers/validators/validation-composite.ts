@@ -1,5 +1,5 @@
 import { Either, left, right } from '../../../shared/either'
-import { Validation } from './validation'
+import { Validation } from '../../protocols/validation'
 
 export class ValidationComposite implements Validation {
   constructor (private readonly validations: Validation[]) {}

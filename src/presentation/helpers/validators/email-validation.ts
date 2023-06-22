@@ -1,7 +1,7 @@
 import { Either, left, right } from '../../../shared/either'
 import { InvalidEmailError } from '../../errors'
 import { EmailValidator } from '../../protocols/email-validator'
-import { Validation } from './validation'
+import { Validation } from '../../protocols/validation'
 
 export class EmailValidation implements Validation {
   constructor (

@@ -3,7 +3,7 @@ import { InvalidEmailError, InvalidNameError, InvalidPasswordError } from '../..
 import { Either, left, right } from '../../../shared/either'
 import { MissingParamError, ServerError } from '../../errors'
 import { badRequest, ok, serverError } from '../../helpers/http/http-helper'
-import { Validation } from '../../helpers/validators/validation'
+import { Validation } from '../../protocols/validation'
 import { SignUpController } from './signup'
 
 interface SutTypes {
