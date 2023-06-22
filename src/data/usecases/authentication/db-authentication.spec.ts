@@ -1,6 +1,8 @@
+import { AuthenticationError } from '../../../domain/errors/authentication-error'
 import { AccountModel } from '../../../domain/models/account'
 import { AuthenticationData } from '../../../domain/usecases/authentication'
-import { right } from '../../../shared/either'
+import { left, right } from '../../../shared/either'
+import { LoadAccountByEmailError } from '../../errors/load-account-by-email-error'
 import { LoadAccountByEmailRepository, LoadAccountByEmailResponse } from '../../protocols/db/load-account-by-email-repository'
 import { DbAuthentication } from './db-authentication'
 
@@ -53,5 +55,14 @@ describe('DbAuthentication UseCase', () => {
     )
     const promise = sut.auth(makeFakeAuthenticationData())
     await expect(promise).rejects.toThrow()
+  })
+
+  test('Should return AuthenticationError if LoadAccountByEmailRepository returns error', async () => {
+    const { sut, loadAccountByEmailRepositoryStub } = makeSut()
+    jest.spyOn(loadAccountByEmailRepositoryStub, 'load').mockReturnValueOnce(
+      Promise.resolve(left(new LoadAccountByEmailError('invalid_email@mail.com')))
+    )
+    const authResult = await sut.auth(makeFakeAuthenticationData())
+    expect(authResult.value).toEqual(new AuthenticationError())
   })
 })
