@@ -1,4 +1,4 @@
-import { Authentication, AuthenticationError, HttpRequest, AuthenticationModel, Validation } from '.'
+import { Authentication, AuthenticationError, HttpRequest, AuthenticationData, Validation } from '.'
 import { Either, left, right } from '../../../shared/either'
 import { badRequest, ok, serverError, unauthorized } from '../../helpers/http/http-helper'
 import { LoginController } from './login'
@@ -14,7 +14,7 @@ const makeValidationStub = (): Validation => {
 
 const makeAuthenticationStub = (): Authentication => {
   class AuthenticationStub implements Authentication {
-    async auth (loginData: AuthenticationModel): Promise<Either<AuthenticationError, string>> {
+    async auth (authenticationData: AuthenticationData): Promise<Either<AuthenticationError, string>> {
       return await Promise.resolve(right('any_token'))
     }
   }
