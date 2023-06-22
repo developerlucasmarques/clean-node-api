@@ -1,5 +1,5 @@
 import { AccountModel } from '../../../domain/models/account'
-import { AuthenticationModel } from '../../../domain/usecases/authentication'
+import { AuthenticationData } from '../../../domain/usecases/authentication'
 import { LoadAccountByEmailRepository } from '../../protocols/load-account-by-email-repository'
 import { DbAuthentication } from './db-authentication'
 
@@ -10,7 +10,7 @@ const makeFakeAccountModel = (): AccountModel => ({
   password: 'password1234'
 })
 
-const makeFakeAuthenticationData = (): AuthenticationModel => ({
+const makeFakeAuthenticationData = (): AuthenticationData => ({
   email: 'any_email@mail.com',
   password: 'password1234'
 })
