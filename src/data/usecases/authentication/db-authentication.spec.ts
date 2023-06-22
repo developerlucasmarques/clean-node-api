@@ -1,6 +1,7 @@
 import { AccountModel } from '../../../domain/models/account'
 import { AuthenticationData } from '../../../domain/usecases/authentication'
-import { LoadAccountByEmailRepository } from '../../protocols/db/load-account-by-email-repository'
+import { right } from '../../../shared/either'
+import { LoadAccountByEmailRepository, LoadAccountByEmailResponse } from '../../protocols/db/load-account-by-email-repository'
 import { DbAuthentication } from './db-authentication'
 
 const makeFakeAccountModel = (): AccountModel => ({
@@ -17,8 +18,8 @@ const makeFakeAuthenticationData = (): AuthenticationData => ({
 
 const makeLoadAccountByEmailRepository = (): LoadAccountByEmailRepository => {
   class LoadAccountByEmailRepositoryStub implements LoadAccountByEmailRepository {
-    async load (email: string): Promise<AccountModel> {
-      return await Promise.resolve(makeFakeAccountModel())
+    async load (email: string): Promise<LoadAccountByEmailResponse> {
+      return await Promise.resolve(right(makeFakeAccountModel()))
     }
   }
   return new LoadAccountByEmailRepositoryStub()
