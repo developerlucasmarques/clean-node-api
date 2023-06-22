@@ -100,7 +100,7 @@ describe('DbAddAccount UseCase', () => {
       new Promise((resolve, reject) => { reject(new Error()) })
     )
     const promise = sut.add(makeFakeAccountData())
-    expect(promise).rejects.toThrow()
+    await expect(promise).rejects.toThrow()
   })
 
   test('Should call AddAccountRepository with correct values', async () => {
@@ -120,7 +120,7 @@ describe('DbAddAccount UseCase', () => {
       new Promise((resolve, reject) => { reject(new Error()) })
     )
     const promise = sut.add(makeFakeAccountData())
-    expect(promise).rejects.toThrow()
+    await expect(promise).rejects.toThrow()
   })
 
   test('Shound return an account on success', async () => {
