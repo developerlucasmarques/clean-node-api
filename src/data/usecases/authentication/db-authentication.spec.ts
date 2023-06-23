@@ -1,13 +1,10 @@
-import { AuthenticationError } from '../../../domain/errors/authentication-error'
-import { AccountModel } from '../../../domain/models/account'
-import { AuthenticationData } from '../../../domain/usecases/authentication'
+import {
+  AuthenticationError, AccountModel, AuthenticationData, LoadAccountByEmailError,
+  DbAuthentication, HashComparer, HashComparerData, TokenGenerator,
+  LoadAccountByEmailRepository, LoadAccountByEmailResponse,
+  UpdateAccessTokenData, UpdateAccessTokenRepository
+} from '.'
 import { left, right } from '../../../shared/either'
-import { LoadAccountByEmailError } from '../../errors/load-account-by-email-error'
-import { HashComparer, HashComparerData } from '../../protocols/criptography/hash-comparer'
-import { TokenGenerator } from '../../protocols/criptography/token-generator'
-import { LoadAccountByEmailRepository, LoadAccountByEmailResponse } from '../../protocols/db/load-account-by-email-repository'
-import { UpdateAccessTokenData, UpdateAccessTokenRepository } from '../../protocols/db/update-access-token-repository'
-import { DbAuthentication } from './db-authentication'
 
 const makeFakeAccountModel = (): AccountModel => ({
   id: 'any_id',

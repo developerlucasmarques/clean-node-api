@@ -1,10 +1,9 @@
-import { AuthenticationError } from '../../../domain/errors/authentication-error'
-import { Authentication, AuthenticationData, AuthenticationResponse } from '../../../domain/usecases/authentication'
+import {
+  AuthenticationError, AuthenticationData, HashComparer, TokenGenerator,
+  LoadAccountByEmailRepository, UpdateAccessTokenRepository, Authentication,
+  AuthenticationResponse
+} from '.'
 import { left, right } from '../../../shared/either'
-import { HashComparer } from '../../protocols/criptography/hash-comparer'
-import { TokenGenerator } from '../../protocols/criptography/token-generator'
-import { LoadAccountByEmailRepository } from '../../protocols/db/load-account-by-email-repository'
-import { UpdateAccessTokenRepository } from '../../protocols/db/update-access-token-repository'
 
 export class DbAuthentication implements Authentication {
   constructor (
