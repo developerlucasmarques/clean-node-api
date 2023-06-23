@@ -4,5 +4,5 @@ export interface HashComparerData {
 }
 
 export interface HashComparer {
-  comparer: (hashComparerData: HashComparerData) => Promise<boolean>
+  compare: (hashComparerData: HashComparerData) => Promise<boolean>
 }

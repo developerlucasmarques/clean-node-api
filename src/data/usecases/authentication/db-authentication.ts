@@ -19,7 +19,7 @@ export class DbAuthentication implements Authentication {
     if (accountOrError.isLeft()) {
       return left(new AuthenticationError())
     }
-    const comparerResult = await this.hashComparer.comparer({
+    const comparerResult = await this.hashComparer.compare({
       value: password,
       hash: accountOrError.value.password
     })

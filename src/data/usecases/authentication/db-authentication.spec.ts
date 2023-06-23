@@ -29,7 +29,7 @@ const makeLoadAccountByEmailRepository = (): LoadAccountByEmailRepository => {
 
 const makeHashComparerStub = (): HashComparer => {
   class HashComparerStub implements HashComparer {
-    async comparer (hashComparerData: HashComparerData): Promise<boolean> {
+    async compare (hashComparerData: HashComparerData): Promise<boolean> {
       return await Promise.resolve(true)
     }
   }
@@ -110,7 +110,7 @@ describe('DbAuthentication UseCase', () => {
 
   test('Should call HashComparer with correct values', async () => {
     const { sut, hashComparerStub } = makeSut()
-    const comparerSpy = jest.spyOn(hashComparerStub, 'comparer')
+    const comparerSpy = jest.spyOn(hashComparerStub, 'compare')
     await sut.auth(makeFakeAuthenticationData())
     expect(comparerSpy).toHaveBeenCalledWith({
       value: makeFakeAuthenticationData().password,
@@ -120,7 +120,7 @@ describe('DbAuthentication UseCase', () => {
 
   test('Should throw if HashComparer throws', async () => {
     const { sut, hashComparerStub } = makeSut()
-    jest.spyOn(hashComparerStub, 'comparer').mockReturnValueOnce(
+    jest.spyOn(hashComparerStub, 'compare').mockReturnValueOnce(
       new Promise((resolve, reject) => { reject(new Error()) })
     )
     const promise = sut.auth(makeFakeAuthenticationData())
@@ -129,7 +129,7 @@ describe('DbAuthentication UseCase', () => {
 
   test('Should return AuthenticationError if HashComparer return false', async () => {
     const { sut, hashComparerStub } = makeSut()
-    jest.spyOn(hashComparerStub, 'comparer').mockReturnValueOnce(Promise.resolve(false))
+    jest.spyOn(hashComparerStub, 'compare').mockReturnValueOnce(Promise.resolve(false))
     const authResult = await sut.auth(makeFakeAuthenticationData())
     expect(authResult.value).toEqual(new AuthenticationError())
   })
