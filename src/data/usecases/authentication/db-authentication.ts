@@ -25,7 +25,7 @@ export class DbAuthentication implements Authentication {
     if (!comparerResult) {
       return left(new AuthenticationError())
     }
-    this.tokenGenerator.generate(accountOrError.value.id)
+    await this.tokenGenerator.generate(accountOrError.value.id)
     return right('access_token')
   }
 }
