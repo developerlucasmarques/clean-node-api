@@ -1,10 +1,10 @@
 import { left, right } from '../../../shared/either'
 import { Account } from '../../../domain/entities/account'
-import { Encrypter, AddAccountRepository, AccountData, AddAccount, AddAccountResponse } from '.'
+import { Hasher, AddAccountRepository, AccountData, AddAccount, AddAccountResponse } from '.'
 
 export class DbAddAccount implements AddAccount {
   constructor (
-    private readonly encrypter: Encrypter,
+    private readonly hasher: Hasher,
     private readonly addAccountRepository: AddAccountRepository
   ) {}
 
@@ -13,7 +13,7 @@ export class DbAddAccount implements AddAccount {
     if (accountOrError.isLeft()) {
       return left(accountOrError.value)
     }
-    const hashedPassword = await this.encrypter.encrypt(accountData.password)
+    const hashedPassword = await this.hasher.hash(accountData.password)
     const account = await this.addAccountRepository.add(
       Object.assign({}, accountData, { password: hashedPassword })
     )
