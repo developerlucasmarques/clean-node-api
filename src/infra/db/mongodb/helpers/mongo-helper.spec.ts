@@ -14,6 +14,24 @@ describe('Mongo Helper', () => {
     sut.disconnect()
   })
 
+  test('Should return AccountModel', async () => {
+    const accountCollection = await sut.getCollection('account')
+    const result = await accountCollection.insertOne({
+      name: 'any name',
+      email: 'any_email@mail.com',
+      password: 'password1234'
+    })
+    const { insertedId: id } = result
+    const account = sut.map(await accountCollection.findOne({ _id: id }))
+    expect(account).toEqual({
+      id: id.toHexString(),
+      name: 'any name',
+      email: 'any_email@mail.com',
+      password: 'password1234'
+    })
+    sut.disconnect()
+  })
+
   test('Should connect to the specified URL', async () => {
     const url = 'mongodb://127.0.0.1:27017/db-test'
     const mongoClientMock = {
