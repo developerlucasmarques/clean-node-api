@@ -2,8 +2,15 @@ import { Collection } from 'mongodb'
 import { MongoHelper } from '../helpers/mongo-helper'
 import { AccountMongoRepository } from './account'
 import { LoadAccountByEmailError } from '../../../../data/errors/load-account-by-email-error'
+import { AccountData } from '../../../../domain/usecases/add-account'
 
 let accountCollection: Collection
+
+const makeFakeAccountData = (): AccountData => ({
+  name: 'any name',
+  email: 'any_email@mail.com',
+  password: 'password1234'
+})
 
 describe('Account Mongo Repository', () => {
   beforeAll(async () => {
@@ -25,11 +32,7 @@ describe('Account Mongo Repository', () => {
 
   test('Should return an account if add on success', async () => {
     const sut = makeSut()
-    const account = await sut.add({
-      name: 'any name',
-      email: 'any_email@mail.com',
-      password: 'password1234'
-    })
+    const account = await sut.add(makeFakeAccountData())
     expect(account).toBeTruthy()
     expect(account.id).toBeTruthy()
     expect(account.name).toBe('any name')
@@ -39,33 +42,15 @@ describe('Account Mongo Repository', () => {
 
   test('Should return an account if loadAccountByEmail on success', async () => {
     const sut = makeSut()
-    await accountCollection.insertOne({
-      name: 'any name',
-      email: 'any_email@mail.com',
-      password: 'password1234'
-    })
+    const result = await accountCollection.insertOne(makeFakeAccountData())
+    const accountEntered = MongoHelper.mapAddAccount(result, makeFakeAccountData())
     const account = await sut.loadAccountByEmail('any_email@mail.com')
-    if (account.isLeft()) {
-      return
-    }
-    expect(account).toBeTruthy()
-    expect(account.value.id).toBeTruthy()
-    expect(account.value.name).toBe('any name')
-    expect(account.value.email).toBe('any_email@mail.com')
-    expect(account.value.password).toBe('password1234')
+    expect(account.value).toEqual(accountEntered)
   })
 
-  test('Should return LoadAccountByEmailError if loadAccountByEmail not found account', async () => {
+  test('Should return LoadAccountByEmailError if loadAccountByEmail fails', async () => {
     const sut = makeSut()
-    await accountCollection.insertOne({
-      name: 'any name',
-      email: 'any_email@mail.com',
-      password: 'password1234'
-    })
     const account = await sut.loadAccountByEmail('another_email@mail.com')
-    if (account.isRight()) {
-      return
-    }
     expect(account.value).toEqual(new LoadAccountByEmailError('another_email@mail.com'))
   })
 })
