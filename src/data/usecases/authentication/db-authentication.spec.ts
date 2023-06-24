@@ -20,7 +20,7 @@ const makeFakeAuthenticationData = (): AuthenticationData => ({
 
 const makeLoadAccountByEmailRepository = (): LoadAccountByEmailRepository => {
   class LoadAccountByEmailRepositoryStub implements LoadAccountByEmailRepository {
-    async load (email: string): Promise<LoadAccountByEmailResponse> {
+    async loadAccountByEmail (email: string): Promise<LoadAccountByEmailResponse> {
       return await Promise.resolve(right(makeFakeAccountModel()))
     }
   }
@@ -85,14 +85,14 @@ const makeSut = (): SutTypes => {
 describe('DbAuthentication UseCase', () => {
   test('Should call LoadAccountByEmailRepository with correct email', async () => {
     const { sut, loadAccountByEmailRepositoryStub } = makeSut()
-    const loadSpy = jest.spyOn(loadAccountByEmailRepositoryStub, 'load')
+    const loadAccountByEmailSpy = jest.spyOn(loadAccountByEmailRepositoryStub, 'loadAccountByEmail')
     await sut.auth(makeFakeAuthenticationData())
-    expect(loadSpy).toHaveBeenLastCalledWith('any_email@mail.com')
+    expect(loadAccountByEmailSpy).toHaveBeenLastCalledWith('any_email@mail.com')
   })
 
   test('Should throw if LoadAccountByEmailRepository throws', async () => {
     const { sut, loadAccountByEmailRepositoryStub } = makeSut()
-    jest.spyOn(loadAccountByEmailRepositoryStub, 'load').mockReturnValueOnce(
+    jest.spyOn(loadAccountByEmailRepositoryStub, 'loadAccountByEmail').mockReturnValueOnce(
       new Promise((resolve, reject) => { reject(new Error()) })
     )
     const promise = sut.auth(makeFakeAuthenticationData())
@@ -101,7 +101,7 @@ describe('DbAuthentication UseCase', () => {
 
   test('Should return AuthenticationError if LoadAccountByEmailRepository returns error', async () => {
     const { sut, loadAccountByEmailRepositoryStub } = makeSut()
-    jest.spyOn(loadAccountByEmailRepositoryStub, 'load').mockReturnValueOnce(
+    jest.spyOn(loadAccountByEmailRepositoryStub, 'loadAccountByEmail').mockReturnValueOnce(
       Promise.resolve(left(new LoadAccountByEmailError('invalid_email@mail.com')))
     )
     const authResult = await sut.auth(makeFakeAuthenticationData())

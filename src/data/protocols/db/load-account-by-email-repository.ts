@@ -5,5 +5,5 @@ import { LoadAccountByEmailError } from '../../errors/load-account-by-email-erro
 export type LoadAccountByEmailResponse = Either<LoadAccountByEmailError, AccountModel>
 
 export interface LoadAccountByEmailRepository {
-  load: (email: string) => Promise<LoadAccountByEmailResponse>
+  loadAccountByEmail: (email: string) => Promise<LoadAccountByEmailResponse>
 }
