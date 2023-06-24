@@ -43,14 +43,27 @@ describe('Account Mongo Repository', () => {
   test('Should return an account if loadAccountByEmail on success', async () => {
     const sut = makeSut()
     const result = await accountCollection.insertOne(makeFakeAccountData())
-    const accountEntered = MongoHelper.mapAddAccount(result, makeFakeAccountData())
+    const accountEnteredWithId = MongoHelper.mapAddAccount(result, makeFakeAccountData())
     const account = await sut.loadAccountByEmail('any_email@mail.com')
-    expect(account.value).toEqual(accountEntered)
+    expect(account.value).toEqual(accountEnteredWithId)
   })
 
   test('Should return LoadAccountByEmailError if loadAccountByEmail fails', async () => {
     const sut = makeSut()
     const account = await sut.loadAccountByEmail('another_email@mail.com')
     expect(account.value).toEqual(new LoadAccountByEmailError('another_email@mail.com'))
+  })
+
+  test('Should update the account accessToken if updateAccessToken success', async () => {
+    const sut = makeSut()
+    const result = await accountCollection.insertOne(makeFakeAccountData())
+    const accountWithoutAccessToken = await accountCollection.findOne({ _id: result.insertedId })
+    expect(accountWithoutAccessToken?.accessToken).toBeFalsy()
+    await sut.updateAccessToken({
+      accountId: result.insertedId.toHexString(),
+      accessToken: 'any_token'
+    })
+    const account = await accountCollection.findOne({ _id: result.insertedId })
+    expect(account?.accessToken).toBe('any_token')
   })
 })
