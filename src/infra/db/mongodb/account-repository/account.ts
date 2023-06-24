@@ -1,6 +1,6 @@
-import { AccountData, AccountModel, AddAccountRepository } from '.'
-import { LoadAccountByEmailRepository, LoadAccountByEmailResponse } from '../../../../data/usecases/authentication'
-import { right } from '../../../../shared/either'
+import { AddAccountRepository, AccountModel, AccountData } from '.'
+import { LoadAccountByEmailError, LoadAccountByEmailRepository, LoadAccountByEmailResponse } from '../../../../data/usecases/authentication'
+import { left, right } from '../../../../shared/either'
 import { MongoHelper } from '../helpers/mongo-helper'
 
 export class AccountMongoRepository implements AddAccountRepository, LoadAccountByEmailRepository {
@@ -13,6 +13,9 @@ export class AccountMongoRepository implements AddAccountRepository, LoadAccount
   async loadAccountByEmail (email: string): Promise<LoadAccountByEmailResponse> {
     const accountCollection = await MongoHelper.getCollection('account')
     const account = await accountCollection.findOne({ email })
+    if (!account) {
+      return left(new LoadAccountByEmailError(email))
+    }
     return right(MongoHelper.map(account))
   }
 }
