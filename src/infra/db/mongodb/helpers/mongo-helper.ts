@@ -28,7 +28,7 @@ export const MongoHelper = {
     return this.client.db().collection(name)
   },
 
-  map (result: InsertOneResult<Document>, data: any): any {
+  mapAddAccount (result: InsertOneResult<Document>, data: any): any {
     if (data._id) {
       delete data._id
     }
