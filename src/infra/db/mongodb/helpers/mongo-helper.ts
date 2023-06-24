@@ -1,4 +1,5 @@
 import { MongoClient, Collection, InsertOneResult } from 'mongodb'
+import { AccountModel } from '../account-repository'
 
 export const MongoHelper = {
   client: null as unknown as MongoClient | null,
@@ -33,5 +34,10 @@ export const MongoHelper = {
       delete data._id
     }
     return Object.assign({}, data, { id: result.insertedId.toHexString() })
+  },
+
+  map (collection: any): AccountModel {
+    const { _id, ...collectionWithoutId } = collection
+    return Object.assign({}, collectionWithoutId, { id: _id.toHexString() })
   }
 }
