@@ -1,9 +1,9 @@
 import { AddAccountRepository, AccountModel, AccountData } from '.'
-import { LoadAccountByEmailError, LoadAccountByEmailRepository, LoadAccountByEmailResponse } from '../../../../data/usecases/authentication'
+import { LoadAccountByEmailError, LoadAccountByEmailRepository, LoadAccountByEmailResponse, UpdateAccessTokenData, UpdateAccessTokenRepository } from '../../../../data/usecases/authentication'
 import { left, right } from '../../../../shared/either'
 import { MongoHelper } from '../helpers/mongo-helper'
 
-export class AccountMongoRepository implements AddAccountRepository, LoadAccountByEmailRepository {
+export class AccountMongoRepository implements AddAccountRepository, LoadAccountByEmailRepository, UpdateAccessTokenRepository {
   async add (accountData: AccountData): Promise<AccountModel> {
     const accountCollection = await MongoHelper.getCollection('account')
     const result = await accountCollection.insertOne(accountData)
@@ -17,5 +17,11 @@ export class AccountMongoRepository implements AddAccountRepository, LoadAccount
       return left(new LoadAccountByEmailError(email))
     }
     return right(MongoHelper.map(account))
+  }
+
+  async updateAccessToken (values: UpdateAccessTokenData): Promise<void> {
+    const accountCollection = await MongoHelper.getCollection('account')
+    const mongoId = MongoHelper.transformIdInObjectId(values.accountId)
+    await accountCollection.updateOne({ _id: mongoId }, { $set: { accessToken: values.accessToken } })
   }
 }
