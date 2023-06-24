@@ -1,8 +1,8 @@
-export interface HashComparerData {
+export interface HashCompareData {
   value: string
   hash: string
 }
 
 export interface HashComparer {
-  compare: (hashComparerData: HashComparerData) => Promise<boolean>
+  compare: (hashCompareData: HashCompareData) => Promise<boolean>
 }

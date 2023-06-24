@@ -1,6 +1,6 @@
 import {
   AuthenticationError, AccountModel, AuthenticationData, LoadAccountByEmailError,
-  DbAuthentication, HashComparer, HashComparerData, Encrypter,
+  DbAuthentication, HashComparer, HashCompareData, Encrypter,
   LoadAccountByEmailRepository, LoadAccountByEmailResponse,
   UpdateAccessTokenData, UpdateAccessTokenRepository
 } from '.'
@@ -29,7 +29,7 @@ const makeLoadAccountByEmailRepository = (): LoadAccountByEmailRepository => {
 
 const makeHashComparerStub = (): HashComparer => {
   class HashComparerStub implements HashComparer {
-    async compare (hashComparerData: HashComparerData): Promise<boolean> {
+    async compare (hashCompareData: HashCompareData): Promise<boolean> {
       return await Promise.resolve(true)
     }
   }
