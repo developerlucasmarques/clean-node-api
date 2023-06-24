@@ -1,6 +1,7 @@
 import { Collection } from 'mongodb'
 import { MongoHelper } from '../helpers/mongo-helper'
 import { AccountMongoRepository } from './account'
+import { LoadAccountByEmailError } from '../../../../data/errors/load-account-by-email-error'
 
 let accountCollection: Collection
 
@@ -43,7 +44,6 @@ describe('Account Mongo Repository', () => {
       email: 'any_email@mail.com',
       password: 'password1234'
     })
-
     const account = await sut.loadAccountByEmail('any_email@mail.com')
     if (account.isLeft()) {
       return
@@ -53,5 +53,19 @@ describe('Account Mongo Repository', () => {
     expect(account.value.name).toBe('any name')
     expect(account.value.email).toBe('any_email@mail.com')
     expect(account.value.password).toBe('password1234')
+  })
+
+  test('Should return LoadAccountByEmailError if loadAccountByEmail not found account', async () => {
+    const sut = makeSut()
+    await accountCollection.insertOne({
+      name: 'any name',
+      email: 'any_email@mail.com',
+      password: 'password1234'
+    })
+    const account = await sut.loadAccountByEmail('another_email@mail.com')
+    if (account.isRight()) {
+      return
+    }
+    expect(account.value).toEqual(new LoadAccountByEmailError('another_email@mail.com'))
   })
 })
