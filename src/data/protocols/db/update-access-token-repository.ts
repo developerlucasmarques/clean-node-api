@@ -1,6 +1,6 @@
 export interface UpdateAccessTokenData {
   accountId: string
-  accessTokent: string
+  accessToken: string
 }
 
 export interface UpdateAccessTokenRepository {

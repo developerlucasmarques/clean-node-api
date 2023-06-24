@@ -29,7 +29,7 @@ export class DbAuthentication implements Authentication {
     const token = await this.encrypter.encrypt(accountOrError.value.id)
     await this.updateAccessTokenRepository.updateAccessToken({
       accountId: accountOrError.value.id,
-      accessTokent: token
+      accessToken: token
     })
     return right(token)
   }

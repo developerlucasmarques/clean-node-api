@@ -162,7 +162,7 @@ describe('DbAuthentication UseCase', () => {
     await sut.auth(makeFakeAuthenticationData())
     expect(updateAccessTokenSpy).toHaveBeenCalledWith({
       accountId: 'any_id',
-      accessTokent: 'access_token'
+      accessToken: 'access_token'
     })
   })
 
