@@ -3,7 +3,7 @@ import { InvalidEmailError, InvalidNameError, InvalidPasswordError } from '../..
 import { Either, left, right } from '../../../shared/either'
 import { MissingParamError, ServerError } from '../../errors'
 import { badRequest, ok, serverError } from '../../helpers/http/http-helper'
-import { SignUpController } from './signup'
+import { SignUpController } from './signup-controller'
 
 interface SutTypes {
   sut: SignUpController

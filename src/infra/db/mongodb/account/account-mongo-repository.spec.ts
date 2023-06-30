@@ -1,6 +1,6 @@
 import { Collection } from 'mongodb'
 import { MongoHelper } from '../helpers/mongo-helper'
-import { AccountMongoRepository } from './account'
+import { AccountMongoRepository } from './account-mongo-repository'
 import { LoadAccountByEmailError } from '../../../../data/errors/load-account-by-email-error'
 import { AccountData } from '../../../../domain/usecases/add-account'
 

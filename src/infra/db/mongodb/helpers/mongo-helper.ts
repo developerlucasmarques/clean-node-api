@@ -1,5 +1,5 @@
 import { MongoClient, Collection, InsertOneResult, ObjectId } from 'mongodb'
-import { AccountModel } from '../account-repository'
+import { AccountModel } from '../account'
 
 export const MongoHelper = {
   client: null as unknown as MongoClient | null,
