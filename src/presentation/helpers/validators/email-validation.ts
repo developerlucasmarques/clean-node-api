@@ -10,7 +10,7 @@ export class EmailValidation implements Validation {
   validate (input: any): Either<Error, null> {
     const isValid = this.emailValidator.isValid(input[this.fieldName])
     if (!isValid) {
-      return left(new InvalidEmailError(this.fieldName))
+      return left(new InvalidEmailError(input[this.fieldName]))
     }
     return right(null)
   }
