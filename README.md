@@ -167,6 +167,31 @@ Após ter configurado o projeto e ter aguardado a instalação das dependencias 
  	npm run start:dev
  ```
 
+Para executar todos os testes do projeto execute o comando:
+
+ ```
+ 	npm test
+ ```
+
+Para executar apenas os testes unitários execute o comando:
+
+ ```
+ 	npm run test:unit
+ ```
+
+Para executar apenas os testes de integração execute o comando:
+
+ ```
+ 	npm run test:integration
+ ```
+
+Para visualizar a cobertura de testes do projeto execute o comando:
+
+ ```
+ 	npm run test:ci
+ ```
+
+
 ## Autor
 
 - **Lucas Marques** - Desenvolvedor - [Github](https://github.com/codedbylucas) | [Linkedin](https://www.linkedin.com/in/codedbylucas/)
