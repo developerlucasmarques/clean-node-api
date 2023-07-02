@@ -70,11 +70,12 @@ O objetivo do treinamento é mostrar como criar uma API com uma arquitetura bem 
 
 
 ## Features do Node
-API Rest com Express
-Log de Erro
-Segurança (Hashing, Encryption e Encoding)
-CORS
-Middlewares
+
+- API Rest com Express
+- Log de Erro
+- Segurança (Hashing, Encryption e Encoding)
+- CORS
+- Middlewares
 
 
 ## Features do Git
