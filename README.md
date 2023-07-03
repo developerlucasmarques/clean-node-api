@@ -5,6 +5,16 @@ Essa API faz parte do treinamento do professor Rodrigo Manguinho (Mango) na Udem
 O objetivo do treinamento é mostrar como criar uma API com uma arquitetura bem definida e desacoplada, utilizando TDD (programação orientada a testes) como metodologia de trabalho, Clean Architecture para fazer a distribuição de responsabilidades em camadas, sempre seguindo os princípios do SOLID e, sempre que possível, aplicando Design Patterns para resolver alguns problemas comuns.
 
 
+## APIs construídas no treinamento
+
+1. [Cadastro](./requirements/signup.md)
+2. [Login](./requirements/login.md)
+3. [Criar enquete](./requirements/add-survey.md)
+4. [Listar enquetes](./requirements/load-surveys.md)
+5. [Responder enquete](./requirements/save-survey-result.md)
+6. [Resultado da enquete](./requirements/load-survey-result.md)
+
+
 ## Princípios
 
 - Single Responsibility Principle (SRP)
