@@ -12,8 +12,7 @@
     "test:unit": "npm test -- --watch -c jest-unit-config.js",
     "test:integration": "npm test -- --watch -c jest-integration-config.js",
     "test:staged": "npm test -- --findRelatedTests",
-    "test:ci": "npm test -- --coverage",
-    "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,md}\""
+    "test:ci": "npm test -- --coverage"
   },
   "keywords": [],
   "author": "",
