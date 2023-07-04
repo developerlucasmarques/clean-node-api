@@ -8,17 +8,18 @@ import { Controller } from '../../../presentation/protocols'
 import { LogControllerDecorator } from '../../decorators/log-controller-decorator'
 import { makeLoginValidation } from './login-validation-factory'
 import env from '../../config/env'
+import { DbUpdateAccessToken } from '../../../data/usecases/util'
 
 export const makeLoginController = (): Controller => {
   const accountMongoRepository = new AccountMongoRepository()
   const salt = 12
   const bcryptAdapter = new BcryptAdapter(salt)
   const jwtAdapter = new JwtAdapter(env.jwtSecretKey)
+  const dbUpdateAccessToken = new DbUpdateAccessToken(jwtAdapter, accountMongoRepository)
   const authentication = new DbAuthentication(
     accountMongoRepository,
     bcryptAdapter,
-    jwtAdapter,
-    accountMongoRepository
+    dbUpdateAccessToken
   )
   const loginController = new LoginController(makeLoginValidation(), authentication)
   const logMongoRepository = new LogMongoRepository()
