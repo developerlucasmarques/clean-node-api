@@ -3,6 +3,7 @@ import { DbAddAccount } from './db-add-account'
 import { left } from '../../../shared/either'
 import { InvalidNameError, InvalidPasswordError, InvalidEmailError, Account } from '../../../domain/entities/account'
 import { AccountModel } from '../../../domain/models/account'
+import { UpdateAccessToken } from '../authentication'
 
 const makeHasher = (): Hasher => {
   class HasherStub implements Hasher {
@@ -22,6 +23,15 @@ const makeAddAccountRepository = (): AddAccountRepository => {
   return new AddAccountRepositoryStub()
 }
 
+const makeUpdateAccessTokenStub = (): UpdateAccessToken => {
+  class UpdateAccessTokenStub implements UpdateAccessToken {
+    async update (accountId: string): Promise<string> {
+      return await Promise.resolve('access_token')
+    }
+  }
+  return new UpdateAccessTokenStub()
+}
+
 const makeFakeAccount = (): AccountModel => ({
   id: 'valid_id',
   name: 'valid name',
@@ -39,16 +49,19 @@ interface SutTypes {
   sut: DbAddAccount
   hasherStub: Hasher
   addAccountRepositoryStub: AddAccountRepository
+  updateAccessTokenStub: UpdateAccessToken
 }
 
 const makeSut = (): SutTypes => {
   const hasherStub = makeHasher()
   const addAccountRepositoryStub = makeAddAccountRepository()
-  const sut = new DbAddAccount(hasherStub, addAccountRepositoryStub)
+  const updateAccessTokenStub = makeUpdateAccessTokenStub()
+  const sut = new DbAddAccount(hasherStub, addAccountRepositoryStub, updateAccessTokenStub)
   return {
     sut,
     hasherStub,
-    addAccountRepositoryStub
+    addAccountRepositoryStub,
+    updateAccessTokenStub
   }
 }
 
@@ -123,9 +136,10 @@ describe('DbAddAccount UseCase', () => {
     await expect(promise).rejects.toThrow()
   })
 
-  test('Shound return an account on success', async () => {
-    const { sut } = makeSut()
-    const account = await sut.add(makeFakeAccountData())
-    expect(account.value).toEqual(makeFakeAccount())
+  test('Should call UpdateAccessToken with correct account id', async () => {
+    const { sut, updateAccessTokenStub } = makeSut()
+    const updateSpy = jest.spyOn(updateAccessTokenStub, 'update')
+    await sut.add(makeFakeAccountData())
+    expect(updateSpy).toHaveBeenCalledWith('valid_id')
   })
 })
