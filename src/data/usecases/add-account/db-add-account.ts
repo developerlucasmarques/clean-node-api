@@ -2,6 +2,7 @@ import { left, right } from '../../../shared/either'
 import { Account } from '../../../domain/entities/account'
 import { Hasher, AddAccountRepository, AccountData, AddAccount, AddAccountResponse } from '.'
 import { LoadAccountByEmailRepository, UpdateAccessToken } from '../authentication'
+import { EmailInUseError } from '../../errors/email-in-use-error'
 
 export class DbAddAccount implements AddAccount {
   constructor (
@@ -16,7 +17,10 @@ export class DbAddAccount implements AddAccount {
     if (accountOrError.isLeft()) {
       return left(accountOrError.value)
     }
-    await this.loadAccountByEmailRepository.loadAccountByEmail(accountData.email)
+    const loadAccountResult = await this.loadAccountByEmailRepository.loadAccountByEmail(accountData.email)
+    if (loadAccountResult.isRight()) {
+      return left(new EmailInUseError(accountData.email))
+    }
     const hashedPassword = await this.hasher.hash(accountData.password)
     const account = await this.addAccountRepository.add(
       Object.assign({}, accountData, { password: hashedPassword })
