@@ -19,12 +19,8 @@ export class SignUpController implements Controller {
       if (account.isLeft()) {
         return badRequest(account.value)
       }
-      await this.authentication.auth({ email, password })
-      return ok({
-        id: account.value.id,
-        name: account.value.name,
-        email: account.value.email
-      })
+      const accessToken = await this.authentication.auth({ email, password })
+      return ok({ accessToken: accessToken.value })
     } catch (error: any) {
       return serverError(error)
     }
