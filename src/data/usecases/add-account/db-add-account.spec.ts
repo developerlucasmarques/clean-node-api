@@ -3,7 +3,8 @@ import { DbAddAccount } from './db-add-account'
 import { left, right } from '../../../shared/either'
 import { InvalidNameError, InvalidPasswordError, InvalidEmailError, Account } from '../../../domain/entities/account'
 import { AccountModel } from '../../../domain/models/account'
-import { LoadAccountByEmailRepository, LoadAccountByEmailResponse, UpdateAccessToken } from '../authentication'
+import { LoadAccountByEmailError, LoadAccountByEmailRepository, LoadAccountByEmailResponse, UpdateAccessToken } from '../authentication'
+import { EmailInUseError } from '../../errors/email-in-use-error'
 
 const makeHasher = (): Hasher => {
   class HasherStub implements Hasher {
@@ -35,7 +36,7 @@ const makeUpdateAccessTokenStub = (): UpdateAccessToken => {
 const makeLoadAccountByEmailRepositoryStub = (): LoadAccountByEmailRepository => {
   class LoadAccountByEmailRepositoryStub implements LoadAccountByEmailRepository {
     async loadAccountByEmail (email: string): Promise<LoadAccountByEmailResponse> {
-      return await Promise.resolve(right(makeFakeAccount()))
+      return await Promise.resolve(left(new LoadAccountByEmailError('valid_email@mail.com')))
     }
   }
   return new LoadAccountByEmailRepositoryStub()
@@ -117,6 +118,15 @@ describe('DbAddAccount UseCase', () => {
     const loadAccountByEmailSpy = jest.spyOn(loadAccountByEmailRepositoryStub, 'loadAccountByEmail')
     await sut.add(makeFakeAccountData())
     expect(loadAccountByEmailSpy).toHaveBeenCalledWith('valid_email@mail.com')
+  })
+
+  test('Should return EmailInUseError if an account with the email already exists', async () => {
+    const { sut, loadAccountByEmailRepositoryStub } = makeSut()
+    jest.spyOn(loadAccountByEmailRepositoryStub, 'loadAccountByEmail').mockReturnValueOnce(
+      Promise.resolve(right(makeFakeAccount()))
+    )
+    const addResult = await sut.add(makeFakeAccountData())
+    expect(addResult.value).toEqual(new EmailInUseError('valid_email@mail.com'))
   })
 
   test('Should call Hasher with correct passwod', async () => {
