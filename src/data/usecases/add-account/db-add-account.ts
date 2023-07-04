@@ -19,7 +19,7 @@ export class DbAddAccount implements AddAccount {
     const account = await this.addAccountRepository.add(
       Object.assign({}, accountData, { password: hashedPassword })
     )
-    await this.updateAccessToken.update(account.id)
-    return right('')
+    const accessToken = await this.updateAccessToken.update(account.id)
+    return right(accessToken)
   }
 }
