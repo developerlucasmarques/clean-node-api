@@ -10,6 +10,6 @@ export class DbUpdateAccessToken implements UpdateAccessToken {
   async update (accountId: string): Promise<string> {
     const accessToken = await this.encrypter.encrypt(accountId)
     await this.updateAccessTokenRepository.updateAccessToken({ accountId, accessToken })
-    return 'any_token'
+    return accessToken
   }
 }
