@@ -10,7 +10,7 @@ export class DbAuthentication implements Authentication {
   constructor (
     private readonly loadAccountByEmailRepository: LoadAccountByEmailRepository,
     private readonly hashComparer: HashComparer,
-    private readonly dbUpdateAccessToken: UpdateAccessToken
+    private readonly updateAccessToken: UpdateAccessToken
   ) {}
 
   async auth (authenticationData: AuthenticationData): Promise<AuthenticationResponse> {
@@ -26,7 +26,7 @@ export class DbAuthentication implements Authentication {
     if (!comparerResult) {
       return left(new AuthenticationError())
     }
-    const accessToken = await this.dbUpdateAccessToken.update(accountOrError.value.id)
+    const accessToken = await this.updateAccessToken.update(accountOrError.value.id)
     return right(accessToken)
   }
 }

@@ -15,11 +15,11 @@ export const makeLoginController = (): Controller => {
   const salt = 12
   const bcryptAdapter = new BcryptAdapter(salt)
   const jwtAdapter = new JwtAdapter(env.jwtSecretKey)
-  const dbUpdateAccessToken = new DbUpdateAccessToken(jwtAdapter, accountMongoRepository)
+  const updateAccessToken = new DbUpdateAccessToken(jwtAdapter, accountMongoRepository)
   const authentication = new DbAuthentication(
     accountMongoRepository,
     bcryptAdapter,
-    dbUpdateAccessToken
+    updateAccessToken
   )
   const loginController = new LoginController(makeLoginValidation(), authentication)
   const logMongoRepository = new LogMongoRepository()
