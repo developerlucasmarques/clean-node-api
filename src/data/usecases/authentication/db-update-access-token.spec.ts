@@ -61,4 +61,13 @@ describe('UpdateAccessToken UseCase', () => {
       accessToken: 'any_token'
     })
   })
+
+  test('Should throw if UpdateAccessTokenRepository throws', async () => {
+    const { sut, updateAccessTokenRepositoryStub } = makeSut()
+    jest.spyOn(updateAccessTokenRepositoryStub, 'updateAccessToken').mockImplementationOnce(async () => {
+      await Promise.reject(new Error())
+    })
+    const promise = sut.update('account_id')
+    await expect(promise).rejects.toThrow(new Error())
+  })
 })
