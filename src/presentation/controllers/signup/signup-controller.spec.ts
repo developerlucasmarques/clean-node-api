@@ -1,4 +1,4 @@
-import { AccountData, AccountModel, AddAccount, AddAccountResponse, HttpRequest, Validation, Authentication, AuthenticationData, AuthenticationResponse } from '.'
+import { AccountData, AddAccount, AddAccountResponse, HttpRequest, Validation } from '.'
 import { InvalidEmailError, InvalidNameError, InvalidPasswordError } from '../../../domain/entities/account'
 import { Either, left, right } from '../../../shared/either'
 import { MissingParamError, ServerError } from '../../errors'
@@ -8,7 +8,7 @@ import { SignUpController } from './signup-controller'
 const makeAddAccount = (): AddAccount => {
   class AddAccountStub implements AddAccount {
     async add (account: AccountData): Promise<AddAccountResponse> {
-      return right(await Promise.resolve(makeFakeAccount()))
+      return right(await Promise.resolve('access_token'))
     }
   }
   return new AddAccountStub()
@@ -23,41 +23,22 @@ const makeValidation = (): Validation => {
   return new ValidationStub()
 }
 
-const makeAuthentication = (): Authentication => {
-  class AuthenticationStub implements Authentication {
-    async auth (authenticationData: AuthenticationData): Promise<AuthenticationResponse> {
-      return right('any_token')
-    }
-  }
-  return new AuthenticationStub()
-}
-
 interface SutTypes {
   sut: SignUpController
   addAccountStub: AddAccount
   validationStub: Validation
-  authenticationStub: Authentication
 }
 
 const makeSut = (): SutTypes => {
   const addAccountStub = makeAddAccount()
   const validationStub = makeValidation()
-  const authenticationStub = makeAuthentication()
-  const sut = new SignUpController(addAccountStub, validationStub, authenticationStub)
+  const sut = new SignUpController(addAccountStub, validationStub)
   return {
     sut,
     addAccountStub,
-    validationStub,
-    authenticationStub
+    validationStub
   }
 }
-
-const makeFakeAccount = (): AccountModel => ({
-  id: 'valid_id',
-  name: 'valid name',
-  email: 'valid_email@mail.com',
-  password: 'password1234'
-})
 
 const makeFakeRequest = (): HttpRequest => ({
   body: {
@@ -133,25 +114,9 @@ describe('SignUp Controller', () => {
     expect(httpResponse).toEqual(badRequest(new MissingParamError('any_field')))
   })
 
-  test('Should call Authentication with correct values', async () => {
-    const { sut, authenticationStub } = makeSut()
-    const authSpy = jest.spyOn(authenticationStub, 'auth')
-    await sut.handle(makeFakeRequest())
-    expect(authSpy).toHaveBeenCalledWith({ email: 'any_email', password: 'password1234' })
-  })
-
-  test('Should return 500 if Authentication throws', async () => {
-    const { sut, authenticationStub } = makeSut()
-    jest.spyOn(authenticationStub, 'auth').mockImplementationOnce(async () => {
-      return await Promise.reject(new Error())
-    })
-    const httpResponse = await sut.handle(makeFakeRequest())
-    expect(httpResponse).toEqual(serverError(new Error()))
-  })
-
   test('Should return 200 if valid data is provided', async () => {
     const { sut } = makeSut()
     const httpResponse = await sut.handle(makeFakeRequest())
-    expect(httpResponse).toEqual(ok({ accessToken: 'any_token' }))
+    expect(httpResponse).toEqual(ok({ accessToken: 'access_token' }))
   })
 })
