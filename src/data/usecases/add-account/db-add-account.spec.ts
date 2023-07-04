@@ -151,4 +151,10 @@ describe('DbAddAccount UseCase', () => {
     const promise = sut.add(makeFakeAccountData())
     await expect(promise).rejects.toThrow()
   })
+
+  test('Should return access token if UpdateAccessToken success', async () => {
+    const { sut } = makeSut()
+    const accessToken = await sut.add(makeFakeAccountData())
+    expect(accessToken.value).toBe('access_token')
+  })
 })
