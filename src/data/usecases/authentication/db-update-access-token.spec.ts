@@ -70,4 +70,10 @@ describe('UpdateAccessToken UseCase', () => {
     const promise = sut.update('account_id')
     await expect(promise).rejects.toThrow(new Error())
   })
+
+  test('Should return access token if Encrypter success', async () => {
+    const { sut } = makeSut()
+    const updateResult = await sut.update('account_id')
+    expect(updateResult).toBe('any_token')
+  })
 })
