@@ -1,7 +1,8 @@
 import {
-  AuthenticationError, AuthenticationData, HashComparer, Encrypter,
-  LoadAccountByEmailRepository, UpdateAccessTokenRepository, Authentication,
-  AuthenticationResponse
+  AuthenticationError, AuthenticationData, HashComparer,
+  LoadAccountByEmailRepository, Authentication,
+  AuthenticationResponse,
+  UpdateAccessToken
 } from '.'
 import { left, right } from '../../../shared/either'
 
@@ -9,8 +10,7 @@ export class DbAuthentication implements Authentication {
   constructor (
     private readonly loadAccountByEmailRepository: LoadAccountByEmailRepository,
     private readonly hashComparer: HashComparer,
-    private readonly encrypter: Encrypter,
-    private readonly updateAccessTokenRepository: UpdateAccessTokenRepository
+    private readonly dbUpdateAccessToken: UpdateAccessToken
   ) {}
 
   async auth (authenticationData: AuthenticationData): Promise<AuthenticationResponse> {
@@ -26,11 +26,7 @@ export class DbAuthentication implements Authentication {
     if (!comparerResult) {
       return left(new AuthenticationError())
     }
-    const token = await this.encrypter.encrypt(accountOrError.value.id)
-    await this.updateAccessTokenRepository.updateAccessToken({
-      accountId: accountOrError.value.id,
-      accessToken: token
-    })
-    return right(token)
+    await this.dbUpdateAccessToken.update(accountOrError.value.id)
+    return right('token')
   }
 }
