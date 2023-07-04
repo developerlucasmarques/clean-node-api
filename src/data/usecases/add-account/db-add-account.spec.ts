@@ -129,6 +129,15 @@ describe('DbAddAccount UseCase', () => {
     expect(addResult.value).toEqual(new EmailInUseError('valid_email@mail.com'))
   })
 
+  test('Should throw if LoadAccountByEmailRepository throws', async () => {
+    const { sut, loadAccountByEmailRepositoryStub } = makeSut()
+    jest.spyOn(loadAccountByEmailRepositoryStub, 'loadAccountByEmail').mockImplementationOnce(async () => {
+      return await Promise.reject(new Error())
+    })
+    const promise = sut.add(makeFakeAccountData())
+    await expect(promise).rejects.toThrow()
+  })
+
   test('Should call Hasher with correct passwod', async () => {
     const { sut, hasherStub } = makeSut()
     const hashSpy = jest.spyOn(hasherStub, 'hash')
