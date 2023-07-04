@@ -26,7 +26,7 @@ export class DbAuthentication implements Authentication {
     if (!comparerResult) {
       return left(new AuthenticationError())
     }
-    await this.dbUpdateAccessToken.update(accountOrError.value.id)
-    return right('token')
+    const accessToken = await this.dbUpdateAccessToken.update(accountOrError.value.id)
+    return right(accessToken)
   }
 }
