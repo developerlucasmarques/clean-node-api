@@ -30,4 +30,13 @@ describe('UpdateAccessToken UseCase', () => {
     sut.update('account_id')
     expect(encryptSpy).toHaveBeenCalledWith('account_id')
   })
+
+  test('Should throw if Encrypter throws', async () => {
+    const { sut, encrypterStub } = makeSut()
+    jest.spyOn(encrypterStub, 'encrypt').mockImplementationOnce(async () => {
+      return await Promise.reject(new Error())
+    })
+    const promise = sut.update('account_id')
+    await expect(promise).rejects.toThrow(new Error())
+  })
 })
