@@ -1,4 +1,4 @@
-import { HttpRequest, Validation, badRequest, AddSurvey, AddSurveyData, serverError } from '.'
+import { HttpRequest, Validation, badRequest, AddSurvey, AddSurveyData, serverError, noContent } from '.'
 import { AddSurveyController } from './add-survey-controller'
 import { Either, left, right } from '../../../../shared/either'
 
@@ -76,5 +76,11 @@ describe('AddSurvey Controller', () => {
     })
     const httpResponse = await sut.handle(makeFakeRequest())
     expect(httpResponse).toEqual(serverError(new Error()))
+  })
+
+  test('Should return 204 on success', async () => {
+    const { sut } = makeSut()
+    const httpResponse = await sut.handle(makeFakeRequest())
+    expect(httpResponse).toEqual(noContent())
   })
 })
