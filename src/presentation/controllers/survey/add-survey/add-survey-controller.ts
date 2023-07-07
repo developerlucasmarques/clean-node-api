@@ -11,7 +11,8 @@ export class AddSurveyController implements Controller {
     if (validationResult.isLeft()) {
       return badRequest(validationResult.value)
     }
-    await this.addSurvey.add(httpRequest.body)
+    const { question, answers } = httpRequest.body
+    await this.addSurvey.add({ question, answers })
     return await Promise.resolve({
       statusCode: 1,
       body: 'any_body'
