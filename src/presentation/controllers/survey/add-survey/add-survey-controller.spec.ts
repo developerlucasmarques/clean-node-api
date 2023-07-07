@@ -1,6 +1,6 @@
-import { HttpRequest, Validation } from '.'
+import { HttpRequest, Validation, badRequest } from '.'
 import { AddSurveyController } from './add-survey-controller'
-import { Either, right } from '../../../../shared/either'
+import { Either, left, right } from '../../../../shared/either'
 
 describe('AddSurvey Controller', () => {
   const makeValidationStub = (): Validation => {
@@ -41,5 +41,12 @@ describe('AddSurvey Controller', () => {
     const validateSpy = jest.spyOn(validationStub, 'validate')
     await sut.handle(makeFakeRequest())
     expect(validateSpy).toHaveBeenCalledWith(makeFakeRequest().body)
+  })
+
+  test('Should return 404 if Validation fails', async () => {
+    const { sut, validationStub } = makeSut()
+    jest.spyOn(validationStub, 'validate').mockReturnValueOnce(left(new Error()))
+    const httpResponse = await sut.handle(makeFakeRequest())
+    expect(httpResponse).toEqual(badRequest(new Error()))
   })
 })
