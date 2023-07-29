@@ -7,13 +7,20 @@ export class Question {
   }
 
   static create (question: string): Either<InvalidQuestionError, Question> {
-    if (!Question.validate(question)) {
-      return left(new InvalidQuestionError())
+    const validate = Question.validate(question)
+    if (validate) {
+      return left(validate)
     }
     return right(new Question(question))
   }
 
-  private static validate (question: string): boolean {
-    return false
+  private static validate (question: string): InvalidQuestionError | null {
+    if (!question) {
+      return new InvalidQuestionError('Question not provided')
+    }
+    if (question.length < 7) {
+      return new InvalidQuestionError('Contains less than 7 characters')
+    }
+    return null
   }
 }

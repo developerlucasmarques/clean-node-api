@@ -1,6 +1,6 @@
 export class InvalidQuestionError extends Error {
-  constructor () {
-    super('The question is invalid')
+  constructor (message: string) {
+    super(`The question ${message}`)
     this.name = 'InvalidQuestionError'
   }
 }
