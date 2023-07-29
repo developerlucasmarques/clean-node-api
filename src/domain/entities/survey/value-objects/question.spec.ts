@@ -23,4 +23,9 @@ describe('Question Value Object', () => {
     const sut = Question.create('   any question    ')
     expect(sut).toEqual(right({ question: 'any question' }))
   })
+
+  test('Should return Question if validation on success', () => {
+    const sut = Question.create('any question')
+    expect(sut).toEqual(right({ question: 'any question' }))
+  })
 })
