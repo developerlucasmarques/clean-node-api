@@ -11,6 +11,7 @@ export class Question {
     if (validate) {
       return left(validate)
     }
+    question = question.trim()
     return right(new Question(question))
   }
 
