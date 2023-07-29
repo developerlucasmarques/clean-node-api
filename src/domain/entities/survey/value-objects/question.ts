@@ -16,10 +16,13 @@ export class Question {
 
   private static validate (question: string): InvalidQuestionError | null {
     if (!question) {
-      return new InvalidQuestionError('Question not provided')
+      return new InvalidQuestionError('not provided')
     }
     if (question.length < 7) {
-      return new InvalidQuestionError('Contains less than 7 characters')
+      return new InvalidQuestionError('contains less than 7 characters')
+    }
+    if (question.length > 300) {
+      return new InvalidQuestionError('contains more than 300 characters')
     }
     return null
   }
