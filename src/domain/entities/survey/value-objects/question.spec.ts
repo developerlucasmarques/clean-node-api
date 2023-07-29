@@ -1,4 +1,4 @@
-import { left } from '../../../../shared/either'
+import { left, right } from '../../../../shared/either'
 import { InvalidQuestionError } from '../errors'
 import { Question } from './question'
 
@@ -17,5 +17,10 @@ describe('Question Value Object', () => {
     const question = 'A'.repeat(301)
     const sut = Question.create(question)
     expect(sut).toEqual(left(new InvalidQuestionError('contains more than 300 characters')))
+  })
+
+  test('Should remove spaces at the beginning and end of the question', () => {
+    const sut = Question.create('   any question    ')
+    expect(sut).toEqual(right({ question: 'any question' }))
   })
 })
