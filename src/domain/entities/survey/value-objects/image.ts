@@ -11,10 +11,15 @@ export class Image {
     if (validateResult) {
       return left(validateResult)
     }
+    image = image.trim()
     return right(new Image(image))
   }
 
   private static validate (image: string): InvalidImageError | null {
+    if (!image) {
+      return new InvalidImageError('was not provided')
+    }
+    image = image.trim()
     const urlPattern = new RegExp('^(https?:\\/\\/)?' +
     '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|' +
     '((\\d{1,3}\\.){3}\\d{1,3}))' +
