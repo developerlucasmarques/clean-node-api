@@ -1,18 +1,16 @@
-import { SurveyAnswer, Image, Answer } from '.'
-import { left } from '../../../../shared/either'
+import { Answer, Image, SurveyAnswer } from '.'
+import { left, right } from '../../../../shared/either'
 import { InvalidAnswerError, InvalidImageError } from '../errors'
 
-const image = 'http://invalid-image.com'
-const answer = 'any_answer'
+const image = 'http://valid-image-url.com'
+const answer = 'valid_answer'
 
 describe('SurveyAnswer ValueObject', () => {
   test('Should return InvalidImageError if image is invalid', () => {
     jest.spyOn(Image, 'create').mockReturnValueOnce(
       left(new InvalidImageError('any error'))
     )
-
     const sut = SurveyAnswer.create({ image, answer })
-
     expect(sut).toEqual(left(new InvalidImageError('any error')))
   })
 
@@ -20,9 +18,15 @@ describe('SurveyAnswer ValueObject', () => {
     jest.spyOn(Answer, 'create').mockReturnValueOnce(
       left(new InvalidAnswerError('any error'))
     )
-
     const sut = SurveyAnswer.create({ image, answer })
-
     expect(sut).toEqual(left(new InvalidAnswerError('any error')))
+  })
+
+  test('Should return SurveyAnswer if all datas is valid', () => {
+    const sut = SurveyAnswer.create({ image, answer })
+    expect(sut).toEqual(right({
+      image: Image.create(image).value,
+      answer: Answer.create(answer).value
+    }))
   })
 })
