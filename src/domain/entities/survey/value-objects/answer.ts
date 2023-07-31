@@ -11,6 +11,7 @@ export class Answer {
     if (validate) {
       return left(validate)
     }
+    answer = answer.trim()
     return right(new Answer(answer))
   }
 
@@ -18,6 +19,7 @@ export class Answer {
     if (!answer) {
       return new InvalidAnswerError('not provided')
     }
+    answer = answer.trim()
     if (answer.length < 3) {
       return new InvalidAnswerError('contains less than 3 characters')
     }
