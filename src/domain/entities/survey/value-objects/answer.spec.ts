@@ -1,4 +1,4 @@
-import { left } from '../../../../shared/either'
+import { left, right } from '../../../../shared/either'
 import { InvalidAnswerError } from '../errors'
 import { Answer } from './answer'
 
@@ -17,5 +17,10 @@ describe('Answer ValueObject', () => {
     const answer = 'a'.repeat(301)
     const sut = Answer.create(answer)
     expect(sut).toEqual(left(new InvalidAnswerError('contains more than 300 characters')))
+  })
+
+  test('Should remove spaces at the beginning and at the end', () => {
+    const sut = Answer.create(' any answer  ')
+    expect(sut).toEqual(right({ answer: 'any answer' }))
   })
 })
