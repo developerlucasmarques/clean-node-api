@@ -1,6 +1,6 @@
 import { Survey } from '../../../domain/entities/survey'
 import { AddSurveyData } from '../../../domain/usecases/add-survey'
-import { left } from '../../../shared/either'
+import { left, right } from '../../../shared/either'
 import { AddSurveyRepository } from '../../protocols/db/survey/add-survey-repository'
 import { DbAddSurvey } from './db-add-survey'
 
@@ -59,5 +59,11 @@ describe('DbAdddSurvey UseCase', () => {
     )
     const result = await sut.add(makeFakeSurveyData())
     expect(result).toEqual(left(new Error()))
+  })
+
+  test('Should return null if add on success', async () => {
+    const { sut } = makeSut()
+    const result = await sut.add(makeFakeSurveyData())
+    expect(result).toEqual(right(null))
   })
 })
