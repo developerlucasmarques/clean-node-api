@@ -1,13 +1,22 @@
 import { Either, left, right } from '../../../shared/either'
 import { InvalidQuestionError } from './errors'
-import { Question } from './value-objects'
+import { Question, SurveyAnswer } from './value-objects'
 
-interface SurveyData {
+interface SurveyAnswerData {
+  image?: string
+  answer: string
+}
+
+export interface SurveyData {
   question: string
+  answers: SurveyAnswerData[]
 }
 
 export class Survey {
-  private constructor (private readonly question: Question) {
+  private constructor (
+    private readonly question: Question,
+    private readonly answers: SurveyAnswer[]
+  ) {
     Object.freeze(this)
   }
 
@@ -16,6 +25,14 @@ export class Survey {
     if (questionResult.isLeft()) {
       return left(questionResult.value)
     }
-    return right(new Survey(questionResult.value))
+    const answers: SurveyAnswer[] = []
+    for (const answer of input.answers) {
+      const surveyAnswerResult = SurveyAnswer.create(answer)
+      if (surveyAnswerResult.isLeft()) {
+        return left(surveyAnswerResult.value)
+      }
+      answers.push(surveyAnswerResult.value)
+    }
+    return right(new Survey(questionResult.value, answers))
   }
 }
