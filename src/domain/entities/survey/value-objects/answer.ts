@@ -21,6 +21,9 @@ export class Answer {
     if (answer.length < 3) {
       return new InvalidAnswerError('contains less than 3 characters')
     }
+    if (answer.length > 300) {
+      return new InvalidAnswerError('contains more than 300 characters')
+    }
     return null
   }
 }
