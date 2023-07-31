@@ -1,4 +1,4 @@
-import { left } from '../../../shared/either'
+import { Either, left } from '../../../shared/either'
 import { InvalidAnswerError, InvalidImageError, InvalidQuestionError } from './errors'
 import { Question } from './value-objects/question'
 import { Survey, SurveyData } from './survey'
@@ -12,12 +12,17 @@ const makeFakeSurveyData = (): SurveyData => ({
   }]
 })
 
+const makeSut = (): Either<InvalidQuestionError, Survey> => {
+  const sut = Survey.create(makeFakeSurveyData())
+  return sut
+}
+
 describe('Survey Entity', () => {
   test('Should return InvalidQuestionError if Question return this error', () => {
     jest.spyOn(Question, 'create').mockReturnValueOnce(
       left(new InvalidQuestionError('any message'))
     )
-    const sut = Survey.create(makeFakeSurveyData())
+    const sut = makeSut()
     expect(sut).toEqual(left(new InvalidQuestionError('any message')))
   })
 
@@ -25,7 +30,7 @@ describe('Survey Entity', () => {
     jest.spyOn(SurveyAnswer, 'create').mockReturnValueOnce(
       left(new InvalidImageError('any message'))
     )
-    const sut = Survey.create(makeFakeSurveyData())
+    const sut = makeSut()
     expect(sut).toEqual(left(new InvalidImageError('any message')))
   })
 
@@ -33,7 +38,7 @@ describe('Survey Entity', () => {
     jest.spyOn(SurveyAnswer, 'create').mockReturnValueOnce(
       left(new InvalidAnswerError('any message'))
     )
-    const sut = Survey.create(makeFakeSurveyData())
+    const sut = makeSut()
     expect(sut).toEqual(left(new InvalidAnswerError('any message')))
   })
 })
