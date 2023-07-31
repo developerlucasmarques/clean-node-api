@@ -41,4 +41,13 @@ describe('Survey Entity', () => {
     const sut = makeSut()
     expect(sut).toEqual(left(new InvalidAnswerError('any message')))
   })
+
+  test('Should return the first error if more than one SurveyAnswer validation fails', () => {
+    jest.spyOn(SurveyAnswer, 'create').mockReturnValueOnce(left(new Error()))
+    jest.spyOn(SurveyAnswer, 'create').mockReturnValueOnce(
+      left(new InvalidAnswerError('any message'))
+    )
+    const sut = makeSut()
+    expect(sut).toEqual(left(new Error()))
+  })
 })
