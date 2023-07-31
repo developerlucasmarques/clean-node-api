@@ -1,4 +1,4 @@
-import { HttpRequest, Validation, badRequest, AddSurvey, AddSurveyData, serverError, noContent } from '.'
+import { HttpRequest, Validation, badRequest, AddSurvey, AddSurveyData, serverError, noContent, AddSurveyResponse } from '.'
 import { AddSurveyController } from './add-survey-controller'
 import { Either, left, right } from '../../../../shared/either'
 
@@ -14,8 +14,8 @@ describe('AddSurvey Controller', () => {
 
   const makeAddSurveyStub = (): AddSurvey => {
     class AddSurveyStub implements AddSurvey {
-      async add (data: AddSurveyData): Promise<void> {
-        Promise.resolve()
+      async add (data: AddSurveyData): Promise<AddSurveyResponse> {
+        return await Promise.resolve(right(null))
       }
     }
     return new AddSurveyStub()
@@ -72,10 +72,19 @@ describe('AddSurvey Controller', () => {
   test('Should return 500 if AddSurvey throws', async () => {
     const { sut, addSurveyStub } = makeSut()
     jest.spyOn(addSurveyStub, 'add').mockImplementationOnce(async () => {
-      await Promise.reject(new Error())
+      return await new Promise((resolve, reject) => { reject(new Error()) })
     })
     const httpResponse = await sut.handle(makeFakeRequest())
     expect(httpResponse).toEqual(serverError(new Error()))
+  })
+
+  test('Should return 400 if AddSurvey return a Error', async () => {
+    const { sut, addSurveyStub } = makeSut()
+    jest.spyOn(addSurveyStub, 'add').mockReturnValueOnce(
+      Promise.resolve(left(new Error()))
+    )
+    const httpResponse = await sut.handle(makeFakeRequest())
+    expect(httpResponse).toEqual(badRequest(new Error()))
   })
 
   test('Should return 204 on success', async () => {
