@@ -23,4 +23,9 @@ describe('Answer ValueObject', () => {
     const sut = Answer.create(' any answer  ')
     expect(sut).toEqual(right({ answer: 'any answer' }))
   })
+
+  test('Should return Answer if answer is valid', () => {
+    const sut = Answer.create('valid answer')
+    expect(sut).toEqual(right({ answer: 'valid answer' }))
+  })
 })
