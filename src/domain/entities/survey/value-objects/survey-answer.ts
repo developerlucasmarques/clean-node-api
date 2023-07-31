@@ -2,18 +2,16 @@ import { Answer, Image } from '.'
 import { Either, left, right } from '../../../../shared/either'
 import { InvalidAnswerError, InvalidImageError } from '../errors'
 
-export interface SurveyAnswerModel {
-  image?: Image
-  answer: Answer
-}
-
 export interface SurveyAnswerData {
   image?: string
   answer: string
 }
 
 export class SurveyAnswer {
-  private constructor (private readonly input: SurveyAnswerModel) {
+  private constructor (
+    private readonly answer: Answer,
+    private readonly image: Image | undefined
+  ) {
     Object.freeze(this)
   }
 
@@ -26,10 +24,11 @@ export class SurveyAnswer {
       }
       image = imageResult.value
     }
-    const answer = Answer.create(input.answer)
-    if (answer.isLeft()) {
-      return left(answer.value)
+    const answerResult = Answer.create(input.answer)
+    if (answerResult.isLeft()) {
+      return left(answerResult.value)
     }
-    return right(new SurveyAnswer({ answer: answer.value, image }))
+    const answer = answerResult.value
+    return right(new SurveyAnswer(answer, image))
   }
 }
