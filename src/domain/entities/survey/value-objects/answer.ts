@@ -18,6 +18,9 @@ export class Answer {
     if (!answer) {
       return new InvalidAnswerError('not provided')
     }
+    if (answer.length < 3) {
+      return new InvalidAnswerError('contains less than 3 characters')
+    }
     return null
   }
 }
