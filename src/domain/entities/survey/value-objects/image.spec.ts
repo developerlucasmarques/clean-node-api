@@ -52,4 +52,9 @@ describe('Image ValueObject', () => {
     const sut = Image.create('https://github.com/codedbylucas/clean-node-api')
     expect(sut).toEqual(right({ image: 'https://github.com/codedbylucas/clean-node-api' }))
   })
+
+  test('Should remove spaces at the beginning and at the end', () => {
+    const sut = Image.create('  https://image.com  ')
+    expect(sut).toEqual(right({ image: 'https://image.com' }))
+  })
 })
