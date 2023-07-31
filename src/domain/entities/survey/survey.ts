@@ -13,9 +13,9 @@ export class Survey {
 
   static create (input: SurveyData): Either<InvalidQuestionError, Survey> {
     const questionResult = Question.create(input.question)
-    // if (questionResult.isLeft()) {
-    //   return left(questionResult.value)
-    // }
+    if (questionResult.isLeft()) {
+      return left(questionResult.value)
+    }
     return right(new Survey(questionResult.value))
   }
 }
