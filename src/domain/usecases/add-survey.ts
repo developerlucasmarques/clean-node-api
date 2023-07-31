@@ -1,3 +1,6 @@
+import { Either } from '../../shared/either'
+import { InvalidAnswerError, InvalidImageError, InvalidQuestionError } from '../entities/survey/errors'
+
 export interface SurveyAnswer {
   image?: string
   answer: string
@@ -8,6 +11,8 @@ export interface AddSurveyData {
   answers: SurveyAnswer[]
 }
 
+export type AddSurveyResponse = Either<InvalidQuestionError | InvalidAnswerError | InvalidImageError, null>
+
 export interface AddSurvey {
-  add: (data: AddSurveyData) => Promise<void>
+  add: (data: AddSurveyData) => Promise<AddSurveyResponse>
 }
