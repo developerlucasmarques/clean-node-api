@@ -1,5 +1,5 @@
 import { left } from '../../../shared/either'
-import { InvalidImageError, InvalidQuestionError } from './errors'
+import { InvalidAnswerError, InvalidImageError, InvalidQuestionError } from './errors'
 import { Question } from './value-objects/question'
 import { Survey, SurveyData } from './survey'
 import { SurveyAnswer } from './value-objects'
@@ -27,5 +27,13 @@ describe('Survey Entity', () => {
     )
     const sut = Survey.create(makeFakeSurveyData())
     expect(sut).toEqual(left(new InvalidImageError('any message')))
+  })
+
+  test('Should return InvalidAnswerError if SurveyAnswer return this error', () => {
+    jest.spyOn(SurveyAnswer, 'create').mockReturnValueOnce(
+      left(new InvalidAnswerError('any message'))
+    )
+    const sut = Survey.create(makeFakeSurveyData())
+    expect(sut).toEqual(left(new InvalidAnswerError('any message')))
   })
 })
