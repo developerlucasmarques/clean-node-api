@@ -29,4 +29,11 @@ describe('SurveyAnswer ValueObject', () => {
       answer: Answer.create(answer).value
     }))
   })
+
+  test('Should return SurveyAnswer even if the image is undefined', () => {
+    const sut = SurveyAnswer.create({ image: undefined, answer })
+    expect(sut).toEqual(right({
+      answer: Answer.create(answer).value
+    }))
+  })
 })
