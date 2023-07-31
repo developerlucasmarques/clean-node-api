@@ -1,11 +1,13 @@
+import { Survey } from '../../../domain/entities/survey'
 import { AddSurveyData } from '../../../domain/usecases/add-survey'
+import { left } from '../../../shared/either'
 import { AddSurveyRepository } from '../../protocols/db/survey/add-survey-repository'
 import { DbAddSurvey } from './db-add-survey'
 
 const makeFakeSurveyData = (): AddSurveyData => ({
   question: 'any_question',
   answers: [{
-    image: 'any_image',
+    image: 'http://valid-image-url.com',
     answer: 'any_answer'
   }]
 })
@@ -37,9 +39,7 @@ describe('DbAdddSurvey UseCase', () => {
   test('Should call AddSurveyRepository with correct values', async () => {
     const { sut, addSurveyRepositoryStub } = makeSut()
     const addSpy = jest.spyOn(addSurveyRepositoryStub, 'add')
-
     await sut.add(makeFakeSurveyData())
-
     expect(addSpy).toHaveBeenCalledWith(makeFakeSurveyData())
   })
 
@@ -48,9 +48,16 @@ describe('DbAdddSurvey UseCase', () => {
     jest.spyOn(addSurveyRepositoryStub, 'add').mockImplementationOnce(async () => {
       await Promise.reject(new Error())
     })
-
     const promise = sut.add(makeFakeSurveyData())
-
     await expect(promise).rejects.toThrow()
+  })
+
+  test('Should return an Error if Survey creation fails', async () => {
+    const { sut } = makeSut()
+    jest.spyOn(Survey, 'create').mockReturnValueOnce(
+      left(new Error())
+    )
+    const result = await sut.add(makeFakeSurveyData())
+    expect(result).toEqual(left(new Error()))
   })
 })
