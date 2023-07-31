@@ -12,4 +12,10 @@ describe('Answer ValueObject', () => {
     const sut = Answer.create('ab')
     expect(sut).toEqual(left(new InvalidAnswerError('contains less than 3 characters')))
   })
+
+  test('Should return InvalidAnswerError if answer contains more than 300 characters', () => {
+    const answer = 'a'.repeat(301)
+    const sut = Answer.create(answer)
+    expect(sut).toEqual(left(new InvalidAnswerError('contains more than 300 characters')))
+  })
 })
