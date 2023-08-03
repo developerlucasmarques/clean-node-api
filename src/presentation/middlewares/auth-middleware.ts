@@ -1,12 +1,15 @@
 import { InvalidTokenError } from '../../domain/errors'
-import { LoadAccountByToken } from '../../domain/usecases'
+import { AccountRole, LoadAccountByToken } from '../../domain/usecases'
 import { AccessTokenNotInformedError } from '../errors'
 import { forbidden, ok, serverError, unauthorized } from '../helpers/http/http-helper'
 import { HttpRequest, HttpResponse } from '../protocols'
 import { Middleware } from '../protocols/middleware'
 
 export class AuthMiddleware implements Middleware {
-  constructor (private readonly loadAccountByToken: LoadAccountByToken) {}
+  constructor (
+    private readonly loadAccountByToken: LoadAccountByToken,
+    private readonly role?: AccountRole
+  ) {}
 
   async handle (httpRequest: HttpRequest): Promise<HttpResponse> {
     try {
@@ -14,7 +17,7 @@ export class AuthMiddleware implements Middleware {
       if (!accessToken) {
         return unauthorized(new AccessTokenNotInformedError())
       }
-      const accountOrError = await this.loadAccountByToken.load(httpRequest.headers['x-access-token'])
+      const accountOrError = await this.loadAccountByToken.load({ accessToken, role: this.role })
       if (accountOrError.isLeft()) {
         if (accountOrError.value instanceof InvalidTokenError) {
           return unauthorized(accountOrError.value)
