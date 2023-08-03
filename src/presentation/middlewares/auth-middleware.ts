@@ -1,5 +1,6 @@
+import { InvalidTokenError } from '../../domain/errors'
 import { LoadAccountByToken } from '../../domain/usecases'
-import { AccessDeniedError } from '../errors'
+import { AccessTokenNotInformedError } from '../errors'
 import { ok, unauthorized } from '../helpers/http/http-helper'
 import { HttpRequest, HttpResponse } from '../protocols'
 import { Middleware } from '../protocols/middleware'
@@ -10,9 +11,14 @@ export class AuthMiddleware implements Middleware {
   async handle (httpRequest: HttpRequest): Promise<HttpResponse> {
     const accessToken = httpRequest.headers?.['x-access-token']
     if (!accessToken) {
-      return unauthorized(new AccessDeniedError())
+      return unauthorized(new AccessTokenNotInformedError())
     }
-    await this.loadAccountByToken.load(httpRequest.headers['x-access-token'])
+    const accountOrError = await this.loadAccountByToken.load(httpRequest.headers['x-access-token'])
+    if (accountOrError.isLeft()) {
+      if (accountOrError.value instanceof InvalidTokenError) {
+        return unauthorized(accountOrError.value)
+      }
+    }
     return ok({
       id: '213123',
       name: 'any name',
