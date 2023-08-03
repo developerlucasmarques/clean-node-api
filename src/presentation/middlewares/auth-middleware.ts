@@ -1,7 +1,7 @@
 import { AccessDeniedError, InvalidTokenError } from '../../domain/errors'
 import { LoadAccountByToken } from '../../domain/usecases'
 import { AccessTokenNotInformedError } from '../errors'
-import { forbidden, ok, unauthorized } from '../helpers/http/http-helper'
+import { forbidden, ok, serverError, unauthorized } from '../helpers/http/http-helper'
 import { HttpRequest, HttpResponse } from '../protocols'
 import { Middleware } from '../protocols/middleware'
 
@@ -9,24 +9,28 @@ export class AuthMiddleware implements Middleware {
   constructor (private readonly loadAccountByToken: LoadAccountByToken) {}
 
   async handle (httpRequest: HttpRequest): Promise<HttpResponse> {
-    const accessToken = httpRequest.headers?.['x-access-token']
-    if (!accessToken) {
-      return unauthorized(new AccessTokenNotInformedError())
-    }
-    const accountOrError = await this.loadAccountByToken.load(httpRequest.headers['x-access-token'])
-    if (accountOrError.isLeft()) {
-      if (accountOrError.value instanceof InvalidTokenError) {
-        return unauthorized(accountOrError.value)
+    try {
+      const accessToken = httpRequest.headers?.['x-access-token']
+      if (!accessToken) {
+        return unauthorized(new AccessTokenNotInformedError())
       }
-      if (accountOrError.value instanceof AccessDeniedError) {
-        return forbidden(accountOrError.value)
+      const accountOrError = await this.loadAccountByToken.load(httpRequest.headers['x-access-token'])
+      if (accountOrError.isLeft()) {
+        if (accountOrError.value instanceof InvalidTokenError) {
+          return unauthorized(accountOrError.value)
+        }
+        if (accountOrError.value instanceof AccessDeniedError) {
+          return forbidden(accountOrError.value)
+        }
       }
+      return ok({
+        id: '213123',
+        name: 'any name',
+        email: 'any_email@mail.com',
+        password: 'hashed_password'
+      })
+    } catch (error: any) {
+      return serverError(error)
     }
-    return ok({
-      id: '213123',
-      name: 'any name',
-      email: 'any_email@mail.com',
-      password: 'hashed_password'
-    })
   }
 }
