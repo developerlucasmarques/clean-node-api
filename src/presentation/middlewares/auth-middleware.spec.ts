@@ -1,9 +1,9 @@
-import { InvalidTokenError } from '../../domain/errors'
+import { AccessDeniedError, InvalidTokenError } from '../../domain/errors'
 import { AccountModel } from '../../domain/models/account'
 import { LoadAccountByToken, LoadAccountByTokenData, LoadAccountByTokenResponse } from '../../domain/usecases'
 import { left, right } from '../../shared/either'
 import { AccessTokenNotInformedError } from '../errors'
-import { unauthorized } from '../helpers/http/http-helper'
+import { forbidden, unauthorized } from '../helpers/http/http-helper'
 import { HttpRequest } from '../protocols'
 import { AuthMiddleware } from './auth-middleware'
 
@@ -62,5 +62,14 @@ describe('Auth Middleware', () => {
     )
     const httpResponse = await sut.handle(makeFakeRequest())
     expect(httpResponse).toEqual(unauthorized(new InvalidTokenError()))
+  })
+
+  test('Should return 403 if LoadAccountByToken returns a AccessDeniedError', async () => {
+    const { sut, loadAccountByTokenStub } = makeSut()
+    jest.spyOn(loadAccountByTokenStub, 'load').mockReturnValueOnce(
+      Promise.resolve(left(new AccessDeniedError()))
+    )
+    const httpResponse = await sut.handle(makeFakeRequest())
+    expect(httpResponse).toEqual(forbidden(new AccessDeniedError()))
   })
 })
