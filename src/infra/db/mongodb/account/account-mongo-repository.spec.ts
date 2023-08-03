@@ -1,7 +1,7 @@
 import { Collection } from 'mongodb'
 import { MongoHelper } from '../helpers/mongo-helper'
 import { AccountMongoRepository } from './account-mongo-repository'
-import { LoadAccountByEmailError } from '../../../../data/errors/load-account-by-email-error'
+import { LoadAccountByEmailError } from '../../../../data/errors'
 import { AccountData } from '../../../../domain/usecases/add-account'
 
 let accountCollection: Collection

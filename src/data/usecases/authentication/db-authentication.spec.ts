@@ -1,8 +1,9 @@
 import {
-  AuthenticationError, AccountModel, AuthenticationData, LoadAccountByEmailError,
+  AuthenticationError, AccountModel, AuthenticationData,
   DbAuthentication, HashComparer, HashCompareData,
   LoadAccountByEmailRepository, LoadAccountByEmailResponse, UpdateAccessToken
 } from '.'
+import { LoadAccountByEmailError } from '../../errors'
 import { left, right } from '../../../shared/either'
 
 const makeFakeAccountModel = (): AccountModel => ({

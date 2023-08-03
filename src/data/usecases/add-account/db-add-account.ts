@@ -2,7 +2,7 @@ import { left, right } from '../../../shared/either'
 import { Account } from '../../../domain/entities/account'
 import { Hasher, AddAccountRepository, AccountData, AddAccount, AddAccountResponse } from '.'
 import { LoadAccountByEmailRepository, UpdateAccessToken } from '../authentication'
-import { EmailInUseError } from '../../errors/email-in-use-error'
+import { EmailInUseError } from '../../errors'
 
 export class DbAddAccount implements AddAccount {
   constructor (

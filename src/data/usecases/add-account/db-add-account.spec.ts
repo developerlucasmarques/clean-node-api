@@ -3,8 +3,8 @@ import { DbAddAccount } from './db-add-account'
 import { left, right } from '../../../shared/either'
 import { InvalidNameError, InvalidPasswordError, InvalidEmailError, Account } from '../../../domain/entities/account'
 import { AccountModel } from '../../../domain/models/account'
-import { LoadAccountByEmailError, LoadAccountByEmailRepository, LoadAccountByEmailResponse, UpdateAccessToken } from '../authentication'
-import { EmailInUseError } from '../../errors/email-in-use-error'
+import { LoadAccountByEmailRepository, LoadAccountByEmailResponse, UpdateAccessToken } from '../authentication'
+import { EmailInUseError, LoadAccountByEmailError } from '../../errors'
 
 const makeHasher = (): Hasher => {
   class HasherStub implements Hasher {
