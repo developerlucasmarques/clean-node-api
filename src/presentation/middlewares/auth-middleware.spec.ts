@@ -1,6 +1,6 @@
 import { AccessDeniedError, InvalidTokenError } from '../../domain/errors'
 import { AccountModel } from '../../domain/models/account'
-import { LoadAccountByToken, LoadAccountByTokenData, LoadAccountByTokenResponse } from '../../domain/usecases'
+import { LoadAccountByToken, LoadAccountByTokenData, LoadAccountByTokenResponse, AccountRole } from '../../domain/usecases'
 import { left, right } from '../../shared/either'
 import { AccessTokenNotInformedError } from '../errors'
 import { forbidden, ok, serverError, unauthorized } from '../helpers/http/http-helper'
@@ -32,9 +32,9 @@ interface SutTypes {
   loadAccountByTokenStub: LoadAccountByToken
 }
 
-const makeSut = (): SutTypes => {
+const makeSut = (role?: AccountRole): SutTypes => {
   const loadAccountByTokenStub = makeLoadAccountByToken()
-  const sut = new AuthMiddleware(loadAccountByTokenStub)
+  const sut = new AuthMiddleware(loadAccountByTokenStub, role)
   return {
     loadAccountByTokenStub,
     sut
@@ -48,11 +48,12 @@ describe('Auth Middleware', () => {
     expect(httpResponse).toEqual(unauthorized(new AccessTokenNotInformedError()))
   })
 
-  test('Should call LoadAccountByToken with correct accessToken', async () => {
-    const { sut, loadAccountByTokenStub } = makeSut()
+  test('Should call LoadAccountByToken with correct values', async () => {
+    const role: AccountRole = 'admin'
+    const { sut, loadAccountByTokenStub } = makeSut(role)
     const loadSpy = jest.spyOn(loadAccountByTokenStub, 'load')
     await sut.handle(makeFakeRequest())
-    expect(loadSpy).toHaveBeenCalledWith('any_token')
+    expect(loadSpy).toHaveBeenCalledWith({ accessToken: 'any_token', role })
   })
 
   test('Should return 401 if LoadAccountByToken returns a InvalidTokenError', async () => {
