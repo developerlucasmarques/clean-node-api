@@ -1,7 +1,7 @@
-import { InvalidTokenError } from '../../domain/errors'
+import { AccessDeniedError, InvalidTokenError } from '../../domain/errors'
 import { LoadAccountByToken } from '../../domain/usecases'
 import { AccessTokenNotInformedError } from '../errors'
-import { ok, unauthorized } from '../helpers/http/http-helper'
+import { forbidden, ok, unauthorized } from '../helpers/http/http-helper'
 import { HttpRequest, HttpResponse } from '../protocols'
 import { Middleware } from '../protocols/middleware'
 
@@ -17,6 +17,9 @@ export class AuthMiddleware implements Middleware {
     if (accountOrError.isLeft()) {
       if (accountOrError.value instanceof InvalidTokenError) {
         return unauthorized(accountOrError.value)
+      }
+      if (accountOrError.value instanceof AccessDeniedError) {
+        return forbidden(accountOrError.value)
       }
     }
     return ok({
