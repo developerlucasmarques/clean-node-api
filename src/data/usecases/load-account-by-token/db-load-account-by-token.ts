@@ -2,15 +2,20 @@ import { InvalidTokenError } from '../../../domain/errors'
 import { LoadAccountByToken, LoadAccountByTokenData, LoadAccountByTokenResponse } from '../../../domain/usecases'
 import { left, right } from '../../../shared/either'
 import { Decrypter } from '../../protocols/criptography'
+import { LoadAccountByTokenRepository } from '../../protocols/db/account/load-account-by-token-repository'
 
 export class DbLoadAccountByToken implements LoadAccountByToken {
-  constructor (private readonly decrypter: Decrypter) {}
+  constructor (
+    private readonly decrypter: Decrypter,
+    private readonly loadAccountByTokenRepository: LoadAccountByTokenRepository
+  ) {}
 
   async load (data: LoadAccountByTokenData): Promise<LoadAccountByTokenResponse> {
     const idOrNull = await this.decrypter.decrypt(data.accessToken)
     if (!idOrNull) {
       return left(new InvalidTokenError())
     }
+    await this.loadAccountByTokenRepository.loadByToken(data)
     return right({
       id: 'id',
       email: 'email',

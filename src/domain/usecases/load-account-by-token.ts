@@ -1,8 +1,7 @@
 import { Either } from '../../shared/either'
 import { AccessDeniedError, InvalidTokenError } from '../errors'
 import { AccountModel } from '../models/account'
-
-export type AccountRole = 'admin' | 'user'
+import { AccountRole } from '../models/account-role'
 
 export interface LoadAccountByTokenData {
   accessToken: string
