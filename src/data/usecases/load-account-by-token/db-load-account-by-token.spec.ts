@@ -1,4 +1,6 @@
+import { InvalidTokenError } from '../../../domain/errors'
 import { LoadAccountByTokenData } from '../../../domain/usecases'
+import { left } from '../../../shared/either'
 import { Decrypter } from '../../protocols/criptography'
 import { DbLoadAccountByToken } from './db-load-account-by-token'
 
@@ -36,5 +38,12 @@ describe('DbLoadAccountByToken UseCase', () => {
     const decryptSpy = jest.spyOn(decrypterStub, 'decrypt')
     await sut.load(makeFakeLoadAccountByTokenData())
     expect(decryptSpy).toBeCalledWith('any_token')
+  })
+
+  test('Should return InvalidTokenError if Decrypter return null', async () => {
+    const { sut, decrypterStub } = makeSut()
+    jest.spyOn(decrypterStub, 'decrypt').mockReturnValueOnce(Promise.resolve(null))
+    const loadResult = await sut.load(makeFakeLoadAccountByTokenData())
+    expect(loadResult).toEqual(left(new InvalidTokenError()))
   })
 })
