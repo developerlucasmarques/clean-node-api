@@ -1,6 +1,6 @@
 import { AccessDeniedError, InvalidTokenError } from '../../../domain/errors'
 import { LoadAccountByTokenData } from '../../../domain/usecases'
-import { left } from '../../../shared/either'
+import { left, right } from '../../../shared/either'
 import { Decrypter } from '../../protocols/criptography'
 import { LoadAccountByTokenRepository } from '../../protocols/db/account/load-account-by-token-repository'
 import { AccountModel } from '../authentication'
@@ -96,5 +96,11 @@ describe('DbLoadAccountByToken UseCase', () => {
     )
     const loadResult = await sut.load(makeFakeLoadAccountByTokenData())
     expect(loadResult).toEqual(left(new AccessDeniedError()))
+  })
+
+  test('Should return an Account if validations on success', async () => {
+    const { sut } = makeSut()
+    const loadResult = await sut.load(makeFakeLoadAccountByTokenData())
+    expect(loadResult).toEqual(right(makeFakeAccountModel()))
   })
 })
