@@ -1,4 +1,4 @@
-import { InvalidTokenError } from '../../../domain/errors'
+import { AccessDeniedError, InvalidTokenError } from '../../../domain/errors'
 import { LoadAccountByTokenData } from '../../../domain/usecases'
 import { left } from '../../../shared/either'
 import { Decrypter } from '../../protocols/criptography'
@@ -81,5 +81,20 @@ describe('DbLoadAccountByToken UseCase', () => {
     jest.spyOn(loadAccountByTokenRepositoryStub, 'loadByToken').mockReturnValueOnce(Promise.resolve(null))
     const loadResult = await sut.load(makeFakeLoadAccountByTokenData())
     expect(loadResult).toEqual(left(new InvalidTokenError()))
+  })
+
+  test('Should return AccessDeniedError if the role is different from the one passed in the data', async () => {
+    const { sut, loadAccountByTokenRepositoryStub } = makeSut()
+    jest.spyOn(loadAccountByTokenRepositoryStub, 'loadByToken').mockReturnValueOnce(
+      Promise.resolve({
+        id: 'any_id',
+        name: 'any name',
+        email: 'any_email@mail.com',
+        password: 'hashed_password',
+        role: 'user'
+      })
+    )
+    const loadResult = await sut.load(makeFakeLoadAccountByTokenData())
+    expect(loadResult).toEqual(left(new AccessDeniedError()))
   })
 })
