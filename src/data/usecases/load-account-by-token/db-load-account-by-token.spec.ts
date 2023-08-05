@@ -33,7 +33,8 @@ const makeFakeAccountModel = (): AccountModel => ({
   id: 'any_id',
   name: 'any name',
   email: 'any_email@mail.com',
-  password: 'hashed_password'
+  password: 'hashed_password',
+  role: 'admin'
 })
 
 interface SutTypes {

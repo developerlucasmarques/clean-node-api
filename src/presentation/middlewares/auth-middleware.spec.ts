@@ -1,6 +1,7 @@
 import { AccessDeniedError, InvalidTokenError } from '../../domain/errors'
 import { AccountModel } from '../../domain/models/account'
-import { LoadAccountByToken, LoadAccountByTokenData, LoadAccountByTokenResponse, AccountRole } from '../../domain/usecases'
+import { AccountRole } from '../../domain/models/account-role'
+import { LoadAccountByToken, LoadAccountByTokenData, LoadAccountByTokenResponse } from '../../domain/usecases'
 import { left, right } from '../../shared/either'
 import { AccessTokenNotInformedError } from '../errors'
 import { forbidden, ok, serverError, unauthorized } from '../helpers/http/http-helper'
@@ -20,7 +21,8 @@ const makeFakeAccountModel = (): AccountModel => ({
   id: 'any_id',
   name: 'any name',
   email: 'any_email@mail.com',
-  password: 'hashed_password'
+  password: 'hashed_password',
+  role: 'admin'
 })
 
 const makeFakeRequest = (): HttpRequest => ({

@@ -23,7 +23,8 @@ export class DbLoadAccountByToken implements LoadAccountByToken {
       id: 'id',
       email: 'email',
       name: 'name',
-      password: '123'
+      password: '123',
+      role: 'admin'
     })
   }
 }
