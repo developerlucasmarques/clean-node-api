@@ -74,4 +74,11 @@ describe('DbLoadAccountByToken UseCase', () => {
     await sut.load(makeFakeLoadAccountByTokenData())
     expect(loadByTokenSpy).toBeCalledWith({ accessToken: 'any_token', role: 'admin' })
   })
+
+  test('Should return InvalidTokenError if LoadAccountByTokenRepository return null', async () => {
+    const { sut, loadAccountByTokenRepositoryStub } = makeSut()
+    jest.spyOn(loadAccountByTokenRepositoryStub, 'loadByToken').mockReturnValueOnce(Promise.resolve(null))
+    const loadResult = await sut.load(makeFakeLoadAccountByTokenData())
+    expect(loadResult).toEqual(left(new InvalidTokenError()))
+  })
 })
