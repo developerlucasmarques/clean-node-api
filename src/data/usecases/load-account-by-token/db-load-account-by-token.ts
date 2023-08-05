@@ -15,7 +15,10 @@ export class DbLoadAccountByToken implements LoadAccountByToken {
     if (!idOrNull) {
       return left(new InvalidTokenError())
     }
-    await this.loadAccountByTokenRepository.loadByToken(data)
+    const accountOrNull = await this.loadAccountByTokenRepository.loadByToken(data)
+    if (!accountOrNull) {
+      return left(new InvalidTokenError())
+    }
     return right({
       id: 'id',
       email: 'email',
