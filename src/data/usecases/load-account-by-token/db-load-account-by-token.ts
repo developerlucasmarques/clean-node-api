@@ -22,12 +22,6 @@ export class DbLoadAccountByToken implements LoadAccountByToken {
     if (data.role && data.role !== accountOrNull.role) {
       return left(new AccessDeniedError())
     }
-    return right({
-      id: 'id',
-      email: 'email',
-      name: 'name',
-      password: '123',
-      role: 'admin'
-    })
+    return right(accountOrNull)
   }
 }
