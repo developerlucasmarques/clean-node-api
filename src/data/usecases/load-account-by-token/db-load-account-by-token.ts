@@ -1,4 +1,4 @@
-import { InvalidTokenError } from '../../../domain/errors'
+import { AccessDeniedError, InvalidTokenError } from '../../../domain/errors'
 import { LoadAccountByToken, LoadAccountByTokenData, LoadAccountByTokenResponse } from '../../../domain/usecases'
 import { left, right } from '../../../shared/either'
 import { Decrypter } from '../../protocols/criptography'
@@ -18,6 +18,9 @@ export class DbLoadAccountByToken implements LoadAccountByToken {
     const accountOrNull = await this.loadAccountByTokenRepository.loadByToken(data)
     if (!accountOrNull) {
       return left(new InvalidTokenError())
+    }
+    if (data.role && data.role !== accountOrNull.role) {
+      return left(new AccessDeniedError())
     }
     return right({
       id: 'id',
