@@ -98,5 +98,11 @@ describe('Account Mongo Repository', () => {
       const account = await sut.loadByToken({ accessToken: 'any_token', role: 'admin' })
       expect(account).toEqual(accountEnteredWithId)
     })
+
+    test('Should return null if loadByToken fails', async () => {
+      const sut = makeSut()
+      const account = await sut.loadByToken({ accessToken: 'any_token' })
+      expect(account).toBeNull()
+    })
   })
 })
