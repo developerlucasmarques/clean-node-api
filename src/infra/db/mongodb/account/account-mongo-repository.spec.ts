@@ -85,5 +85,18 @@ describe('Account Mongo Repository', () => {
       const account = await sut.loadByToken({ accessToken: 'any_token' })
       expect(account).toEqual(accountEnteredWithId)
     })
+
+    test('Should return an account on loadByToken with role', async () => {
+      const sut = makeSut()
+      const accountData = {
+        ...makeFakeAccountData(),
+        accessToken: 'any_token',
+        role: 'admin'
+      }
+      const result = await accountCollection.insertOne(accountData)
+      const accountEnteredWithId = MongoHelper.mapAddAccount(result, accountData)
+      const account = await sut.loadByToken({ accessToken: 'any_token', role: 'admin' })
+      expect(account).toEqual(accountEnteredWithId)
+    })
   })
 })
