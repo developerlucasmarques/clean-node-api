@@ -1,10 +1,10 @@
 import { AccessDeniedError, InvalidTokenError } from '../../../domain/errors'
+import { AccountModel } from '../../../domain/models'
 import { LoadAccountByTokenData } from '../../../domain/usecases'
 import { left, right } from '../../../shared/either'
 import { Decrypter } from '../../protocols/criptography'
-import { LoadAccountByTokenRepository } from '../../protocols/db/account/load-account-by-token-repository'
-import { AccountModel } from '../authentication'
-import { DbLoadAccountByToken } from './db-load-account-by-token'
+import { LoadAccountByTokenRepository } from '../../protocols/db/account'
+import { DbLoadAccountByToken } from '.'
 
 const makeDecrypter = (): Decrypter => {
   class DecrypterStub implements Decrypter {

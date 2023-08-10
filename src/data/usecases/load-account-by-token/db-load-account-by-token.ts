@@ -2,7 +2,7 @@ import { AccessDeniedError, InvalidTokenError } from '../../../domain/errors'
 import { LoadAccountByToken, LoadAccountByTokenData, LoadAccountByTokenResponse } from '../../../domain/usecases'
 import { left, right } from '../../../shared/either'
 import { Decrypter } from '../../protocols/criptography'
-import { LoadAccountByTokenRepository } from '../../protocols/db/account/load-account-by-token-repository'
+import { LoadAccountByTokenRepository } from '../../protocols/db/account'
 
 export class DbLoadAccountByToken implements LoadAccountByToken {
   constructor (

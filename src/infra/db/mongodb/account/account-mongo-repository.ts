@@ -1,6 +1,7 @@
-import { AddAccountRepository, AccountModel, AccountData } from '.'
-import { LoadAccountByEmailRepository, LoadAccountByEmailResponse, UpdateAccessTokenData, UpdateAccessTokenRepository } from '../../../../data/usecases/authentication'
 import { LoadAccountByEmailError } from '../../../../data/errors'
+import { LoadAccountByEmailRepository, UpdateAccessTokenRepository, AddAccountRepository, LoadAccountByEmailResponse, UpdateAccessTokenData } from '../../../../data/protocols/db/account'
+import { AccountModel } from '../../../../domain/models'
+import { AccountData } from '../../../../domain/usecases'
 import { left, right } from '../../../../shared/either'
 import { MongoHelper } from '../helpers/mongo-helper'
 
