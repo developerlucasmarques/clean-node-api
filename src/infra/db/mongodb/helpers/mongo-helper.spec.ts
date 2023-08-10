@@ -1,4 +1,4 @@
-import { MongoHelper as sut } from './mongo-helper'
+import { MongoHelper, MongoHelper as sut } from './mongo-helper'
 import { MongoClient } from 'mongodb'
 
 describe('Mongo Helper', () => {
@@ -30,6 +30,11 @@ describe('Mongo Helper', () => {
       password: 'password1234'
     })
     sut.disconnect()
+  })
+
+  test('Should return null if map not received collection', () => {
+    const sut = MongoHelper.map({})
+    expect(sut).toBeNull()
   })
 
   test('Should connect to the specified URL', async () => {
