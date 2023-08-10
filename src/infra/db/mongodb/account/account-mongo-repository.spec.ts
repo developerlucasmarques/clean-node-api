@@ -86,7 +86,7 @@ describe('Account Mongo Repository', () => {
       expect(account).toEqual(accountEnteredWithId)
     })
 
-    test('Should return an account on loadByToken with role', async () => {
+    test('Should return an account on loadByToken with admin role', async () => {
       const sut = makeSut()
       const accountData = {
         ...makeFakeAccountData(),
@@ -96,6 +96,30 @@ describe('Account Mongo Repository', () => {
       const result = await accountCollection.insertOne(accountData)
       const accountEnteredWithId = MongoHelper.mapAddAccount(result, accountData)
       const account = await sut.loadByToken({ accessToken: 'any_token', role: 'admin' })
+      expect(account).toEqual(accountEnteredWithId)
+    })
+
+    test('Should return null on loadByToken invalid role', async () => {
+      const sut = makeSut()
+      const accountData = {
+        ...makeFakeAccountData(),
+        accessToken: 'any_token'
+      }
+      await accountCollection.insertOne(accountData)
+      const result = await sut.loadByToken({ accessToken: 'any_token', role: 'admin' })
+      expect(result).toBeNull()
+    })
+
+    test('Should return an account on loadByToken if user is admin', async () => {
+      const sut = makeSut()
+      const accountData = {
+        ...makeFakeAccountData(),
+        accessToken: 'any_token',
+        role: 'admin'
+      }
+      const result = await accountCollection.insertOne(accountData)
+      const accountEnteredWithId = MongoHelper.mapAddAccount(result, accountData)
+      const account = await sut.loadByToken({ accessToken: 'any_token' })
       expect(account).toEqual(accountEnteredWithId)
     })
 
