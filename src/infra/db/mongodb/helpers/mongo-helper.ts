@@ -37,6 +37,9 @@ export const MongoHelper = {
   },
 
   map (collection: any): any {
+    if (!collection || collection.length === 0 || Object.keys(collection).length === 0) {
+      return null
+    }
     const { _id, ...collectionWithoutId } = collection
     return Object.assign({}, collectionWithoutId, { id: _id.toHexString() })
   },
