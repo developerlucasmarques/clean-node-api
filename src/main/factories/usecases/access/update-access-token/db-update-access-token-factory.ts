@@ -1,4 +1,4 @@
-import { DbUpdateAccessToken } from '../../../../../data/usecases/util/update-access-token'
+import { DbUpdateAccessToken } from '../../../../../data/usecases/access/update-access-token'
 import { UpdateAccessToken } from '../../../../../domain/usecases/update-access-token'
 import { JwtAdapter } from '../../../../../infra/criptography/jwt-adapter/jwt-adapter'
 import { AccountMongoRepository } from '../../../../../infra/db/mongodb/account/account-mongo-repository'
