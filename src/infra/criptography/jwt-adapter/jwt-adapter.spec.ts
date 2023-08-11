@@ -11,6 +11,13 @@ jest.mock('jsonwebtoken', () => ({
   }
 }))
 
+class JwtErrorMock extends Error {
+  constructor (name: string) {
+    super('Error Mock')
+    this.name = name
+  }
+}
+
 const makeSut = (): JwtAdapter => {
   return new JwtAdapter('any_secret')
 }
@@ -55,6 +62,33 @@ describe('JWT Adapter', () => {
       })
       const promise = sut.decrypt('any_token')
       await expect(promise).rejects.toThrow()
+    })
+
+    test('Should return null if jwt throws an error JsonWebTokenError', async () => {
+      const sut = makeSut()
+      jest.spyOn(jwt, 'verify').mockImplementationOnce(() => {
+        throw new JwtErrorMock('JsonWebTokenError')
+      })
+      const decryptResult = await sut.decrypt('any_token')
+      expect(decryptResult).toBeNull()
+    })
+
+    test('Should return null if jwt throws an error NotBeforeError', async () => {
+      const sut = makeSut()
+      jest.spyOn(jwt, 'verify').mockImplementationOnce(() => {
+        throw new JwtErrorMock('NotBeforeError')
+      })
+      const decryptResult = await sut.decrypt('any_token')
+      expect(decryptResult).toBeNull()
+    })
+
+    test('Should return null if jwt throws an error TokenExpiredError', async () => {
+      const sut = makeSut()
+      jest.spyOn(jwt, 'verify').mockImplementationOnce(() => {
+        throw new JwtErrorMock('TokenExpiredError')
+      })
+      const decryptResult = await sut.decrypt('any_token')
+      expect(decryptResult).toBeNull()
     })
 
     test('Should return a value on verify success', async () => {
