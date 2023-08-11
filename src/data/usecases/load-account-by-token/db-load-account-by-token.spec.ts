@@ -1,5 +1,5 @@
 import { AccessDeniedError, AccountNotFoundError, InvalidTokenError } from '../../../domain/errors'
-import { AccountModel } from '../../../domain/models'
+import { AccountModel, AccountRole } from '../../../domain/models'
 import { LoadAccountByTokenData } from '../../../domain/usecases'
 import { left, right } from '../../../shared/either'
 import { Decrypter } from '../../protocols/criptography'
@@ -96,6 +96,24 @@ describe('DbLoadAccountByToken UseCase', () => {
     )
     const loadResult = await sut.load(makeFakeLoadAccountByTokenData())
     expect(loadResult).toEqual(left(new AccessDeniedError()))
+  })
+
+  test('Should return an account if the access permission is user and the account is admin', async () => {
+    const { sut, loadAccountByTokenRepositoryStub } = makeSut()
+    const role: AccountRole = 'admin'
+    const accountModel = {
+      id: 'any_id',
+      name: 'any name',
+      email: 'any_email@mail.com',
+      accessToken: 'access_token',
+      password: 'hashed_password',
+      role
+    }
+    jest.spyOn(loadAccountByTokenRepositoryStub, 'loadByToken').mockReturnValueOnce(
+      Promise.resolve(accountModel)
+    )
+    const account = await sut.load({ accessToken: 'access_token', role: 'user' })
+    expect(account).toEqual(right(accountModel))
   })
 
   test('Should return an Account if validations on success', async () => {
