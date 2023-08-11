@@ -91,6 +91,15 @@ describe('JWT Adapter', () => {
       expect(decryptResult).toBeNull()
     })
 
+    test('Should return null if jwt throws an error SyntaxError', async () => {
+      const sut = makeSut()
+      jest.spyOn(jwt, 'verify').mockImplementationOnce(() => {
+        throw new JwtErrorMock('SyntaxError')
+      })
+      const decryptResult = await sut.decrypt('any_token')
+      expect(decryptResult).toBeNull()
+    })
+
     test('Should return a value on verify success', async () => {
       const sut = makeSut()
       const decryptedValue = await sut.decrypt('any_token')
