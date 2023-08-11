@@ -1,4 +1,4 @@
-import { AccessDeniedError, InvalidTokenError } from '../../../domain/errors'
+import { AccessDeniedError, AccountNotFoundError, InvalidTokenError } from '../../../domain/errors'
 import { AccountModel } from '../../../domain/models'
 import { LoadAccountByTokenData } from '../../../domain/usecases'
 import { left, right } from '../../../shared/either'
@@ -17,7 +17,7 @@ const makeDecrypter = (): Decrypter => {
 
 const makeLoadAccountByTokenRepository = (): LoadAccountByTokenRepository => {
   class LoadAccountByTokenRepositoryStub implements LoadAccountByTokenRepository {
-    async loadByToken (data: LoadAccountByTokenData): Promise<null | AccountModel> {
+    async loadByToken (accessToken: string): Promise<null | AccountModel> {
       return await Promise.resolve(makeFakeAccountModel())
     }
   }
@@ -73,14 +73,14 @@ describe('DbLoadAccountByToken UseCase', () => {
     const { sut, loadAccountByTokenRepositoryStub } = makeSut()
     const loadByTokenSpy = jest.spyOn(loadAccountByTokenRepositoryStub, 'loadByToken')
     await sut.load(makeFakeLoadAccountByTokenData())
-    expect(loadByTokenSpy).toBeCalledWith({ accessToken: 'any_token', role: 'admin' })
+    expect(loadByTokenSpy).toBeCalledWith('any_token')
   })
 
-  test('Should return InvalidTokenError if LoadAccountByTokenRepository return null', async () => {
+  test('Should return AccountNotFoundError if LoadAccountByTokenRepository return null', async () => {
     const { sut, loadAccountByTokenRepositoryStub } = makeSut()
     jest.spyOn(loadAccountByTokenRepositoryStub, 'loadByToken').mockReturnValueOnce(Promise.resolve(null))
     const loadResult = await sut.load(makeFakeLoadAccountByTokenData())
-    expect(loadResult).toEqual(left(new InvalidTokenError()))
+    expect(loadResult).toEqual(left(new AccountNotFoundError()))
   })
 
   test('Should return AccessDeniedError if the role is different from the one passed in the data', async () => {

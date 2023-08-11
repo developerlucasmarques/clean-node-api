@@ -163,7 +163,8 @@ describe('DbAddAccount UseCase', () => {
     expect(addSpy).toHaveBeenCalledWith({
       name: 'valid name',
       email: 'valid_email@mail.com',
-      password: 'hashed_password'
+      password: 'hashed_password',
+      role: 'user'
     })
   })
 

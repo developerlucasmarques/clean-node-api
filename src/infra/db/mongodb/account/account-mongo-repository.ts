@@ -1,12 +1,11 @@
 import { LoadAccountByEmailError } from '../../../../data/errors'
-import { LoadAccountByEmailRepository, UpdateAccessTokenRepository, AddAccountRepository, LoadAccountByEmailResponse, UpdateAccessTokenData, LoadAccountByTokenRepository } from '../../../../data/protocols/db/account'
+import { AccountDataRepository, AddAccountRepository, LoadAccountByEmailRepository, LoadAccountByEmailResponse, LoadAccountByTokenRepository, UpdateAccessTokenData, UpdateAccessTokenRepository } from '../../../../data/protocols/db/account'
 import { AccountModel } from '../../../../domain/models'
-import { AccountData, LoadAccountByTokenData } from '../../../../domain/usecases'
 import { left, right } from '../../../../shared/either'
 import { MongoHelper } from '../helpers/mongo-helper'
 
 export class AccountMongoRepository implements AddAccountRepository, LoadAccountByEmailRepository, UpdateAccessTokenRepository, LoadAccountByTokenRepository {
-  async add (accountData: AccountData): Promise<AccountModel> {
+  async add (accountData: AccountDataRepository): Promise<AccountModel> {
     const accountCollection = await MongoHelper.getCollection('account')
     const result = await accountCollection.insertOne(accountData)
     return MongoHelper.mapAddAccount(result, accountData)
@@ -27,12 +26,9 @@ export class AccountMongoRepository implements AddAccountRepository, LoadAccount
     await accountCollection.updateOne({ _id: mongoId }, { $set: { accessToken: values.accessToken } })
   }
 
-  async loadByToken (data: LoadAccountByTokenData): Promise< null | AccountModel> {
+  async loadByToken (accessToken: string): Promise< null | AccountModel> {
     const accountCollection = await MongoHelper.getCollection('account')
-    const account = await accountCollection.findOne({
-      accessToken: data.accessToken,
-      $or: [{ role: data.role }, { role: 'admin' }]
-    })
+    const account = await accountCollection.findOne({ accessToken })
     return MongoHelper.map(account)
   }
 }

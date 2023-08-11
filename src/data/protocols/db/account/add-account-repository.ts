@@ -1,6 +1,13 @@
+import { AccountRole } from '../../../../domain/models'
 import { AccountModel } from '../../../../domain/models/account'
-import { AccountData } from '../../../../domain/usecases/add-account'
+
+export interface AccountDataRepository {
+  name: string
+  email: string
+  password: string
+  role: AccountRole
+}
 
 export interface AddAccountRepository {
-  add: (accountData: AccountData) => Promise<AccountModel>
+  add: (accountData: AccountDataRepository) => Promise<AccountModel>
 }

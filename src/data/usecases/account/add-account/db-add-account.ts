@@ -4,6 +4,7 @@ import { AddAccountRepository, LoadAccountByEmailRepository } from '../../../pro
 import { AccountData, AddAccount, AddAccountResponse, UpdateAccessToken } from '../../../../domain/usecases'
 import { EmailInUseError } from '../../../errors'
 import { Hasher } from '../../../protocols/criptography'
+import { AccountRole } from '../../../../domain/models'
 
 export class DbAddAccount implements AddAccount {
   constructor (
@@ -23,8 +24,9 @@ export class DbAddAccount implements AddAccount {
       return left(new EmailInUseError(accountData.email))
     }
     const hashedPassword = await this.hasher.hash(accountData.password)
+    const role: AccountRole = 'user'
     const account = await this.addAccountRepository.add(
-      Object.assign({}, accountData, { password: hashedPassword })
+      Object.assign({}, accountData, { password: hashedPassword, role })
     )
     const accessToken = await this.updateAccessToken.update(account.id)
     return right(accessToken)
