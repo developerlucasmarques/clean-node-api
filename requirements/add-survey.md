@@ -11,6 +11,7 @@
 > ## Exceções
 
 1. ✅ Retorna erro **404** se a API não existir
-2. ✅ Retorna erro **403** se o usuário não for admin
-3. ✅ Retorna erro **400** se question ou answers não forem fornecidos pelo client
-4. ✅ Retorna erro **500** se der erro ao tentar criar a enquete
+2. ✅ Retorna erro **401** se o client não informar o token ou se for inválido
+3. ✅ Retorna erro **403** se o usuário não for admin
+4. ✅ Retorna erro **400** se question ou answers não forem fornecidos pelo client
+5. ✅ Retorna erro **500** se der erro ao tentar criar a enquete
