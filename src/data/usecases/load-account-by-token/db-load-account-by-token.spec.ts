@@ -1,10 +1,10 @@
+import { DbLoadAccountByToken } from '.'
 import { AccessDeniedError, AccountNotFoundError, InvalidTokenError } from '../../../domain/errors'
-import { AccountModel, AccountRole } from '../../../domain/models'
+import { AccountModel } from '../../../domain/models'
 import { LoadAccountByTokenData } from '../../../domain/usecases'
 import { left, right } from '../../../shared/either'
 import { Decrypter } from '../../protocols/criptography'
 import { LoadAccountByTokenRepository } from '../../protocols/db/account'
-import { DbLoadAccountByToken } from '.'
 
 const makeDecrypter = (): Decrypter => {
   class DecrypterStub implements Decrypter {
@@ -34,6 +34,7 @@ const makeFakeAccountModel = (): AccountModel => ({
   name: 'any name',
   email: 'any_email@mail.com',
   password: 'hashed_password',
+  accessToken: 'access_token',
   role: 'admin'
 })
 
@@ -100,20 +101,20 @@ describe('DbLoadAccountByToken UseCase', () => {
 
   test('Should return an account if the access permission is user and the account is admin', async () => {
     const { sut, loadAccountByTokenRepositoryStub } = makeSut()
-    const role: AccountRole = 'admin'
-    const accountModel = {
-      id: 'any_id',
-      name: 'any name',
-      email: 'any_email@mail.com',
-      accessToken: 'access_token',
-      password: 'hashed_password',
-      role
-    }
     jest.spyOn(loadAccountByTokenRepositoryStub, 'loadByToken').mockReturnValueOnce(
-      Promise.resolve(accountModel)
+      Promise.resolve(makeFakeAccountModel())
     )
     const account = await sut.load({ accessToken: 'access_token', role: 'user' })
-    expect(account).toEqual(right(accountModel))
+    expect(account).toEqual(right(makeFakeAccountModel()))
+  })
+
+  test('Should return an account if the role not provided and account is admin', async () => {
+    const { sut, loadAccountByTokenRepositoryStub } = makeSut()
+    jest.spyOn(loadAccountByTokenRepositoryStub, 'loadByToken').mockReturnValueOnce(
+      Promise.resolve(makeFakeAccountModel())
+    )
+    const account = await sut.load({ accessToken: 'access_token' })
+    expect(account).toEqual(right(makeFakeAccountModel()))
   })
 
   test('Should return an Account if validations on success', async () => {
