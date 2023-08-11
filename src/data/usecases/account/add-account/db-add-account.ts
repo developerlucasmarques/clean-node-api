@@ -19,8 +19,8 @@ export class DbAddAccount implements AddAccount {
     if (accountOrError.isLeft()) {
       return left(accountOrError.value)
     }
-    const loadAccountResult = await this.loadAccountByEmailRepository.loadAccountByEmail(accountData.email)
-    if (loadAccountResult.isRight()) {
+    const loadAccountResult = await this.loadAccountByEmailRepository.loadByEmail(accountData.email)
+    if (loadAccountResult) {
       return left(new EmailInUseError(accountData.email))
     }
     const hashedPassword = await this.hasher.hash(accountData.password)

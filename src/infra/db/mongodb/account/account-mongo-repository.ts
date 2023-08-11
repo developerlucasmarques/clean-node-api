@@ -1,7 +1,5 @@
-import { LoadAccountByEmailError } from '../../../../data/errors'
-import { AccountDataRepository, AddAccountRepository, LoadAccountByEmailRepository, LoadAccountByEmailResponse, LoadAccountByTokenRepository, UpdateAccessTokenData, UpdateAccessTokenRepository } from '../../../../data/protocols/db/account'
+import { AccountDataRepository, AddAccountRepository, LoadAccountByEmailRepository, LoadAccountByTokenRepository, UpdateAccessTokenData, UpdateAccessTokenRepository } from '../../../../data/protocols/db/account'
 import { AccountModel } from '../../../../domain/models'
-import { left, right } from '../../../../shared/either'
 import { MongoHelper } from '../helpers/mongo-helper'
 
 export class AccountMongoRepository implements AddAccountRepository, LoadAccountByEmailRepository, UpdateAccessTokenRepository, LoadAccountByTokenRepository {
@@ -11,13 +9,10 @@ export class AccountMongoRepository implements AddAccountRepository, LoadAccount
     return MongoHelper.mapAddAccount(result, accountData)
   }
 
-  async loadAccountByEmail (email: string): Promise<LoadAccountByEmailResponse> {
+  async loadByEmail (email: string): Promise<null | AccountModel> {
     const accountCollection = await MongoHelper.getCollection('account')
     const account = await accountCollection.findOne({ email })
-    if (!account) {
-      return left(new LoadAccountByEmailError(email))
-    }
-    return right(MongoHelper.map(account))
+    return MongoHelper.map(account)
   }
 
   async updateAccessToken (values: UpdateAccessTokenData): Promise<void> {

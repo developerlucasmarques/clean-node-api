@@ -1,11 +1,10 @@
-import { LoadAccountByEmailError } from '../../../errors'
-import { left, right } from '../../../../shared/either'
-import { AccountModel } from '../../../../domain/models/account'
-import { AuthenticationData, UpdateAccessToken } from '../../../../domain/usecases'
-import { LoadAccountByEmailRepository, LoadAccountByEmailResponse } from '../../../protocols/db/account'
-import { HashCompareData, HashComparer } from '../../../protocols/criptography'
 import { DbAuthentication } from '.'
 import { AuthenticationError } from '../../../../domain/errors'
+import { AccountModel } from '../../../../domain/models/account'
+import { AuthenticationData, UpdateAccessToken } from '../../../../domain/usecases'
+import { left, right } from '../../../../shared/either'
+import { HashCompareData, HashComparer } from '../../../protocols/criptography'
+import { LoadAccountByEmailRepository } from '../../../protocols/db/account'
 
 const makeFakeAccountModel = (): AccountModel => ({
   id: 'any_id',
@@ -22,8 +21,8 @@ const makeFakeAuthenticationData = (): AuthenticationData => ({
 
 const makeLoadAccountByEmailRepository = (): LoadAccountByEmailRepository => {
   class LoadAccountByEmailRepositoryStub implements LoadAccountByEmailRepository {
-    async loadAccountByEmail (email: string): Promise<LoadAccountByEmailResponse> {
-      return await Promise.resolve(right(makeFakeAccountModel()))
+    async loadByEmail (email: string): Promise<null | AccountModel> {
+      return await Promise.resolve(makeFakeAccountModel())
     }
   }
   return new LoadAccountByEmailRepositoryStub()
@@ -74,27 +73,27 @@ const makeSut = (): SutTypes => {
 describe('DbAuthentication UseCase', () => {
   test('Should call LoadAccountByEmailRepository with correct email', async () => {
     const { sut, loadAccountByEmailRepositoryStub } = makeSut()
-    const loadAccountByEmailSpy = jest.spyOn(loadAccountByEmailRepositoryStub, 'loadAccountByEmail')
+    const loadAccountByEmailSpy = jest.spyOn(loadAccountByEmailRepositoryStub, 'loadByEmail')
     await sut.auth(makeFakeAuthenticationData())
     expect(loadAccountByEmailSpy).toHaveBeenLastCalledWith('any_email@mail.com')
   })
 
   test('Should throw if LoadAccountByEmailRepository throws', async () => {
     const { sut, loadAccountByEmailRepositoryStub } = makeSut()
-    jest.spyOn(loadAccountByEmailRepositoryStub, 'loadAccountByEmail').mockReturnValueOnce(
+    jest.spyOn(loadAccountByEmailRepositoryStub, 'loadByEmail').mockReturnValueOnce(
       new Promise((resolve, reject) => { reject(new Error()) })
     )
     const promise = sut.auth(makeFakeAuthenticationData())
     await expect(promise).rejects.toThrow()
   })
 
-  test('Should return AuthenticationError if LoadAccountByEmailRepository returns error', async () => {
+  test('Should return AuthenticationError if LoadAccountByEmailRepository returns null', async () => {
     const { sut, loadAccountByEmailRepositoryStub } = makeSut()
-    jest.spyOn(loadAccountByEmailRepositoryStub, 'loadAccountByEmail').mockReturnValueOnce(
-      Promise.resolve(left(new LoadAccountByEmailError('invalid_email@mail.com')))
+    jest.spyOn(loadAccountByEmailRepositoryStub, 'loadByEmail').mockReturnValueOnce(
+      Promise.resolve(null)
     )
     const authResult = await sut.auth(makeFakeAuthenticationData())
-    expect(authResult.value).toEqual(new AuthenticationError())
+    expect(authResult).toEqual(left(new AuthenticationError()))
   })
 
   test('Should call HashComparer with correct values', async () => {
@@ -120,7 +119,7 @@ describe('DbAuthentication UseCase', () => {
     const { sut, hashComparerStub } = makeSut()
     jest.spyOn(hashComparerStub, 'compare').mockReturnValueOnce(Promise.resolve(false))
     const authResult = await sut.auth(makeFakeAuthenticationData())
-    expect(authResult.value).toEqual(new AuthenticationError())
+    expect(authResult).toEqual(left(new AuthenticationError()))
   })
 
   test('Should call UpdateAccessToken with correct account id', async () => {
@@ -142,6 +141,6 @@ describe('DbAuthentication UseCase', () => {
   test('Should return access token if UpdateAccessToken success', async () => {
     const { sut } = makeSut()
     const authResult = await sut.auth(makeFakeAuthenticationData())
-    expect(authResult.value).toBe('access_token')
+    expect(authResult).toEqual(right('access_token'))
   })
 })

@@ -1,11 +1,11 @@
 import { DbAddAccount } from '.'
-import { left, right } from '../../../../shared/either'
-import { InvalidNameError, InvalidPasswordError, InvalidEmailError, Account } from '../../../../domain/entities/account'
+import { Account, InvalidEmailError, InvalidNameError, InvalidPasswordError } from '../../../../domain/entities/account'
 import { AccountModel } from '../../../../domain/models/account'
-import { AddAccountRepository, LoadAccountByEmailRepository, LoadAccountByEmailResponse } from '../../../protocols/db/account'
 import { AccountData, UpdateAccessToken } from '../../../../domain/usecases'
-import { EmailInUseError, LoadAccountByEmailError } from '../../../errors'
+import { left } from '../../../../shared/either'
+import { EmailInUseError } from '../../../errors'
 import { Hasher } from '../../../protocols/criptography'
+import { AddAccountRepository, LoadAccountByEmailRepository } from '../../../protocols/db/account'
 
 const makeHasher = (): Hasher => {
   class HasherStub implements Hasher {
@@ -36,8 +36,8 @@ const makeUpdateAccessTokenStub = (): UpdateAccessToken => {
 
 const makeLoadAccountByEmailRepositoryStub = (): LoadAccountByEmailRepository => {
   class LoadAccountByEmailRepositoryStub implements LoadAccountByEmailRepository {
-    async loadAccountByEmail (email: string): Promise<LoadAccountByEmailResponse> {
-      return await Promise.resolve(left(new LoadAccountByEmailError('valid_email@mail.com')))
+    async loadByEmail (email: string): Promise<null | AccountModel> {
+      return await Promise.resolve(null)
     }
   }
   return new LoadAccountByEmailRepositoryStub()
@@ -117,15 +117,15 @@ describe('DbAddAccount UseCase', () => {
 
   test('Should call LoadAccountByEmailRepository with correct email', async () => {
     const { sut, loadAccountByEmailRepositoryStub } = makeSut()
-    const loadAccountByEmailSpy = jest.spyOn(loadAccountByEmailRepositoryStub, 'loadAccountByEmail')
+    const loadAccountByEmailSpy = jest.spyOn(loadAccountByEmailRepositoryStub, 'loadByEmail')
     await sut.add(makeFakeAccountData())
     expect(loadAccountByEmailSpy).toHaveBeenCalledWith('valid_email@mail.com')
   })
 
   test('Should return EmailInUseError if an account with the email already exists', async () => {
     const { sut, loadAccountByEmailRepositoryStub } = makeSut()
-    jest.spyOn(loadAccountByEmailRepositoryStub, 'loadAccountByEmail').mockReturnValueOnce(
-      Promise.resolve(right(makeFakeAccount()))
+    jest.spyOn(loadAccountByEmailRepositoryStub, 'loadByEmail').mockReturnValueOnce(
+      Promise.resolve(makeFakeAccount())
     )
     const addResult = await sut.add(makeFakeAccountData())
     expect(addResult.value).toEqual(new EmailInUseError('valid_email@mail.com'))
@@ -133,7 +133,7 @@ describe('DbAddAccount UseCase', () => {
 
   test('Should throw if LoadAccountByEmailRepository throws', async () => {
     const { sut, loadAccountByEmailRepositoryStub } = makeSut()
-    jest.spyOn(loadAccountByEmailRepositoryStub, 'loadAccountByEmail').mockImplementationOnce(async () => {
+    jest.spyOn(loadAccountByEmailRepositoryStub, 'loadByEmail').mockImplementationOnce(async () => {
       return await Promise.reject(new Error())
     })
     const promise = sut.add(makeFakeAccountData())

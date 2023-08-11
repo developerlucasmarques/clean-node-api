@@ -1,5 +1,4 @@
 import { Collection } from 'mongodb'
-import { LoadAccountByEmailError } from '../../../../data/errors'
 import { AccountDataRepository } from '../../../../data/protocols/db/account'
 import { MongoHelper } from '../helpers/mongo-helper'
 import { AccountMongoRepository } from './account-mongo-repository'
@@ -43,19 +42,19 @@ describe('Account Mongo Repository', () => {
     })
   })
 
-  describe('loadAccountByEmail()', () => {
-    test('Should return an account if loadAccountByEmail on success', async () => {
+  describe('loadByEmail()', () => {
+    test('Should return an account if loadByEmail on success', async () => {
       const sut = makeSut()
       const result = await accountCollection.insertOne(makeFakeAccountData())
       const accountEnteredWithId = MongoHelper.mapAddAccount(result, makeFakeAccountData())
-      const account = await sut.loadAccountByEmail('any_email@mail.com')
-      expect(account.value).toEqual(accountEnteredWithId)
+      const account = await sut.loadByEmail('any_email@mail.com')
+      expect(account).toEqual(accountEnteredWithId)
     })
 
-    test('Should return LoadAccountByEmailError if loadAccountByEmail fails', async () => {
+    test('Should return LoadAccountByEmailError if loadByEmail fails', async () => {
       const sut = makeSut()
-      const account = await sut.loadAccountByEmail('another_email@mail.com')
-      expect(account.value).toEqual(new LoadAccountByEmailError('another_email@mail.com'))
+      const account = await sut.loadByEmail('another_email@mail.com')
+      expect(account).toBeNull()
     })
   })
 
