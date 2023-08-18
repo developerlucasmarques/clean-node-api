@@ -1,7 +1,7 @@
-import { LoadSurveysController } from './load-surveys-controller'
-import { LoadSurveys } from '../../../../domain/usecases'
 import { SurveyModel } from '../../../../domain/models'
-import { noContent, ok } from '../../../helpers/http/http-helper'
+import { LoadSurveys } from '../../../../domain/usecases'
+import { noContent, ok, serverError } from '../../../helpers/http/http-helper'
+import { LoadSurveysController } from './load-surveys-controller'
 
 const makeLoadSurveys = (): LoadSurveys => {
   class LoadSurveyStub implements LoadSurveys {
@@ -68,5 +68,14 @@ describe('LoadSurveys Controller', () => {
     const { sut } = makeSut()
     const response = await sut.handle({})
     expect(response).toEqual(ok(makeFakeSurveys()))
+  })
+
+  test('Should return 500 if LoadSurveys throws', async () => {
+    const { sut, loadSurveysStub } = makeSut()
+    jest.spyOn(loadSurveysStub, 'load').mockReturnValueOnce(
+      Promise.reject(new Error())
+    )
+    const response = await sut.handle({})
+    expect(response).toEqual(serverError(new Error()))
   })
 })
