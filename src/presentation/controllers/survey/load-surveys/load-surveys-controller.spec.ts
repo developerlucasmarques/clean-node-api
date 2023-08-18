@@ -1,7 +1,7 @@
 import { LoadSurveysController } from './load-surveys-controller'
 import { LoadSurveys } from '../../../../domain/usecases'
 import { SurveyModel } from '../../../../domain/models'
-import { noContent } from '../../../helpers/http/http-helper'
+import { noContent, ok } from '../../../helpers/http/http-helper'
 
 const makeLoadSurveys = (): LoadSurveys => {
   class LoadSurveyStub implements LoadSurveys {
@@ -62,5 +62,11 @@ describe('LoadSurveys Controller', () => {
     )
     const response = await sut.handle({})
     expect(response).toEqual(noContent())
+  })
+
+  test('Should return 200 if LoadSurveys success', async () => {
+    const { sut } = makeSut()
+    const response = await sut.handle({})
+    expect(response).toEqual(ok(makeFakeSurveys()))
   })
 })
