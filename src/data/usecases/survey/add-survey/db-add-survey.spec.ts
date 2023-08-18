@@ -42,16 +42,15 @@ describe('DbAdddSurvey UseCase', () => {
     MockDate.set(new Date())
   })
 
-  beforeAll(() => {
+  afterAll(() => {
     MockDate.reset()
   })
 
   test('Should call AddSurveyRepository with correct values', async () => {
     const { sut, addSurveyRepositoryStub } = makeSut()
     const addSpy = jest.spyOn(addSurveyRepositoryStub, 'add')
-    const data = Object.assign({}, { ...makeFakeSurveyData() }, { date: new Date() })
-    await sut.add(data)
-    expect(addSpy).toHaveBeenCalledWith(data)
+    await sut.add(makeFakeSurveyData())
+    expect(addSpy).toHaveBeenCalledWith(makeFakeSurveyData())
   })
 
   test('Should throw if AddSurveyRepository throws', async () => {
