@@ -13,7 +13,7 @@ export class AddSurveyController implements Controller {
         return badRequest(validationResult.value)
       }
       const { question, answers } = httpRequest.body
-      const addSurveyResult = await this.addSurvey.add({ question, answers })
+      const addSurveyResult = await this.addSurvey.add({ question, answers, date: new Date() })
       if (addSurveyResult.isLeft()) {
         return badRequest(addSurveyResult.value)
       }

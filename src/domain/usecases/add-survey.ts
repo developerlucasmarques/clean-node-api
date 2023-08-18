@@ -9,6 +9,7 @@ export interface SurveyAnswer {
 export interface AddSurveyData {
   question: string
   answers: SurveyAnswer[]
+  date: Date
 }
 
 export type AddSurveyResponse = Either<InvalidQuestionError | InvalidAnswerError | InvalidImageError, null>

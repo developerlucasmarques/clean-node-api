@@ -10,12 +10,14 @@ interface SurveyAnswerData {
 export interface SurveyData {
   question: string
   answers: SurveyAnswerData[]
+  date: Date
 }
 
 export class Survey {
   private constructor (
     private readonly question: Question,
-    private readonly answers: SurveyAnswer[]
+    private readonly answers: SurveyAnswer[],
+    private readonly date: Date
   ) {
     Object.freeze(this)
   }
@@ -33,6 +35,6 @@ export class Survey {
       }
       answers.push(surveyAnswerResult.value)
     }
-    return right(new Survey(questionResult.value, answers))
+    return right(new Survey(questionResult.value, answers, input.date))
   }
 }
