@@ -1,6 +1,7 @@
 import { LoadSurveysController } from './load-surveys-controller'
 import { LoadSurveys } from '../../../../domain/usecases'
 import { SurveyModel } from '../../../../domain/models'
+import { noContent } from '../../../helpers/http/http-helper'
 
 const makeLoadSurveys = (): LoadSurveys => {
   class LoadSurveyStub implements LoadSurveys {
@@ -52,5 +53,14 @@ describe('LoadSurveys Controller', () => {
     const loadSpy = jest.spyOn(loadSurveysStub, 'load')
     await sut.handle({})
     expect(loadSpy).toHaveBeenCalled()
+  })
+
+  test('Should return 204 if LoadSurveys is empty', async () => {
+    const { sut, loadSurveysStub } = makeSut()
+    jest.spyOn(loadSurveysStub, 'load').mockReturnValueOnce(
+      Promise.resolve([])
+    )
+    const response = await sut.handle({})
+    expect(response).toEqual(noContent())
   })
 })
