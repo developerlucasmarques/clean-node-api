@@ -2,6 +2,7 @@ import { SurveyModel } from '../../../../domain/models'
 import { LoadSurveys } from '../../../../domain/usecases'
 import { noContent, ok, serverError } from '../../../helpers/http/http-helper'
 import { LoadSurveysController } from './load-surveys-controller'
+import MockDate from 'mockdate'
 
 const makeLoadSurveys = (): LoadSurveys => {
   class LoadSurveyStub implements LoadSurveys {
@@ -48,6 +49,14 @@ const makeSut = (): SutTypes => {
 }
 
 describe('LoadSurveys Controller', () => {
+  beforeAll(() => {
+    MockDate.set(new Date())
+  })
+
+  afterAll(() => {
+    MockDate.reset()
+  })
+
   test('Should call LoadSurveys', async () => {
     const { sut, loadSurveysStub } = makeSut()
     const loadSpy = jest.spyOn(loadSurveysStub, 'load')
