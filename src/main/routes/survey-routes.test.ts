@@ -76,5 +76,32 @@ describe('Survey Routes', () => {
         .get('/api/surveys')
         .expect(401)
     })
+
+    test('Shound return 200 on load surveys with valid accessToken', async () => {
+      const accountData = {
+        name: 'any name',
+        email: 'any_email@mail.com',
+        password: 'password1234',
+        role: 'user'
+      }
+      const result = await accountCollection.insertOne(accountData)
+      const account = MongoHelper.mapAddAccount(result, accountData)
+      const accessToken = sign(account.id, env.jwtSecretKey)
+      await accountCollection.updateOne({ _id: result.insertedId }, { $set: { accessToken } })
+
+      await surveyCollection.insertOne({
+        question: 'any_question',
+        answers: [{
+          image: 'any_image',
+          answer: 'any_answer'
+        }],
+        date: new Date()
+      })
+
+      await request(app)
+        .get('/api/surveys')
+        .set('x-access-token', accessToken)
+        .expect(200)
+    })
   })
 })
