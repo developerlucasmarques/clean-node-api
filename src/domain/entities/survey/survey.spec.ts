@@ -3,13 +3,15 @@ import { InvalidAnswerError, InvalidImageError, InvalidQuestionError } from './e
 import { Question } from './value-objects/question'
 import { Survey, SurveyData } from './survey'
 import { SurveyAnswer } from './value-objects'
+import MockDate from 'mockdate'
 
 const makeFakeSurveyData = (): SurveyData => ({
   question: 'any_question',
   answers: [{
     image: 'http://valid-image-url.com',
     answer: 'any_answer'
-  }]
+  }],
+  date: new Date()
 })
 
 const makeSut = (): Either<InvalidQuestionError, Survey> => {
@@ -18,6 +20,14 @@ const makeSut = (): Either<InvalidQuestionError, Survey> => {
 }
 
 describe('Survey Entity', () => {
+  beforeAll(() => {
+    MockDate.set(new Date())
+  })
+
+  beforeAll(() => {
+    MockDate.reset()
+  })
+
   test('Should return InvalidQuestionError if Question return this error', () => {
     jest.spyOn(Question, 'create').mockReturnValueOnce(
       left(new InvalidQuestionError('any message'))

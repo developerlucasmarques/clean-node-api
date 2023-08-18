@@ -1,52 +1,61 @@
 import { HttpRequest, Validation, badRequest, AddSurvey, AddSurveyData, serverError, noContent, AddSurveyResponse } from '.'
 import { AddSurveyController } from './add-survey-controller'
 import { Either, left, right } from '../../../../shared/either'
+import MockDate from 'mockdate'
+
+const makeValidationStub = (): Validation => {
+  class ValidationStub implements Validation {
+    validate (input: any): Either<Error, null> {
+      return right(null)
+    }
+  }
+  return new ValidationStub()
+}
+
+const makeAddSurveyStub = (): AddSurvey => {
+  class AddSurveyStub implements AddSurvey {
+    async add (data: AddSurveyData): Promise<AddSurveyResponse> {
+      return await Promise.resolve(right(null))
+    }
+  }
+  return new AddSurveyStub()
+}
+
+const makeFakeRequest = (): HttpRequest => ({
+  body: {
+    question: 'any_question',
+    answers: [{
+      image: 'any_url_image',
+      answer: 'any_answer'
+    }]
+  }
+})
+
+interface SutTypes {
+  sut: AddSurveyController
+  validationStub: Validation
+  addSurveyStub: AddSurvey
+}
+
+const makeSut = (): SutTypes => {
+  const validationStub = makeValidationStub()
+  const addSurveyStub = makeAddSurveyStub()
+  const sut = new AddSurveyController(validationStub, addSurveyStub)
+  return {
+    sut,
+    validationStub,
+    addSurveyStub
+  }
+}
 
 describe('AddSurvey Controller', () => {
-  const makeValidationStub = (): Validation => {
-    class ValidationStub implements Validation {
-      validate (input: any): Either<Error, null> {
-        return right(null)
-      }
-    }
-    return new ValidationStub()
-  }
-
-  const makeAddSurveyStub = (): AddSurvey => {
-    class AddSurveyStub implements AddSurvey {
-      async add (data: AddSurveyData): Promise<AddSurveyResponse> {
-        return await Promise.resolve(right(null))
-      }
-    }
-    return new AddSurveyStub()
-  }
-
-  const makeFakeRequest = (): HttpRequest => ({
-    body: {
-      question: 'any_question',
-      answers: [{
-        image: 'any_url_image',
-        answer: 'any_answer'
-      }]
-    }
+  beforeAll(() => {
+    MockDate.set(new Date())
   })
 
-  interface SutTypes {
-    sut: AddSurveyController
-    validationStub: Validation
-    addSurveyStub: AddSurvey
-  }
-
-  const makeSut = (): SutTypes => {
-    const validationStub = makeValidationStub()
-    const addSurveyStub = makeAddSurveyStub()
-    const sut = new AddSurveyController(validationStub, addSurveyStub)
-    return {
-      sut,
-      validationStub,
-      addSurveyStub
-    }
-  }
+  beforeAll(() => {
+    MockDate.reset()
+  })
 
   test('Should call Validation with correct values', async () => {
     const { sut, validationStub } = makeSut()
@@ -66,7 +75,7 @@ describe('AddSurvey Controller', () => {
     const { sut, addSurveyStub } = makeSut()
     const addSpy = jest.spyOn(addSurveyStub, 'add')
     await sut.handle(makeFakeRequest())
-    expect(addSpy).toHaveBeenCalledWith(makeFakeRequest().body)
+    expect(addSpy).toHaveBeenCalledWith({ ...makeFakeRequest().body, date: new Date() })
   })
 
   test('Should return 500 if AddSurvey throws', async () => {

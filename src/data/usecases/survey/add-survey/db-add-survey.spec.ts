@@ -3,14 +3,7 @@ import { AddSurveyData } from '../../../../domain/usecases'
 import { left, right } from '../../../../shared/either'
 import { AddSurveyRepository } from '../../../protocols/db/survey'
 import { DbAddSurvey } from '.'
-
-const makeFakeSurveyData = (): AddSurveyData => ({
-  question: 'any_question',
-  answers: [{
-    image: 'http://valid-image-url.com',
-    answer: 'any_answer'
-  }]
-})
+import MockDate from 'mockdate'
 
 const makeAddSurveyRepositoryStub = (): AddSurveyRepository => {
   class AddSurveyRepositoryStub implements AddSurveyRepository {
@@ -20,6 +13,15 @@ const makeAddSurveyRepositoryStub = (): AddSurveyRepository => {
   }
   return new AddSurveyRepositoryStub()
 }
+
+const makeFakeSurveyData = (): AddSurveyData => ({
+  question: 'any_question',
+  answers: [{
+    image: 'http://valid-image-url.com',
+    answer: 'any_answer'
+  }],
+  date: new Date()
+})
 
 interface SutTypes {
   sut: DbAddSurvey
@@ -36,11 +38,20 @@ const makeSut = (): SutTypes => {
 }
 
 describe('DbAdddSurvey UseCase', () => {
+  beforeAll(() => {
+    MockDate.set(new Date())
+  })
+
+  beforeAll(() => {
+    MockDate.reset()
+  })
+
   test('Should call AddSurveyRepository with correct values', async () => {
     const { sut, addSurveyRepositoryStub } = makeSut()
     const addSpy = jest.spyOn(addSurveyRepositoryStub, 'add')
-    await sut.add(makeFakeSurveyData())
-    expect(addSpy).toHaveBeenCalledWith(makeFakeSurveyData())
+    const data = Object.assign({}, { ...makeFakeSurveyData() }, { date: new Date() })
+    await sut.add(data)
+    expect(addSpy).toHaveBeenCalledWith(data)
   })
 
   test('Should throw if AddSurveyRepository throws', async () => {
