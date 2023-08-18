@@ -53,4 +53,10 @@ describe('DbLoadSurveys UseCase', () => {
     await sut.load()
     expect(loadAllSpy).toHaveBeenCalled()
   })
+
+  test('Should return the same as LoadSurveysRepository returns', async () => {
+    const { sut } = makeSut()
+    const surveys = await sut.load()
+    expect(surveys).toEqual(makeFakeSurveys())
+  })
 })
