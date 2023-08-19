@@ -50,4 +50,24 @@ describe('OnlyRequiredField Validation', () => {
     })
     expect(result).toEqual(left(new UnnecessaryFieldError('anyField')))
   })
+
+  test('Should return null if validation ListWithRequiredFields is success', () => {
+    const requiredFields = ['name', 'email', 'list']
+    const listWithRequiredFields = {
+      listName: 'list',
+      listFields: ['field', 'anotherField']
+    }
+    const sut = new OnlyRequiredFieldsValidation(requiredFields, listWithRequiredFields)
+    const result = sut.validate({
+      name: 'any_name',
+      email: 'any_email@mail.com',
+      list: [
+        {
+          field: 'any_field',
+          anotherField: 'any_another_field'
+        }
+      ]
+    })
+    expect(result).toEqual(right(null))
+  })
 })
