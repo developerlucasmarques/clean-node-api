@@ -51,7 +51,7 @@ describe('OnlyRequiredField Validation', () => {
     expect(result).toEqual(left(new UnnecessaryFieldError('anyField')))
   })
 
-  test('Should return null if validation ListWithRequiredFields is success', () => {
+  test('Should return null if ListWithRequiredFields validation is success', () => {
     const requiredFields = ['name', 'email', 'list']
     const listWithRequiredFields = {
       listName: 'list',
