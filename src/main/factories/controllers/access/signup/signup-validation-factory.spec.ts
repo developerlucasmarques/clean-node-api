@@ -1,4 +1,4 @@
-import { CompareFieldsValidation, RequiredFieldValidation, ValidationComposite, Validation } from '../../../../../validation/validators'
+import { CompareFieldsValidation, RequiredFieldValidation, ValidationComposite, Validation, OnlyRequiredFieldsValidation } from '../../../../../validation/validators'
 import { makeSignUpValidation } from './signup-validation-factory'
 
 jest.mock('../../../../../validation/validators/validation-composite')
@@ -11,7 +11,10 @@ describe('SignUpValidation Factory', () => {
     for (const field of requiredFields) {
       validations.push(new RequiredFieldValidation(field))
     }
-    validations.push(new CompareFieldsValidation('password', 'passwordConfirmation'))
+    validations.push(
+      new OnlyRequiredFieldsValidation(requiredFields),
+      new CompareFieldsValidation('password', 'passwordConfirmation')
+    )
     expect(ValidationComposite).toHaveBeenCalledWith(validations)
   })
 })
