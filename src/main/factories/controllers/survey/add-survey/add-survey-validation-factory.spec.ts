@@ -1,4 +1,4 @@
-import { OnlyRequiredFieldsValidation, RequiredFieldValidation, Validation, ValidationComposite } from '../../../../../validation/validators'
+import { ListWithRequiredFields, OnlyRequiredFieldsValidation, RequiredFieldValidation, Validation, ValidationComposite } from '../../../../../validation/validators'
 import { makeAddSurveyValidation } from './add-survey-validation-factory'
 
 jest.mock('../../../../../validation/validators/validation-composite')
@@ -11,7 +11,11 @@ describe('AddSurveyValidation Factory', () => {
     for (const fileld of requiredFields) {
       validations.push(new RequiredFieldValidation(fileld))
     }
-    validations.push(new OnlyRequiredFieldsValidation(requiredFields))
+    const listWithRequiredFields: ListWithRequiredFields = {
+      listName: 'answers',
+      listFields: ['image', 'answer']
+    }
+    validations.push(new OnlyRequiredFieldsValidation(requiredFields, listWithRequiredFields))
     expect(ValidationComposite).toHaveBeenCalledWith(validations)
   })
 })
