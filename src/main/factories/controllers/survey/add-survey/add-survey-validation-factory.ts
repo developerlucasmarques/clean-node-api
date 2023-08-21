@@ -1,4 +1,4 @@
-import { ListWithRequiredFields, OnlyRequiredFieldsValidation, RequiredFieldValidation, Validation, ValidationComposite } from '../../../../../validation/validators'
+import { ListWithRequiredFields, OnlyRequiredFieldsValidation, PrimitiveTypeValidation, RequiredFieldValidation, Validation, ValidationComposite } from '../../../../../validation/validators'
 
 export const makeAddSurveyValidation = (): ValidationComposite => {
   const validations: Validation[] = []
@@ -6,10 +6,14 @@ export const makeAddSurveyValidation = (): ValidationComposite => {
   for (const field of requiredFields) {
     validations.push(new RequiredFieldValidation(field))
   }
+
   const listWithRequiredFields: ListWithRequiredFields = {
     listName: 'answers',
     listFields: ['image', 'answer']
   }
-  validations.push(new OnlyRequiredFieldsValidation(requiredFields, listWithRequiredFields))
+  validations.push(
+    new PrimitiveTypeValidation('question', 'string'),
+    new OnlyRequiredFieldsValidation(requiredFields, listWithRequiredFields)
+  )
   return new ValidationComposite(validations)
 }

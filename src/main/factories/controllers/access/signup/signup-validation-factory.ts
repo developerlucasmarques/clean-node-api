@@ -1,10 +1,13 @@
-import { Validation, CompareFieldsValidation, RequiredFieldValidation, ValidationComposite, OnlyRequiredFieldsValidation } from '../../../../../validation/validators'
+import { Validation, CompareFieldsValidation, RequiredFieldValidation, ValidationComposite, OnlyRequiredFieldsValidation, PrimitiveTypeValidation } from '../../../../../validation/validators'
 
 export const makeSignUpValidation = (): ValidationComposite => {
   const validations: Validation[] = []
   const requiredFields = ['name', 'email', 'password', 'passwordConfirmation']
   for (const field of requiredFields) {
-    validations.push(new RequiredFieldValidation(field))
+    validations.push(
+      new RequiredFieldValidation(field),
+      new PrimitiveTypeValidation(field, 'string')
+    )
   }
   validations.push(
     new OnlyRequiredFieldsValidation(requiredFields),
