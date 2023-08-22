@@ -17,6 +17,7 @@ describe('AddSurveyValidation Factory', () => {
     }
     validations.push(
       new PrimitiveTypeValidation('question', 'string'),
+      new PrimitiveTypeValidation('answers', 'array'),
       new OnlyRequiredFieldsValidation(requiredFields, listWithRequiredFields)
     )
     expect(ValidationComposite).toHaveBeenCalledWith(validations)
