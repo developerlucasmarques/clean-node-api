@@ -20,4 +20,22 @@ describe('PrimitiveType Validation', () => {
     })
     expect(result).toEqual(right(null))
   })
+
+  test('Should return ValidationTypeError if field type is array and validation fails', () => {
+    const sut = new PrimitiveTypeValidation('messages', 'array')
+    const result = sut.validate({
+      name: 'any name',
+      messages: 'invalid_field'
+    })
+    expect(result).toEqual(left(new ValidationTypeError('messages')))
+  })
+
+  test('Should return null if fieldType is array and validation success', () => {
+    const sut = new PrimitiveTypeValidation('messages', 'array')
+    const result = sut.validate({
+      name: 'any name',
+      messages: []
+    })
+    expect(result).toEqual(right(null))
+  })
 })
