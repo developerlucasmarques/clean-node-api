@@ -1,5 +1,5 @@
 import { Either, left, right } from '../../../shared/either'
-import { InvalidAnswerError, InvalidImageError, InvalidQuestionError } from './errors'
+import { InvalidAnswerError, InvalidAnswersError, InvalidImageError, InvalidQuestionError } from './errors'
 import { Question, SurveyAnswer } from './value-objects'
 
 interface SurveyAnswerData {
@@ -22,7 +22,10 @@ export class Survey {
     Object.freeze(this)
   }
 
-  static create (input: SurveyData): Either<InvalidQuestionError | InvalidAnswerError | InvalidImageError, Survey> {
+  static create (input: SurveyData): Either<InvalidQuestionError | InvalidAnswerError | InvalidAnswersError | InvalidImageError, Survey> {
+    if (input.answers.length === 0) {
+      return left(new InvalidAnswersError('cannot be empty'))
+    }
     const questionResult = Question.create(input.question)
     if (questionResult.isLeft()) {
       return left(questionResult.value)
