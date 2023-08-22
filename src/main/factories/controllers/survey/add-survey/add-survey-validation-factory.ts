@@ -13,6 +13,7 @@ export const makeAddSurveyValidation = (): ValidationComposite => {
   }
   validations.push(
     new PrimitiveTypeValidation('question', 'string'),
+    new PrimitiveTypeValidation('answers', 'array'),
     new OnlyRequiredFieldsValidation(requiredFields, listWithRequiredFields)
   )
   return new ValidationComposite(validations)
