@@ -1,5 +1,5 @@
 import { Either, left } from '../../../shared/either'
-import { InvalidAnswerError, InvalidImageError, InvalidQuestionError } from './errors'
+import { InvalidAnswerError, InvalidAnswersError, InvalidImageError, InvalidQuestionError } from './errors'
 import { Question } from './value-objects/question'
 import { Survey, SurveyData } from './survey'
 import { SurveyAnswer } from './value-objects'
@@ -14,8 +14,8 @@ const makeFakeSurveyData = (): SurveyData => ({
   date: new Date()
 })
 
-const makeSut = (): Either<InvalidQuestionError, Survey> => {
-  const sut = Survey.create(makeFakeSurveyData())
+const makeSut = (data: SurveyData): Either<InvalidQuestionError, Survey> => {
+  const sut = Survey.create(data)
   return sut
 }
 
@@ -32,7 +32,7 @@ describe('Survey Entity', () => {
     jest.spyOn(Question, 'create').mockReturnValueOnce(
       left(new InvalidQuestionError('any message'))
     )
-    const sut = makeSut()
+    const sut = makeSut(makeFakeSurveyData())
     expect(sut).toEqual(left(new InvalidQuestionError('any message')))
   })
 
@@ -40,7 +40,7 @@ describe('Survey Entity', () => {
     jest.spyOn(SurveyAnswer, 'create').mockReturnValueOnce(
       left(new InvalidImageError('any message'))
     )
-    const sut = makeSut()
+    const sut = makeSut(makeFakeSurveyData())
     expect(sut).toEqual(left(new InvalidImageError('any message')))
   })
 
@@ -48,8 +48,18 @@ describe('Survey Entity', () => {
     jest.spyOn(SurveyAnswer, 'create').mockReturnValueOnce(
       left(new InvalidAnswerError('any message'))
     )
-    const sut = makeSut()
+    const sut = makeSut(makeFakeSurveyData())
     expect(sut).toEqual(left(new InvalidAnswerError('any message')))
+  })
+
+  test('Should return InvalidAnswersError if answers is empty', () => {
+    const data: SurveyData = {
+      question: 'any_question',
+      answers: [],
+      date: new Date()
+    }
+    const sut = makeSut(data)
+    expect(sut).toEqual(left(new InvalidAnswersError('cannot be empty')))
   })
 
   test('Should return the first error if more than one SurveyAnswer validation fails', () => {
@@ -57,7 +67,7 @@ describe('Survey Entity', () => {
     jest.spyOn(SurveyAnswer, 'create').mockReturnValueOnce(
       left(new InvalidAnswerError('any message'))
     )
-    const sut = makeSut()
+    const sut = makeSut(makeFakeSurveyData())
     expect(sut).toEqual(left(new Error()))
   })
 })
