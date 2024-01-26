@@ -1,4 +1,4 @@
-import { left, right } from '../../../../shared/either'
+import { left, right } from '@/shared/either'
 import { InvalidQuestionError } from '../errors'
 import { Question } from './question'
 

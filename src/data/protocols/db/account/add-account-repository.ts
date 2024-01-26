@@ -1,5 +1,5 @@
-import { AccountRole } from '../../../../domain/models'
-import { AccountModel } from '../../../../domain/models/account'
+import { AccountRole } from '@/domain/models'
+import { AccountModel } from '@/domain/models/account'
 
 export interface AccountDataRepository {
   name: string

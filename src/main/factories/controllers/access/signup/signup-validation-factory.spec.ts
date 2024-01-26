@@ -1,7 +1,7 @@
-import { CompareFieldsValidation, RequiredFieldValidation, ValidationComposite, Validation, OnlyRequiredFieldsValidation, PrimitiveTypeValidation } from '../../../../../validation/validators'
+import { CompareFieldsValidation, RequiredFieldValidation, ValidationComposite, Validation, OnlyRequiredFieldsValidation, PrimitiveTypeValidation } from '@/validation/validators'
 import { makeSignUpValidation } from './signup-validation-factory'
 
-jest.mock('../../../../../validation/validators/validation-composite')
+jest.mock('@/validation/validators/validation-composite')
 
 describe('SignUpValidation Factory', () => {
   test('Should call ValidationComposite with all validations', () => {

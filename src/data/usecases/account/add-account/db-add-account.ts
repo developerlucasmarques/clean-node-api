@@ -1,10 +1,10 @@
-import { left, right } from '../../../../shared/either'
-import { Account } from '../../../../domain/entities/account'
-import { AddAccountRepository, LoadAccountByEmailRepository } from '../../../protocols/db/account'
-import { AccountData, AddAccount, AddAccountResponse, UpdateAccessToken } from '../../../../domain/usecases'
-import { EmailInUseError } from '../../../errors'
-import { Hasher } from '../../../protocols/criptography'
-import { AccountRole } from '../../../../domain/models'
+import { left, right } from '@/shared/either'
+import { Account } from '@/domain/entities/account'
+import { AddAccountRepository, LoadAccountByEmailRepository } from '@/data/protocols/db/account'
+import { AccountData, AddAccount, AddAccountResponse, UpdateAccessToken } from '@/domain/usecases'
+import { EmailInUseError } from '@/data/errors'
+import { Hasher } from '@/data/protocols/criptography'
+import { AccountRole } from '@/domain/models'
 
 export class DbAddAccount implements AddAccount {
   constructor (

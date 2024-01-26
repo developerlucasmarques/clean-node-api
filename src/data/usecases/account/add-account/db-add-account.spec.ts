@@ -1,11 +1,11 @@
 import { DbAddAccount } from '.'
-import { Account, InvalidEmailError, InvalidNameError, InvalidPasswordError } from '../../../../domain/entities/account'
-import { AccountModel } from '../../../../domain/models/account'
-import { AccountData, UpdateAccessToken } from '../../../../domain/usecases'
-import { left } from '../../../../shared/either'
-import { EmailInUseError } from '../../../errors'
-import { Hasher } from '../../../protocols/criptography'
-import { AddAccountRepository, LoadAccountByEmailRepository } from '../../../protocols/db/account'
+import { Account, InvalidEmailError, InvalidNameError, InvalidPasswordError } from '@/domain/entities/account'
+import { AccountModel } from '@/domain/models/account'
+import { AccountData, UpdateAccessToken } from '@/domain/usecases'
+import { left } from '@/shared/either'
+import { EmailInUseError } from '@/data/errors'
+import { Hasher } from '@/data/protocols/criptography'
+import { AddAccountRepository, LoadAccountByEmailRepository } from '@/data/protocols/db/account'
 
 const makeHasher = (): Hasher => {
   class HasherStub implements Hasher {

@@ -1,7 +1,7 @@
-import { DbAuthentication } from '../../../../../data/usecases/access/authentication'
-import { Authentication } from '../../../../../domain/usecases/authentication'
-import { BcryptAdapter } from '../../../../../infra/criptography/bcrypt-adapter/bcrypt-adapter'
-import { AccountMongoRepository } from '../../../../../infra/db/mongodb/account/account-mongo-repository'
+import { DbAuthentication } from '@/data/usecases/access/authentication'
+import { Authentication } from '@/domain/usecases/authentication'
+import { BcryptAdapter } from '@/infra/criptography/bcrypt-adapter/bcrypt-adapter'
+import { AccountMongoRepository } from '@/infra/db/mongodb/account/account-mongo-repository'
 import { makeDbUpdateAccessToken } from '../update-access-token/db-update-access-token-factory'
 
 export const makeDbAuthentication = (): Authentication => {

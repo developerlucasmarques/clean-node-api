@@ -1,6 +1,6 @@
 import { DbUpdateAccessToken } from '.'
-import { Encrypter } from '../../../protocols/criptography'
-import { UpdateAccessTokenData, UpdateAccessTokenRepository } from '../../../protocols/db/account'
+import { Encrypter } from '@/data/protocols/criptography'
+import { UpdateAccessTokenData, UpdateAccessTokenRepository } from '@/data/protocols/db/account'
 
 const makeEncrypterStub = (): Encrypter => {
   class EncrypterStub implements Encrypter {

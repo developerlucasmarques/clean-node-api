@@ -1,5 +1,5 @@
-import { ValidationTypeError } from '../../presentation/errors'
-import { left, right } from '../../shared/either'
+import { ValidationTypeError } from '@/presentation/errors'
+import { left, right } from '@/shared/either'
 import { PrimitiveTypeValidation } from './primitive-type-validation'
 
 describe('PrimitiveType Validation', () => {

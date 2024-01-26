@@ -1,6 +1,6 @@
 import { HttpRequest, Validation, badRequest, AddSurvey, AddSurveyData, serverError, noContent, AddSurveyResponse } from '.'
 import { AddSurveyController } from './add-survey-controller'
-import { Either, left, right } from '../../../../shared/either'
+import { Either, left, right } from '@/shared/either'
 import MockDate from 'mockdate'
 
 const makeValidationStub = (): Validation => {

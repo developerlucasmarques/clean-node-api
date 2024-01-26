@@ -1,6 +1,6 @@
 import { Authentication, AuthenticationError, HttpRequest, AuthenticationData, Validation } from '.'
-import { Either, left, right } from '../../../../shared/either'
-import { badRequest, ok, serverError, unauthorized } from '../../../helpers/http/http-helper'
+import { Either, left, right } from '@/shared/either'
+import { badRequest, ok, serverError, unauthorized } from '@/presentation/helpers/http/http-helper'
 import { LoginController } from './login-controller'
 
 const makeValidationStub = (): Validation => {

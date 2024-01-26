@@ -12,6 +12,9 @@ module.exports = {
   transform: {
     '.+\\.ts$': 'ts-jest'
   },
+  moduleNameMapper: {
+    '@/(.*)': '<rootDir>/src/$1'
+  },
   coveragePathIgnorePatterns: [
     'presentation/protocols/index.ts',
     'controllers/signup/signup-protocols.ts',

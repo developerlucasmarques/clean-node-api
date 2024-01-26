@@ -1,4 +1,4 @@
-import { Either, left } from '../../../shared/either'
+import { Either, left } from '@/shared/either'
 import { InvalidAnswerError, InvalidAnswersError, InvalidImageError, InvalidQuestionError } from './errors'
 import { Question } from './value-objects/question'
 import { Survey, SurveyData } from './survey'

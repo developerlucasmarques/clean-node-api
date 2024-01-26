@@ -1,8 +1,8 @@
 import { AccountData, AddAccount, AddAccountResponse, HttpRequest, Validation } from '.'
-import { InvalidEmailError, InvalidNameError, InvalidPasswordError } from '../../../../domain/entities/account'
-import { Either, left, right } from '../../../../shared/either'
-import { MissingParamError, ServerError } from '../../../errors'
-import { badRequest, ok, serverError } from '../../../helpers/http/http-helper'
+import { InvalidEmailError, InvalidNameError, InvalidPasswordError } from '@/domain/entities/account'
+import { Either, left, right } from '@/shared/either'
+import { MissingParamError, ServerError } from '@/presentation/errors'
+import { badRequest, ok, serverError } from '@/presentation/helpers/http/http-helper'
 import { SignUpController } from './signup-controller'
 
 const makeAddAccount = (): AddAccount => {

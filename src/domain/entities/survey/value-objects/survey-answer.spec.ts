@@ -1,5 +1,5 @@
 import { Answer, Image, SurveyAnswer } from '.'
-import { left, right } from '../../../../shared/either'
+import { left, right } from '@/shared/either'
 import { InvalidAnswerError, InvalidImageError } from '../errors'
 
 const image = 'http://valid-image-url.com'

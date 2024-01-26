@@ -1,4 +1,4 @@
-import { Either } from '../../shared/either'
+import { Either } from '@/shared/either'
 import { AccessDeniedError, InvalidTokenError, AccountNotFoundError } from '../errors'
 import { AccountModel } from '../models/account'
 import { AccountRole } from '../models/account-role'

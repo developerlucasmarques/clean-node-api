@@ -1,4 +1,4 @@
-import { Either, left, right } from '../../../../shared/either'
+import { Either, left, right } from '@/shared/either'
 import { InvalidAnswerError } from '../errors'
 
 export class Answer {

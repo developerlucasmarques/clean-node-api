@@ -1,5 +1,5 @@
 import { Answer, Image } from '.'
-import { Either, left, right } from '../../../../shared/either'
+import { Either, left, right } from '@/shared/either'
 import { InvalidAnswerError, InvalidImageError } from '../errors'
 
 export interface SurveyAnswerData {

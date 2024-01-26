@@ -1,4 +1,4 @@
-import { Either } from '../../shared/either'
+import { Either } from '@/shared/either'
 import { AuthenticationError } from '../errors/authentication-error'
 
 export interface AuthenticationData {

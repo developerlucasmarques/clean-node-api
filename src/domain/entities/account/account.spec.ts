@@ -1,7 +1,7 @@
-import { left } from '../../../shared/either'
+import { left } from '@/shared/either'
 import { Email, Name, Password } from './value-objects'
 import { InvalidEmailError, InvalidNameError, InvalidPasswordError } from '.'
-import { AccountData } from '../../usecases/add-account'
+import { AccountData } from '@/domain/usecases/add-account'
 import { Account } from './account'
 
 const makeFakeAccountData = (): AccountData => ({
