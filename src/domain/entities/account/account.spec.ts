@@ -1,6 +1,6 @@
 import { left } from '@/shared/either'
 import { Email, Name, Password } from './value-objects'
-import { InvalidEmailError, InvalidNameError, InvalidPasswordError } from '.'
+import { InvalidEmailError, InvalidNameError, InvalidPasswordError } from './errors'
 import { AccountData } from '@/domain/usecases/add-account'
 import { Account } from './account'
 

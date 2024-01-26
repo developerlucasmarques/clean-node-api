@@ -1,5 +1,4 @@
 import { AccountData, AddAccount, AddAccountResponse, HttpRequest, Validation } from '.'
-import { InvalidEmailError, InvalidNameError, InvalidPasswordError } from '@/domain/entities/account'
 import { Either, left, right } from '@/shared/either'
 import { MissingParamError, ServerError } from '@/presentation/errors'
 import { badRequest, ok, serverError } from '@/presentation/helpers/http/http-helper'
@@ -61,31 +60,13 @@ describe('SignUp Controller', () => {
     })
   })
 
-  test('Should return InvalidNameError if AddAccount return InvalidNameError', async () => {
+  test('Should return 400 if AddAccount returns an Error', async () => {
     const { sut, addAccountStub } = makeSut()
     jest.spyOn(addAccountStub, 'add').mockReturnValueOnce(
-      Promise.resolve(left(new InvalidNameError('invalid name')))
+      Promise.resolve(left(new Error('any_message')))
     )
     const httpResponse = await sut.handle(makeFakeRequest())
-    expect(httpResponse).toEqual(badRequest(new InvalidNameError('invalid name')))
-  })
-
-  test('Should return InvalidEmailError if AddAccount return InvalidEmailError', async () => {
-    const { sut, addAccountStub } = makeSut()
-    jest.spyOn(addAccountStub, 'add').mockReturnValueOnce(
-      Promise.resolve(left(new InvalidEmailError('invalid_email@mail.com')))
-    )
-    const httpResponse = await sut.handle(makeFakeRequest())
-    expect(httpResponse).toEqual(badRequest(new InvalidEmailError('invalid_email@mail.com')))
-  })
-
-  test('Should return InvalidPasswordError if AddAccount return InvalidPasswordError', async () => {
-    const { sut, addAccountStub } = makeSut()
-    jest.spyOn(addAccountStub, 'add').mockReturnValueOnce(
-      Promise.resolve(left(new InvalidPasswordError('invalidPassword1234')))
-    )
-    const httpResponse = await sut.handle(makeFakeRequest())
-    expect(httpResponse).toEqual(badRequest(new InvalidPasswordError('invalidPassword1234')))
+    expect(httpResponse).toEqual(badRequest(new Error('any_message')))
   })
 
   test('Should return 500 if AddAccount throws', async () => {

@@ -1,5 +1,5 @@
 import { DbAddAccount } from '.'
-import { Account, InvalidEmailError, InvalidNameError, InvalidPasswordError } from '@/domain/entities/account'
+import { Account } from '@/domain/entities/account'
 import { AccountModel } from '@/domain/models/account'
 import { AccountData, UpdateAccessToken } from '@/domain/usecases'
 import { left } from '@/shared/either'
@@ -88,31 +88,13 @@ describe('DbAddAccount UseCase', () => {
     expect(createSpy).toHaveBeenCalledWith(makeFakeAccountData())
   })
 
-  test('Should return InvalidNameError if Account return InvalidNameError', async () => {
+  test('Should return the same Error if Account returns an Error', async () => {
     const { sut } = makeSut()
     jest.spyOn(Account, 'create').mockReturnValueOnce(
-      left(new InvalidNameError('invalid name'))
+      left(new Error('any_message'))
     )
     const response = await sut.add(makeFakeAccountData())
-    expect(response.value).toEqual(new InvalidNameError('invalid name'))
-  })
-
-  test('Should return InvalidEmailError if Account return InvalidEmailError', async () => {
-    const { sut } = makeSut()
-    jest.spyOn(Account, 'create').mockReturnValueOnce(
-      left(new InvalidEmailError('invalid_email@mail.com'))
-    )
-    const response = await sut.add(makeFakeAccountData())
-    expect(response.value).toEqual(new InvalidEmailError('invalid_email@mail.com'))
-  })
-
-  test('Should return InvalidPasswordError if Account return InvalidPasswordError', async () => {
-    const { sut } = makeSut()
-    jest.spyOn(Account, 'create').mockReturnValueOnce(
-      left(new InvalidPasswordError('invalid_password1'))
-    )
-    const response = await sut.add(makeFakeAccountData())
-    expect(response.value).toEqual(new InvalidPasswordError('invalid_password1'))
+    expect(response.value).toEqual(new Error('any_message'))
   })
 
   test('Should call LoadAccountByEmailRepository with correct email', async () => {
