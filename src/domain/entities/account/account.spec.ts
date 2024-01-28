@@ -29,13 +29,13 @@ const makeFakeAccountData = (): AccountData => ({
 })
 
 describe('Account', () => {
-  test('Should call Name with correct values', () => {
+  test('Should call Name with correct name', () => {
     const createNameSpy = jest.spyOn(Name, 'create')
     Account.create(makeFakeAccountData())
     expect(createNameSpy).toHaveBeenCalledWith('any_name')
   })
 
-  test('Should return InvalidNameError if Name return InvalidNameError', () => {
+  test('Should return InvalidNameError if Name returns InvalidNameError', () => {
     jest.spyOn(Name, 'create').mockReturnValueOnce(
       left(new InvalidNameError('invalid_name'))
     )
@@ -43,7 +43,7 @@ describe('Account', () => {
     expect(sut.value).toEqual(new InvalidNameError('invalid_name'))
   })
 
-  test('Should call Email with correct value', () => {
+  test('Should call Email with correct email', () => {
     const createEmailSpy = jest.spyOn(Email, 'create')
     Account.create(makeFakeAccountData())
     expect(createEmailSpy).toHaveBeenCalledWith('any_email@mail.com')
@@ -57,7 +57,7 @@ describe('Account', () => {
     expect(sut.value).toEqual(new InvalidEmailError('invalid_email@mail.com'))
   })
 
-  test('Should call Password with correct value', () => {
+  test('Should call Password with correct password', () => {
     const createPasswordSpy = jest.spyOn(Password, 'create')
     Account.create(makeFakeAccountData())
     expect(createPasswordSpy).toHaveBeenCalledWith('any_password')
@@ -71,7 +71,7 @@ describe('Account', () => {
     expect(sut.value).toEqual(new InvalidPasswordError('invalid_passowrd_1234'))
   })
 
-  test('Should return Account if values valid', () => {
+  test('Should return Account on success', () => {
     const sut = Account.create(makeFakeAccountData())
     expect(sut.value).toEqual({
       name: { name: 'any_name' },
