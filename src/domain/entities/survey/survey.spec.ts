@@ -52,12 +52,26 @@ describe('Survey Entity', () => {
     MockDate.reset()
   })
 
+  test('Should call Question with correct question', () => {
+    const createSpy = jest.spyOn(Question, 'create')
+    makeSut(makeFakeSurveyData())
+    expect(createSpy).toHaveBeenCalledWith('any_question')
+  })
+
   test('Should return InvalidQuestionError if Question return this error', () => {
     jest.spyOn(Question, 'create').mockReturnValueOnce(
       left(new InvalidQuestionError('any message'))
     )
     const sut = makeSut(makeFakeSurveyData())
     expect(sut).toEqual(left(new InvalidQuestionError('any message')))
+  })
+
+  test('Should call SurveyAnswer with correct values', () => {
+    const createSpy = jest.spyOn(SurveyAnswer, 'create')
+    makeSut(makeFakeSurveyData())
+    expect(createSpy).toHaveBeenCalledWith({
+      image: 'valid_image_url', answer: 'any_answer'
+    })
   })
 
   test('Should return InvalidImageError if SurveyAnswer return this error', () => {
