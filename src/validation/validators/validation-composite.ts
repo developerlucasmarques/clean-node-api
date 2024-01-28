@@ -1,4 +1,4 @@
-import { Validation } from '.'
+import { Validation } from '@/presentation/protocols'
 import { Either, left, right } from '@/shared/either'
 
 export class ValidationComposite implements Validation {

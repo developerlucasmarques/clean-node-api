@@ -1,5 +1,6 @@
-import { CompareFieldsValidation, RequiredFieldValidation, ValidationComposite, Validation, OnlyRequiredFieldsValidation, PrimitiveTypeValidation } from '@/validation/validators'
+import { CompareFieldsValidation, RequiredFieldValidation, ValidationComposite, OnlyRequiredFieldsValidation, PrimitiveTypeValidation } from '@/validation/validators'
 import { makeSignUpValidation } from './signup-validation-factory'
+import { Validation } from '@/presentation/protocols'
 
 jest.mock('@/validation/validators/validation-composite')
 
