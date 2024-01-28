@@ -10,6 +10,12 @@ jest.mock('@/domain/entities/account/value-objects/name', () => ({
   }
 }))
 
+jest.mock('@/domain/entities/account/value-objects/email', () => ({
+  Email: {
+    create: jest.fn(() => { return right({ email: 'any_email@mail.com' }) })
+  }
+}))
+
 const makeFakeAccountData = (): AccountData => ({
   name: 'any_name',
   email: 'any_email@mail.com',
@@ -62,9 +68,9 @@ describe('Account', () => {
   test('Should return Account if values valid', () => {
     const sut = Account.create(makeFakeAccountData())
     expect(sut.value).toEqual({
-      name: Name.create('any_name').value,
-      email: Email.create('any_email@mail.com').value,
-      password: Password.create('password1234').value
+      name: { name: 'any_name' },
+      email: { email: 'any_email@mail.com' },
+      password: { password: 'password1234' }
     })
   })
 })
