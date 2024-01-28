@@ -2,10 +2,22 @@ import { DbAddAccount } from '.'
 import { Account } from '@/domain/entities/account'
 import { AccountModel } from '@/domain/models/account'
 import { AccountData, UpdateAccessToken } from '@/domain/usecases'
-import { left } from '@/shared/either'
+import { left, right } from '@/shared/either'
 import { EmailInUseError } from '@/data/errors'
 import { Hasher } from '@/data/protocols/criptography'
 import { AddAccountRepository, LoadAccountByEmailRepository } from '@/data/protocols/db/account'
+
+jest.mock('@/domain/entities/account/account', () => ({
+  Account: {
+    create: jest.fn(() => {
+      return right({
+        name: 'valid_name',
+        email: 'valid_email@mail.com',
+        password: 'valid_password'
+      })
+    })
+  }
+}))
 
 const makeHasher = (): Hasher => {
   class HasherStub implements Hasher {
@@ -45,16 +57,16 @@ const makeLoadAccountByEmailRepositoryStub = (): LoadAccountByEmailRepository =>
 
 const makeFakeAccount = (): AccountModel => ({
   id: 'valid_id',
-  name: 'valid name',
+  name: 'valid_name',
   email: 'valid_email@mail.com',
   password: 'hashed_password',
   role: 'admin'
 })
 
 const makeFakeAccountData = (): AccountData => ({
-  name: 'valid name',
+  name: 'valid_name',
   email: 'valid_email@mail.com',
-  password: 'password1234'
+  password: 'valid_password'
 })
 
 interface SutTypes {
@@ -126,7 +138,7 @@ describe('DbAddAccount UseCase', () => {
     const { sut, hasherStub } = makeSut()
     const hashSpy = jest.spyOn(hasherStub, 'hash')
     await sut.add(makeFakeAccountData())
-    expect(hashSpy).toHaveBeenCalledWith('password1234')
+    expect(hashSpy).toHaveBeenCalledWith('valid_password')
   })
 
   test('Should throw if Hasher throws', async () => {
@@ -143,7 +155,7 @@ describe('DbAddAccount UseCase', () => {
     const addSpy = jest.spyOn(addAccountRepositoryStub, 'add')
     await sut.add(makeFakeAccountData())
     expect(addSpy).toHaveBeenCalledWith({
-      name: 'valid name',
+      name: 'valid_name',
       email: 'valid_email@mail.com',
       password: 'hashed_password',
       role: 'user'
