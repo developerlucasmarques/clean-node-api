@@ -16,18 +16,15 @@ export class Account {
     const nameOrError = Name.create(accountData.name)
     const emailOrError = Email.create(accountData.email)
     const passwordOrError = Password.create(accountData.password)
-    if (nameOrError.isLeft()) {
-      return left(nameOrError.value)
+    for (const result of [nameOrError, emailOrError, passwordOrError]) {
+      if (result.isLeft()) return left(result.value)
     }
-    if (emailOrError.isLeft()) {
-      return left(emailOrError.value)
-    }
-    if (passwordOrError.isLeft()) {
-      return left(passwordOrError.value)
-    }
-    const name = nameOrError.value
-    const email = emailOrError.value
-    const password = passwordOrError.value
-    return right(new Account(name, email, password))
+    return right(
+      new Account(
+        nameOrError.value as Name,
+        emailOrError.value as Email,
+        passwordOrError.value as Password
+      )
+    )
   }
 }
