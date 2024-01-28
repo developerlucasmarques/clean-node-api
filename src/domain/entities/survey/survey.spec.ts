@@ -1,10 +1,16 @@
-import { Either, left } from '@/shared/either'
+import { Either, left, right } from '@/shared/either'
 import { InvalidAnswerError, InvalidAnswersError, InvalidImageError, InvalidQuestionError } from './errors'
 import { Question } from './value-objects/question'
 import { Survey } from './survey'
 import { SurveyAnswer } from './value-objects'
 import MockDate from 'mockdate'
 import { SurveyData } from './survey-types'
+
+jest.mock('@/domain/entities/survey/value-objects/question', () => ({
+  Question: {
+    create: jest.fn(() => { return right({ question: 'any_question' }) })
+  }
+}))
 
 const makeFakeSurveyData = (): SurveyData => ({
   question: 'any_question',
