@@ -1,10 +1,10 @@
-import { Either, left, right } from '@/shared/either'
-import { InvalidAnswerError, InvalidAnswersError, InvalidImageError, InvalidQuestionError } from './errors'
-import { Question } from './value-objects/question'
-import { Survey } from './survey'
-import { SurveyAnswer } from './value-objects'
+import { left, right } from '@/shared/either'
 import MockDate from 'mockdate'
+import { InvalidAnswerError, InvalidAnswersError, InvalidImageError, InvalidQuestionError } from './errors'
+import { Survey } from './survey'
 import { SurveyData } from './survey-types'
+import { SurveyAnswer } from './value-objects'
+import { Question } from './value-objects/question'
 
 jest.mock('@/domain/entities/survey/value-objects/question', () => ({
   Question: {
@@ -22,8 +22,8 @@ jest.mock('@/domain/entities/survey/value-objects/survey-answer', () => ({
   SurveyAnswer: {
     create: jest.fn(() => {
       return right({
-        answer: 'any_answer',
-        image: 'valid_image_url'
+        answer: { answer: 'any_answer' },
+        image: { image: 'valid_image_url' }
       })
     })
   }
@@ -38,11 +38,6 @@ const makeFakeSurveyData = (): SurveyData => ({
   date: new Date()
 })
 
-const makeSut = (data: SurveyData): Either<InvalidQuestionError, Survey> => {
-  const sut = Survey.create(data)
-  return sut
-}
-
 describe('Survey Entity', () => {
   beforeAll(() => {
     MockDate.set(new Date())
@@ -54,7 +49,7 @@ describe('Survey Entity', () => {
 
   test('Should call Question with correct question', () => {
     const createSpy = jest.spyOn(Question, 'create')
-    makeSut(makeFakeSurveyData())
+    Survey.create(makeFakeSurveyData())
     expect(createSpy).toHaveBeenCalledWith('any_question')
   })
 
@@ -62,13 +57,13 @@ describe('Survey Entity', () => {
     jest.spyOn(Question, 'create').mockReturnValueOnce(
       left(new InvalidQuestionError('any message'))
     )
-    const sut = makeSut(makeFakeSurveyData())
+    const sut = Survey.create(makeFakeSurveyData())
     expect(sut).toEqual(left(new InvalidQuestionError('any message')))
   })
 
   test('Should call SurveyAnswer with correct values', () => {
     const createSpy = jest.spyOn(SurveyAnswer, 'create')
-    makeSut(makeFakeSurveyData())
+    Survey.create(makeFakeSurveyData())
     expect(createSpy).toHaveBeenCalledWith({
       image: 'valid_image_url', answer: 'any_answer'
     })
@@ -78,7 +73,7 @@ describe('Survey Entity', () => {
     jest.spyOn(SurveyAnswer, 'create').mockReturnValueOnce(
       left(new InvalidImageError('any message'))
     )
-    const sut = makeSut(makeFakeSurveyData())
+    const sut = Survey.create(makeFakeSurveyData())
     expect(sut).toEqual(left(new InvalidImageError('any message')))
   })
 
@@ -86,7 +81,7 @@ describe('Survey Entity', () => {
     jest.spyOn(SurveyAnswer, 'create').mockReturnValueOnce(
       left(new InvalidAnswerError('any message'))
     )
-    const sut = makeSut(makeFakeSurveyData())
+    const sut = Survey.create(makeFakeSurveyData())
     expect(sut).toEqual(left(new InvalidAnswerError('any message')))
   })
 
@@ -96,7 +91,7 @@ describe('Survey Entity', () => {
       answers: [],
       date: new Date()
     }
-    const sut = makeSut(data)
+    const sut = Survey.create(data)
     expect(sut).toEqual(left(new InvalidAnswersError('cannot be empty')))
   })
 
@@ -105,7 +100,7 @@ describe('Survey Entity', () => {
     jest.spyOn(SurveyAnswer, 'create').mockReturnValueOnce(
       left(new InvalidAnswerError('any message'))
     )
-    const sut = makeSut(makeFakeSurveyData())
+    const sut = Survey.create(makeFakeSurveyData())
     expect(sut).toEqual(left(new Error()))
   })
 })
