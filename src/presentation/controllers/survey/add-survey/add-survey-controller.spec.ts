@@ -1,7 +1,9 @@
-import { HttpRequest, Validation, badRequest, AddSurvey, AddSurveyData, serverError, noContent, AddSurveyResponse } from '.'
-import { AddSurveyController } from './add-survey-controller'
+import { AddSurvey, AddSurveyData, AddSurveyResponse } from '@/domain/usecases'
+import { badRequest, noContent, serverError } from '@/presentation/helpers/http/http-helper'
+import { HttpRequest, Validation } from '@/presentation/protocols'
 import { Either, left, right } from '@/shared/either'
 import MockDate from 'mockdate'
+import { AddSurveyController } from './add-survey-controller'
 
 const makeValidationStub = (): Validation => {
   class ValidationStub implements Validation {
