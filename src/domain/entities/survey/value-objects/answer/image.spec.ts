@@ -1,5 +1,5 @@
 import { left, right } from '@/shared/either'
-import { InvalidImageError } from '../errors'
+import { InvalidImageError } from '../../errors'
 import { Image } from './image'
 
 describe('Image ValueObject', () => {

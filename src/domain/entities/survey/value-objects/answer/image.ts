@@ -1,5 +1,5 @@
 import { Either, left, right } from '@/shared/either'
-import { InvalidImageError } from '../errors'
+import { InvalidImageError } from '../../errors'
 
 export class Image {
   private constructor (private readonly image: string) {

@@ -1,5 +1,5 @@
 import { Either, left, right } from '@/shared/either'
-import { InvalidAnswerError } from '../errors'
+import { InvalidAnswerError } from '../../errors'
 
 export class Answer {
   private constructor (private readonly answer: string) {

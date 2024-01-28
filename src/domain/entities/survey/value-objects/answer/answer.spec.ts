@@ -1,5 +1,5 @@
 import { left, right } from '@/shared/either'
-import { InvalidAnswerError } from '../errors'
+import { InvalidAnswerError } from '../../errors'
 import { Answer } from './answer'
 
 describe('Answer ValueObject', () => {
