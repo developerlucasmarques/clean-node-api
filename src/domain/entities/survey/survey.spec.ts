@@ -95,6 +95,18 @@ describe('Survey Entity', () => {
     expect(sut).toEqual(left(new InvalidAnswersError('cannot be empty')))
   })
 
+  test('Should return an Survey on success', () => {
+    const sut = Survey.create(makeFakeSurveyData())
+    expect(sut.value).toEqual({
+      question: { question: 'any_question' },
+      answers: [{
+        answer: { answer: 'any_answer' },
+        image: { image: 'valid_image_url' }
+      }],
+      date: new Date()
+    })
+  })
+
   test('Should return the first error if more than one SurveyAnswer validation fails', () => {
     jest.spyOn(SurveyAnswer, 'create').mockReturnValueOnce(left(new Error()))
     jest.spyOn(SurveyAnswer, 'create').mockReturnValueOnce(
