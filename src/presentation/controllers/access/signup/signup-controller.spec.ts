@@ -1,8 +1,9 @@
-import { AccountData, AddAccount, AddAccountResponse, HttpRequest, Validation } from '.'
 import { Either, left, right } from '@/shared/either'
 import { MissingParamError, ServerError } from '@/presentation/errors'
 import { badRequest, ok, serverError } from '@/presentation/helpers/http/http-helper'
 import { SignUpController } from './signup-controller'
+import { AccountData, AddAccount, AddAccountResponse } from '@/domain/usecases'
+import { HttpRequest, Validation } from '@/presentation/protocols'
 
 const makeAddAccount = (): AddAccount => {
   class AddAccountStub implements AddAccount {

@@ -1,5 +1,6 @@
-import { AddAccount, Controller, HttpRequest, HttpResponse, Validation } from '.'
+import { AddAccount } from '@/domain/usecases'
 import { badRequest, ok, serverError } from '@/presentation/helpers/http/http-helper'
+import { Controller, HttpRequest, HttpResponse, Validation } from '@/presentation/protocols'
 
 export class SignUpController implements Controller {
   constructor (
