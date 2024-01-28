@@ -5,6 +5,21 @@ import { AddSurveyRepository } from '@/data/protocols/db/survey'
 import { DbAddSurvey } from '.'
 import MockDate from 'mockdate'
 
+jest.mock('@/domain/entities/survey/survey', () => ({
+  Survey: {
+    create: jest.fn(() => {
+      return right({
+        question: 'any_question',
+        answers: [{
+          image: 'http://valid-image-url.com',
+          answer: 'any_answer'
+        }],
+        date: new Date()
+      })
+    })
+  }
+}))
+
 const makeAddSurveyRepositoryStub = (): AddSurveyRepository => {
   class AddSurveyRepositoryStub implements AddSurveyRepository {
     async add (surveyData: AddSurveyData): Promise<void> {
@@ -31,10 +46,7 @@ interface SutTypes {
 const makeSut = (): SutTypes => {
   const addSurveyRepositoryStub = makeAddSurveyRepositoryStub()
   const sut = new DbAddSurvey(addSurveyRepositoryStub)
-  return {
-    sut,
-    addSurveyRepositoryStub
-  }
+  return { sut, addSurveyRepositoryStub }
 }
 
 describe('DbAdddSurvey UseCase', () => {
