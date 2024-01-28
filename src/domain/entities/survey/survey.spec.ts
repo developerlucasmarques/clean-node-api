@@ -12,6 +12,12 @@ jest.mock('@/domain/entities/survey/value-objects/question', () => ({
   }
 }))
 
+jest.mock('@/domain/entities/survey/value-objects/question', () => ({
+  Question: {
+    create: jest.fn(() => { return right({ question: 'any_question' }) })
+  }
+}))
+
 const makeFakeSurveyData = (): SurveyData => ({
   question: 'any_question',
   answers: [{
