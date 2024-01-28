@@ -1,11 +1,17 @@
-import { left } from '@/shared/either'
+import { left, right } from '@/shared/either'
 import { Email, Name, Password } from './value-objects'
 import { InvalidEmailError, InvalidNameError, InvalidPasswordError } from './errors'
 import { AccountData } from '@/domain/usecases/add-account'
 import { Account } from './account'
 
+jest.mock('@/domain/entities/account/value-objects/name', () => ({
+  Name: {
+    create: jest.fn(() => { return right({ name: 'any_name' }) })
+  }
+}))
+
 const makeFakeAccountData = (): AccountData => ({
-  name: 'any name',
+  name: 'any_name',
   email: 'any_email@mail.com',
   password: 'password1234'
 })
@@ -14,15 +20,15 @@ describe('Account', () => {
   test('Should call Name with correct values', () => {
     const createNameSpy = jest.spyOn(Name, 'create')
     Account.create(makeFakeAccountData())
-    expect(createNameSpy).toHaveBeenCalledWith('any name')
+    expect(createNameSpy).toHaveBeenCalledWith('any_name')
   })
 
   test('Should return InvalidNameError if Name return InvalidNameError', () => {
     jest.spyOn(Name, 'create').mockReturnValueOnce(
-      left(new InvalidNameError('invalid name'))
+      left(new InvalidNameError('invalid_name'))
     )
     const sut = Account.create(makeFakeAccountData())
-    expect(sut.value).toEqual(new InvalidNameError('invalid name'))
+    expect(sut.value).toEqual(new InvalidNameError('invalid_name'))
   })
 
   test('Should call Email with correct value', () => {
@@ -56,7 +62,7 @@ describe('Account', () => {
   test('Should return Account if values valid', () => {
     const sut = Account.create(makeFakeAccountData())
     expect(sut.value).toEqual({
-      name: Name.create('any name').value,
+      name: Name.create('any_name').value,
       email: Email.create('any_email@mail.com').value,
       password: Password.create('password1234').value
     })
