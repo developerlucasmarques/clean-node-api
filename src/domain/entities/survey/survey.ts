@@ -1,17 +1,7 @@
-import { Either, left, right } from '@/shared/either'
-import { InvalidAnswerError, InvalidAnswersError, InvalidImageError, InvalidQuestionError } from './errors'
+import { left, right } from '@/shared/either'
+import { InvalidAnswersError } from './errors'
+import { SurveyData, SurveyResponse } from './survey-types'
 import { Question, SurveyAnswer } from './value-objects'
-
-interface SurveyAnswerData {
-  image?: string
-  answer: string
-}
-
-export interface SurveyData {
-  question: string
-  answers: SurveyAnswerData[]
-  date: Date
-}
 
 export class Survey {
   private constructor (
@@ -22,7 +12,7 @@ export class Survey {
     Object.freeze(this)
   }
 
-  static create (input: SurveyData): Either<InvalidQuestionError | InvalidAnswerError | InvalidAnswersError | InvalidImageError, Survey> {
+  static create (input: SurveyData): SurveyResponse {
     if (input.answers.length === 0) {
       return left(new InvalidAnswersError('cannot be empty'))
     }
