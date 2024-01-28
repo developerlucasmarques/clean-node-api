@@ -16,10 +16,16 @@ jest.mock('@/domain/entities/account/value-objects/email', () => ({
   }
 }))
 
+jest.mock('@/domain/entities/account/value-objects/password', () => ({
+  Password: {
+    create: jest.fn(() => { return right({ password: 'any_password' }) })
+  }
+}))
+
 const makeFakeAccountData = (): AccountData => ({
   name: 'any_name',
   email: 'any_email@mail.com',
-  password: 'password1234'
+  password: 'any_password'
 })
 
 describe('Account', () => {
@@ -54,7 +60,7 @@ describe('Account', () => {
   test('Should call Password with correct value', () => {
     const createPasswordSpy = jest.spyOn(Password, 'create')
     Account.create(makeFakeAccountData())
-    expect(createPasswordSpy).toHaveBeenCalledWith('password1234')
+    expect(createPasswordSpy).toHaveBeenCalledWith('any_password')
   })
 
   test('Should return InvalidPasswordError if Password return InvalidPasswordError', () => {
@@ -70,7 +76,7 @@ describe('Account', () => {
     expect(sut.value).toEqual({
       name: { name: 'any_name' },
       email: { email: 'any_email@mail.com' },
-      password: { password: 'password1234' }
+      password: { password: 'any_password' }
     })
   })
 })
