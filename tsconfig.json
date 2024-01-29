@@ -5,6 +5,7 @@
     "target": "ES2021",
     "esModuleInterop": true,
     "strict": true,
+    "inlineSourceMap": true,
     "baseUrl": "src",
     "paths": {
       "@/*": ["*"]
