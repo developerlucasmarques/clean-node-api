@@ -39,4 +39,13 @@ describe('DbLoadSurveyById UseCase', () => {
     await sut.loadById('any_survey_id')
     expect(loadByIdSpy).toHaveBeenCalledWith('any_survey_id')
   })
+
+  test('Should return null if LoadSurveyByIdRepository returns null', async () => {
+    const { sut, loadSurveyByIdRepositoryStub } = makeSut()
+    jest.spyOn(loadSurveyByIdRepositoryStub, 'loadById').mockReturnValueOnce(
+      Promise.resolve(null)
+    )
+    const result = await sut.loadById('any_survey_id')
+    expect(result).toBe(null)
+  })
 })
