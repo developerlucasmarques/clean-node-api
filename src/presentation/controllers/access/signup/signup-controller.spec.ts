@@ -5,14 +5,14 @@ import { SignUpController } from './signup-controller'
 import { AccountData, AddAccount, AddAccountResponse } from '@/domain/usecases'
 import { HttpRequest, Validation } from '@/presentation/protocols'
 
-const makeAddAccount = (): AddAccount => {
-  class AddAccountStub implements AddAccount {
-    async add (account: AccountData): Promise<AddAccountResponse> {
-      return right(await Promise.resolve('access_token'))
-    }
+const makeFakeRequest = (): HttpRequest => ({
+  body: {
+    name: 'any name',
+    email: 'any_email',
+    password: 'password1234',
+    passwordConfirmation: 'password1234'
   }
-  return new AddAccountStub()
-}
+})
 
 const makeValidation = (): Validation => {
   class ValidationStub implements Validation {
@@ -23,33 +23,55 @@ const makeValidation = (): Validation => {
   return new ValidationStub()
 }
 
+const makeAddAccount = (): AddAccount => {
+  class AddAccountStub implements AddAccount {
+    async add (account: AccountData): Promise<AddAccountResponse> {
+      return right(await Promise.resolve('access_token'))
+    }
+  }
+  return new AddAccountStub()
+}
+
 interface SutTypes {
   sut: SignUpController
-  addAccountStub: AddAccount
   validationStub: Validation
+  addAccountStub: AddAccount
 }
 
 const makeSut = (): SutTypes => {
-  const addAccountStub = makeAddAccount()
   const validationStub = makeValidation()
-  const sut = new SignUpController(addAccountStub, validationStub)
-  return {
-    sut,
-    addAccountStub,
-    validationStub
-  }
+  const addAccountStub = makeAddAccount()
+  const sut = new SignUpController(validationStub, addAccountStub)
+  return { sut, validationStub, addAccountStub }
 }
 
-const makeFakeRequest = (): HttpRequest => ({
-  body: {
-    name: 'any name',
-    email: 'any_email',
-    password: 'password1234',
-    passwordConfirmation: 'password1234'
-  }
-})
-
 describe('SignUp Controller', () => {
+  test('Should call Validation with correct values', async () => {
+    const { sut, validationStub } = makeSut()
+    const validateSpy = jest.spyOn(validationStub, 'validate')
+    await sut.handle(makeFakeRequest())
+    expect(validateSpy).toHaveBeenCalledWith(makeFakeRequest().body)
+  })
+
+  test('Should return 400 if Validation returns an error', async () => {
+    const { sut, validationStub } = makeSut()
+    jest.spyOn(validationStub, 'validate').mockReturnValueOnce(
+      left(new MissingParamError('any_field'))
+    )
+    const httpResponse = await sut.handle(makeFakeRequest())
+    expect(httpResponse).toEqual(badRequest(new MissingParamError('any_field')))
+  })
+
+  test('Should return 500 if Validation throws', async () => {
+    const { sut, validationStub } = makeSut()
+    jest.spyOn(validationStub, 'validate').mockImplementationOnce(() => {
+      throw new Error()
+    })
+    const httpResponse = await sut.handle(makeFakeRequest())
+    const error = new Error()
+    expect(httpResponse).toEqual(serverError(new ServerError(error.stack)))
+  })
+
   test('Should call AddAccount with correct values', async () => {
     const { sut, addAccountStub } = makeSut()
     const addSpy = jest.spyOn(addAccountStub, 'add')
@@ -78,22 +100,6 @@ describe('SignUp Controller', () => {
     const httpResponse = await sut.handle(makeFakeRequest())
     const error = new Error()
     expect(httpResponse).toEqual(serverError(new ServerError(error.stack)))
-  })
-
-  test('Should call Validation with correct values', async () => {
-    const { sut, validationStub } = makeSut()
-    const validateSpy = jest.spyOn(validationStub, 'validate')
-    await sut.handle(makeFakeRequest())
-    expect(validateSpy).toHaveBeenCalledWith(makeFakeRequest().body)
-  })
-
-  test('Should return 400 if Validation returns an error', async () => {
-    const { sut, validationStub } = makeSut()
-    jest.spyOn(validationStub, 'validate').mockReturnValueOnce(
-      left(new MissingParamError('any_field'))
-    )
-    const httpResponse = await sut.handle(makeFakeRequest())
-    expect(httpResponse).toEqual(badRequest(new MissingParamError('any_field')))
   })
 
   test('Should return 200 if valid data is provided', async () => {

@@ -4,8 +4,8 @@ import { Controller, HttpRequest, HttpResponse, Validation } from '@/presentatio
 
 export class SignUpController implements Controller {
   constructor (
-    private readonly addAccount: AddAccount,
-    private readonly validation: Validation
+    private readonly validation: Validation,
+    private readonly addAccount: AddAccount
   ) {}
 
   async handle (httpRequest: HttpRequest): Promise<HttpResponse> {
