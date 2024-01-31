@@ -1,14 +1,11 @@
-import { DbAddAccount } from '.'
+import { DbAddAccount } from './db-add-account'
 import { Account } from '@/domain/entities/account'
 import { AccountModel } from '@/domain/models/account'
 import { AccountData, UpdateAccessToken } from '@/domain/contracts'
 import { left, right } from '@/shared/either'
 import { EmailInUseError } from '@/domain/errors'
 import { Hasher } from '@/interactions/contracts/criptography'
-import {
-  AddAccountRepository,
-  LoadAccountByEmailRepository
-} from '@/interactions/contracts/db/account'
+import { AddAccountRepository, LoadAccountByEmailRepository } from '@/interactions/contracts/db'
 
 jest.mock('@/domain/entities/account/account', () => ({
   Account: {

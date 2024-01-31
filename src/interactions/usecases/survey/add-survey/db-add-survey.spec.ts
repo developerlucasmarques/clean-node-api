@@ -1,7 +1,7 @@
 import { Survey } from '@/domain/entities/survey'
 import { AddSurveyData } from '@/domain/contracts'
 import { left, right } from '@/shared/either'
-import { AddSurveyRepository } from '@/interactions/contracts/db/survey'
+import { AddSurveyRepository } from '@/interactions/contracts/db'
 import { DbAddSurvey } from '.'
 import MockDate from 'mockdate'
 

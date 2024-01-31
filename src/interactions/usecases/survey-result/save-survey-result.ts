@@ -1,6 +1,6 @@
 import { SaveSurveyResult, SaveSurveyResultData, SaveSurveyResultResponse } from '@/domain/contracts'
 import { InvalidAnswerError, InvalidSurveyError } from '@/domain/errors'
-import { LoadSurveyByIdRepository, SaveSurveyResultRepository } from '@/interactions/contracts/db/survey'
+import { LoadSurveyByIdRepository, SaveSurveyResultRepository } from '@/interactions/contracts/db'
 import { left, right } from '@/shared/either'
 
 export class DbSaveSurveyResult implements SaveSurveyResult {

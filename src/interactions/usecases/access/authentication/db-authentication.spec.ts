@@ -1,13 +1,10 @@
-import { DbAuthentication } from '.'
+import { DbAuthentication } from './db-authentication'
 import { AuthenticationError } from '@/domain/errors'
 import { AccountModel } from '@/domain/models/account'
 import { AuthenticationData, UpdateAccessToken } from '@/domain/contracts'
 import { left, right } from '@/shared/either'
-import {
-  HashCompareData,
-  HashComparer
-} from '@/interactions/contracts/criptography'
-import { LoadAccountByEmailRepository } from '@/interactions/contracts/db/account'
+import { HashCompareData, HashComparer } from '@/interactions/contracts/criptography'
+import { LoadAccountByEmailRepository } from '@/interactions/contracts/db'
 
 const makeFakeAccountModel = (): AccountModel => ({
   id: 'any_id',

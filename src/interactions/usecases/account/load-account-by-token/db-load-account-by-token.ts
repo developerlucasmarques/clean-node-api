@@ -2,7 +2,7 @@ import { AccessDeniedError, AccountNotFoundError, InvalidTokenError } from '@/do
 import { LoadAccountByToken, LoadAccountByTokenData, LoadAccountByTokenResponse } from '@/domain/contracts'
 import { left, right } from '@/shared/either'
 import { Decrypter } from '@/interactions/contracts/criptography'
-import { LoadAccountByTokenRepository } from '@/interactions/contracts/db/account'
+import { LoadAccountByTokenRepository } from '@/interactions/contracts/db'
 
 export class DbLoadAccountByToken implements LoadAccountByToken {
   constructor (

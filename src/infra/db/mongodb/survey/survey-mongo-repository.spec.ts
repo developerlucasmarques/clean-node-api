@@ -1,5 +1,5 @@
 import { Collection } from 'mongodb'
-import { AddSurveyData } from '@/domain/contracts/survey/add-survey'
+import { AddSurveyData } from '@/domain/contracts'
 import { MongoHelper } from '../helpers/mongo-helper'
 import { SurveyMongoRepository } from './survey-mongo-repository'
 

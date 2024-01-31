@@ -1,9 +1,6 @@
-import { DbUpdateAccessToken } from '.'
+import { DbUpdateAccessToken } from './db-update-access-token'
 import { Encrypter } from '@/interactions/contracts/criptography'
-import {
-  UpdateAccessTokenData,
-  UpdateAccessTokenRepository
-} from '@/interactions/contracts/db/account'
+import { UpdateAccessTokenData, UpdateAccessTokenRepository } from '@/interactions/contracts/db'
 
 const makeEncrypterStub = (): Encrypter => {
   class EncrypterStub implements Encrypter {

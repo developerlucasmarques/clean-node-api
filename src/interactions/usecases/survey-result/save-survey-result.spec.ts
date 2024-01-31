@@ -1,8 +1,9 @@
-import { LoadSurveyByIdRepository, SaveSurveyResultRepository } from '@/interactions/contracts/db/survey'
+import { LoadSurveyByIdRepository, SaveSurveyResultRepository } from '@/interactions/contracts/db'
 import { SurveyModel, SurveyResultModel } from '@/domain/models'
 import { DbSaveSurveyResult } from './save-survey-result'
 import { SaveSurveyResultData } from '@/domain/contracts'
 import { InvalidAnswerError, InvalidSurveyError } from '@/domain/errors'
+import MockDate from 'mockdate'
 
 const makeFakeSaveSurveyResultData = (): SaveSurveyResultData => ({
   accountId: 'any_account_id',
@@ -60,6 +61,10 @@ const makeSut = (): SutTypes => {
 }
 
 describe('DbSaveSurveyResult UseCase', () => {
+  beforeAll(() => { MockDate.set(new Date()) })
+
+  afterAll(() => { MockDate.reset() })
+
   test('Should call LoadSurveyByIdRepository with correct id', async () => {
     const { sut, loadSurveyByIdRepositoryStub } = makeSut()
     const loadByIdSpy = jest.spyOn(loadSurveyByIdRepositoryStub, 'loadById')
