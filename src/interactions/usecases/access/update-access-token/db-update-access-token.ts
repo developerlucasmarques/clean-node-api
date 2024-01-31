@@ -1,4 +1,4 @@
-import { UpdateAccessToken } from '@/domain/usecases'
+import { UpdateAccessToken } from '@/domain/contracts'
 import { Encrypter } from '@/interactions/protocols/criptography'
 import { UpdateAccessTokenRepository } from '@/interactions/protocols/db/account'
 

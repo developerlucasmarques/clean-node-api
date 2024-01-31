@@ -1,7 +1,7 @@
 import { AccessDeniedError, InvalidTokenError } from '@/domain/errors'
 import { AccountModel } from '@/domain/models/account'
 import { AccountRole } from '@/domain/models/account-role'
-import { LoadAccountByToken, LoadAccountByTokenData, LoadAccountByTokenResponse } from '@/domain/usecases'
+import { LoadAccountByToken, LoadAccountByTokenData, LoadAccountByTokenResponse } from '@/domain/contracts'
 import { left, right } from '@/shared/either'
 import { AccessTokenNotInformedError } from '../errors'
 import { forbidden, ok, serverError, unauthorized } from '../helpers/http/http-helper'

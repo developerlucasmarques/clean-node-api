@@ -1,5 +1,5 @@
 import { AccessDeniedError, AccountNotFoundError, InvalidTokenError } from '@/domain/errors'
-import { LoadAccountByToken, LoadAccountByTokenData, LoadAccountByTokenResponse } from '@/domain/usecases'
+import { LoadAccountByToken, LoadAccountByTokenData, LoadAccountByTokenResponse } from '@/domain/contracts'
 import { left, right } from '@/shared/either'
 import { Decrypter } from '@/interactions/protocols/criptography'
 import { LoadAccountByTokenRepository } from '@/interactions/protocols/db/account'

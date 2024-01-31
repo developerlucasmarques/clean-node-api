@@ -1,4 +1,4 @@
-import { Authentication, AuthenticationData, AuthenticationResponse, UpdateAccessToken } from '@/domain/usecases'
+import { Authentication, AuthenticationData, AuthenticationResponse, UpdateAccessToken } from '@/domain/contracts'
 import { LoadAccountByEmailRepository } from '@/interactions/protocols/db/account'
 import { HashComparer } from '@/interactions/protocols/criptography'
 import { AuthenticationError } from '@/domain/errors'

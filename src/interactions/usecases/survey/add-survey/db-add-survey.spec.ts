@@ -1,5 +1,5 @@
 import { Survey } from '@/domain/entities/survey'
-import { AddSurveyData } from '@/domain/usecases'
+import { AddSurveyData } from '@/domain/contracts'
 import { left, right } from '@/shared/either'
 import { AddSurveyRepository } from '@/interactions/protocols/db/survey'
 import { DbAddSurvey } from '.'

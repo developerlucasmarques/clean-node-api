@@ -1,4 +1,4 @@
-import { AddSurvey, AddSurveyData, AddSurveyResponse } from '@/domain/usecases'
+import { AddSurvey, AddSurveyData, AddSurveyResponse } from '@/domain/contracts'
 import { badRequest, noContent, serverError } from '@/presentation/helpers/http/http-helper'
 import { HttpRequest, Validation } from '@/presentation/protocols'
 import { Either, left, right } from '@/shared/either'

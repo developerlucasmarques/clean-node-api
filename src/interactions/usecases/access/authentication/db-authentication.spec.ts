@@ -1,7 +1,7 @@
 import { DbAuthentication } from '.'
 import { AuthenticationError } from '@/domain/errors'
 import { AccountModel } from '@/domain/models/account'
-import { AuthenticationData, UpdateAccessToken } from '@/domain/usecases'
+import { AuthenticationData, UpdateAccessToken } from '@/domain/contracts'
 import { left, right } from '@/shared/either'
 import { HashCompareData, HashComparer } from '@/interactions/protocols/criptography'
 import { LoadAccountByEmailRepository } from '@/interactions/protocols/db/account'

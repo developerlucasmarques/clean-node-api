@@ -1,7 +1,7 @@
 import { left, right } from '@/shared/either'
 import { Account } from '@/domain/entities/account'
 import { AddAccountRepository, LoadAccountByEmailRepository } from '@/interactions/protocols/db/account'
-import { AccountData, AddAccount, AddAccountResponse, UpdateAccessToken } from '@/domain/usecases'
+import { AccountData, AddAccount, AddAccountResponse, UpdateAccessToken } from '@/domain/contracts'
 import { EmailInUseError } from '@/domain/errors'
 import { Hasher } from '@/interactions/protocols/criptography'
 import { AccountRole } from '@/domain/models'

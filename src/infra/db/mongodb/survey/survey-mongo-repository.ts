@@ -1,7 +1,7 @@
 import { LoadSurveysRepository } from '@/interactions/protocols/db/survey'
 import { AddSurveyRepository } from '@/interactions/protocols/db/survey/add-survey-repository'
 import { SurveyModel } from '@/domain/models'
-import { AddSurveyData } from '@/domain/usecases/add-survey'
+import { AddSurveyData } from '@/domain/contracts/add-survey'
 import { MongoHelper } from '../helpers/mongo-helper'
 
 export class SurveyMongoRepository implements AddSurveyRepository, LoadSurveysRepository {

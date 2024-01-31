@@ -2,7 +2,7 @@ import { Either, left, right } from '@/shared/either'
 import { MissingParamError, ServerError } from '@/presentation/errors'
 import { badRequest, ok, serverError } from '@/presentation/helpers/http/http-helper'
 import { SignUpController } from './signup-controller'
-import { AccountData, AddAccount, AddAccountResponse } from '@/domain/usecases'
+import { AccountData, AddAccount, AddAccountResponse } from '@/domain/contracts'
 import { HttpRequest, Validation } from '@/presentation/protocols'
 
 const makeFakeRequest = (): HttpRequest => ({

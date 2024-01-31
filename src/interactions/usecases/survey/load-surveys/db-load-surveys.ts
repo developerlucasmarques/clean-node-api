@@ -1,5 +1,5 @@
 import { SurveyModel } from '@/domain/models'
-import { LoadSurveys } from '@/domain/usecases'
+import { LoadSurveys } from '@/domain/contracts'
 import { LoadSurveysRepository } from '@/interactions/protocols/db/survey'
 
 export class DbLoadSurveys implements LoadSurveys {

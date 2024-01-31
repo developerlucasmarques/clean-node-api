@@ -1,7 +1,7 @@
 import { DbLoadAccountByToken } from '.'
 import { AccessDeniedError, AccountNotFoundError, InvalidTokenError } from '@/domain/errors'
 import { AccountModel } from '@/domain/models'
-import { LoadAccountByTokenData } from '@/domain/usecases'
+import { LoadAccountByTokenData } from '@/domain/contracts'
 import { left, right } from '@/shared/either'
 import { Decrypter } from '@/interactions/protocols/criptography'
 import { LoadAccountByTokenRepository } from '@/interactions/protocols/db/account'
