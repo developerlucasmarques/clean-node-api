@@ -1,10 +1,13 @@
 import { SaveSurveyResult, SaveSurveyResultData, SaveSurveyResultResponse } from '@/domain/contracts'
 import { InvalidAnswerError, InvalidSurveyError } from '@/domain/errors'
-import { LoadSurveyByIdRepository } from '@/interactions/contracts/db/survey'
+import { LoadSurveyByIdRepository, SaveSurveyResultRepository } from '@/interactions/contracts/db/survey'
 import { left } from '@/shared/either'
 
 export class DbSaveSurveyResult implements SaveSurveyResult {
-  constructor (private readonly loadSurveyByIdRepository: LoadSurveyByIdRepository) {}
+  constructor (
+    private readonly loadSurveyByIdRepository: LoadSurveyByIdRepository,
+    private readonly saveSurveyResultRepository: SaveSurveyResultRepository
+  ) {}
 
   async save (data: SaveSurveyResultData): Promise<SaveSurveyResultResponse> {
     const survey = await this.loadSurveyByIdRepository.loadById(data.surveyId)
@@ -15,6 +18,7 @@ export class DbSaveSurveyResult implements SaveSurveyResult {
     if (!answers.includes(data.answer)) {
       return left(new InvalidAnswerError(data.answer))
     }
+    await this.saveSurveyResultRepository.save(data)
     return '' as any
   }
 }
