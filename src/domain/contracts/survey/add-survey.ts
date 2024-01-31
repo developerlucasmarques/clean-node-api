@@ -1,5 +1,5 @@
 import { Either } from '@/shared/either'
-import { InvalidAnswerError, InvalidImageError, InvalidQuestionError } from '../entities/survey/errors'
+import { InvalidAnswerError, InvalidImageError, InvalidQuestionError } from '../../entities/survey/errors'
 
 export interface SurveyAnswer {
   image?: string
