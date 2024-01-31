@@ -1,7 +1,7 @@
 import { SaveSurveyResult, SaveSurveyResultData, SaveSurveyResultResponse } from '@/domain/contracts'
 import { InvalidAnswerError, InvalidSurveyError } from '@/domain/errors'
 import { LoadSurveyByIdRepository, SaveSurveyResultRepository } from '@/interactions/contracts/db/survey'
-import { left } from '@/shared/either'
+import { left, right } from '@/shared/either'
 
 export class DbSaveSurveyResult implements SaveSurveyResult {
   constructor (
@@ -18,7 +18,7 @@ export class DbSaveSurveyResult implements SaveSurveyResult {
     if (!answers.includes(data.answer)) {
       return left(new InvalidAnswerError(data.answer))
     }
-    await this.saveSurveyResultRepository.save(data)
-    return '' as any
+    const surveyResult = await this.saveSurveyResultRepository.save(data)
+    return right(surveyResult)
   }
 }
