@@ -1,5 +1,5 @@
 import { DbUpdateAccessToken } from '@/interactions/usecases/access/update-access-token'
-import { UpdateAccessToken } from '@/domain/contracts/update-access-token'
+import { UpdateAccessToken } from '@/domain/contracts/access/update-access-token'
 import { JwtAdapter } from '@/infra/criptography/jwt-adapter/jwt-adapter'
 import { AccountMongoRepository } from '@/infra/db/mongodb/account/account-mongo-repository'
 import env from '@/main/config/env'

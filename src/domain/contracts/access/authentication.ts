@@ -1,5 +1,5 @@
 import { Either } from '@/shared/either'
-import { AuthenticationError } from '../errors/authentication-error'
+import { AuthenticationError } from '@/domain/errors/authentication-error'
 
 export interface AuthenticationData {
   email: string
