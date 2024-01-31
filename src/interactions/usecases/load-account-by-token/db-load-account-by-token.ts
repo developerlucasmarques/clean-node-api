@@ -1,8 +1,16 @@
-import { AccessDeniedError, AccountNotFoundError, InvalidTokenError } from '@/domain/errors'
-import { LoadAccountByToken, LoadAccountByTokenData, LoadAccountByTokenResponse } from '@/domain/contracts'
+import {
+  AccessDeniedError,
+  AccountNotFoundError,
+  InvalidTokenError
+} from '@/domain/errors'
+import {
+  LoadAccountByToken,
+  LoadAccountByTokenData,
+  LoadAccountByTokenResponse
+} from '@/domain/contracts'
 import { left, right } from '@/shared/either'
-import { Decrypter } from '@/interactions/protocols/criptography'
-import { LoadAccountByTokenRepository } from '@/interactions/protocols/db/account'
+import { Decrypter } from '@/interactions/contracts/criptography'
+import { LoadAccountByTokenRepository } from '@/interactions/contracts/db/account'
 
 export class DbLoadAccountByToken implements LoadAccountByToken {
   constructor (
@@ -10,12 +18,16 @@ export class DbLoadAccountByToken implements LoadAccountByToken {
     private readonly loadAccountByTokenRepository: LoadAccountByTokenRepository
   ) {}
 
-  async load (data: LoadAccountByTokenData): Promise<LoadAccountByTokenResponse> {
+  async load (
+    data: LoadAccountByTokenData
+  ): Promise<LoadAccountByTokenResponse> {
     const idOrNull = await this.decrypter.decrypt(data.accessToken)
     if (!idOrNull) {
       return left(new InvalidTokenError())
     }
-    const account = await this.loadAccountByTokenRepository.loadByToken(data.accessToken)
+    const account = await this.loadAccountByTokenRepository.loadByToken(
+      data.accessToken
+    )
     if (!account) {
       return left(new AccountNotFoundError())
     }

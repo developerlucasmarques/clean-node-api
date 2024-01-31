@@ -1,6 +1,11 @@
-import { Authentication, AuthenticationData, AuthenticationResponse, UpdateAccessToken } from '@/domain/contracts'
-import { LoadAccountByEmailRepository } from '@/interactions/protocols/db/account'
-import { HashComparer } from '@/interactions/protocols/criptography'
+import {
+  Authentication,
+  AuthenticationData,
+  AuthenticationResponse,
+  UpdateAccessToken
+} from '@/domain/contracts'
+import { LoadAccountByEmailRepository } from '@/interactions/contracts/db/account'
+import { HashComparer } from '@/interactions/contracts/criptography'
 import { AuthenticationError } from '@/domain/errors'
 import { left, right } from '@/shared/either'
 
@@ -11,7 +16,9 @@ export class DbAuthentication implements Authentication {
     private readonly updateAccessToken: UpdateAccessToken
   ) {}
 
-  async auth (authenticationData: AuthenticationData): Promise<AuthenticationResponse> {
+  async auth (
+    authenticationData: AuthenticationData
+  ): Promise<AuthenticationResponse> {
     const { email, password } = authenticationData
     const account = await this.loadAccountByEmailRepository.loadByEmail(email)
     if (!account) {

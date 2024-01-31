@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken'
-import { Decrypter, Encrypter } from '@/interactions/protocols/criptography'
+import { Decrypter, Encrypter } from '@/interactions/contracts/criptography'
 
 export class JwtAdapter implements Encrypter, Decrypter {
   constructor (private readonly secretKey: string) {}
@@ -9,13 +9,18 @@ export class JwtAdapter implements Encrypter, Decrypter {
     return token
   }
 
-  async decrypt (token: string): Promise<null | string > {
+  async decrypt (token: string): Promise<null | string> {
     try {
       const decryptedValue: any = jwt.verify(token, this.secretKey)
       return decryptedValue
     } catch (error: any) {
       console.error(error)
-      for (const name of ['JsonWebTokenError', 'NotBeforeError', 'TokenExpiredError', 'SyntaxError']) {
+      for (const name of [
+        'JsonWebTokenError',
+        'NotBeforeError',
+        'TokenExpiredError',
+        'SyntaxError'
+      ]) {
         if (error.name === name) {
           return null
         }

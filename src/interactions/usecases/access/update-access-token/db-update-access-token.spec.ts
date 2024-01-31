@@ -1,6 +1,9 @@
 import { DbUpdateAccessToken } from '.'
-import { Encrypter } from '@/interactions/protocols/criptography'
-import { UpdateAccessTokenData, UpdateAccessTokenRepository } from '@/interactions/protocols/db/account'
+import { Encrypter } from '@/interactions/contracts/criptography'
+import {
+  UpdateAccessTokenData,
+  UpdateAccessTokenRepository
+} from '@/interactions/contracts/db/account'
 
 const makeEncrypterStub = (): Encrypter => {
   class EncrypterStub implements Encrypter {
@@ -29,7 +32,10 @@ interface SutTypes {
 const makeSut = (): SutTypes => {
   const encrypterStub = makeEncrypterStub()
   const updateAccessTokenRepositoryStub = makeUpdateAccessTokenRepositoryStub()
-  const sut = new DbUpdateAccessToken(encrypterStub, updateAccessTokenRepositoryStub)
+  const sut = new DbUpdateAccessToken(
+    encrypterStub,
+    updateAccessTokenRepositoryStub
+  )
   return {
     sut,
     encrypterStub,
@@ -56,7 +62,10 @@ describe('UpdateAccessToken UseCase', () => {
 
   test('Should call UpdateAccessTokenRepository with correct values', async () => {
     const { sut, updateAccessTokenRepositoryStub } = makeSut()
-    const updateAccessTokenSpy = jest.spyOn(updateAccessTokenRepositoryStub, 'updateAccessToken')
+    const updateAccessTokenSpy = jest.spyOn(
+      updateAccessTokenRepositoryStub,
+      'updateAccessToken'
+    )
     await sut.update('account_id')
     expect(updateAccessTokenSpy).toHaveBeenCalledWith({
       accountId: 'account_id',
@@ -66,9 +75,11 @@ describe('UpdateAccessToken UseCase', () => {
 
   test('Should throw if UpdateAccessTokenRepository throws', async () => {
     const { sut, updateAccessTokenRepositoryStub } = makeSut()
-    jest.spyOn(updateAccessTokenRepositoryStub, 'updateAccessToken').mockImplementationOnce(async () => {
-      await Promise.reject(new Error())
-    })
+    jest
+      .spyOn(updateAccessTokenRepositoryStub, 'updateAccessToken')
+      .mockImplementationOnce(async () => {
+        await Promise.reject(new Error())
+      })
     const promise = sut.update('account_id')
     await expect(promise).rejects.toThrow(new Error())
   })

@@ -1,7 +1,7 @@
 import { Survey } from '@/domain/entities/survey'
 import { AddSurveyData } from '@/domain/contracts'
 import { left, right } from '@/shared/either'
-import { AddSurveyRepository } from '@/interactions/protocols/db/survey'
+import { AddSurveyRepository } from '@/interactions/contracts/db/survey'
 import { DbAddSurvey } from '.'
 import MockDate from 'mockdate'
 
@@ -10,10 +10,12 @@ jest.mock('@/domain/entities/survey/survey', () => ({
     create: jest.fn(() => {
       return right({
         question: 'any_question',
-        answers: [{
-          image: 'http://valid-image-url.com',
-          answer: 'any_answer'
-        }],
+        answers: [
+          {
+            image: 'http://valid-image-url.com',
+            answer: 'any_answer'
+          }
+        ],
         date: new Date()
       })
     })
@@ -31,10 +33,12 @@ const makeAddSurveyRepositoryStub = (): AddSurveyRepository => {
 
 const makeFakeSurveyData = (): AddSurveyData => ({
   question: 'any_question',
-  answers: [{
-    image: 'http://valid-image-url.com',
-    answer: 'any_answer'
-  }],
+  answers: [
+    {
+      image: 'http://valid-image-url.com',
+      answer: 'any_answer'
+    }
+  ],
   date: new Date()
 })
 
@@ -67,18 +71,18 @@ describe('DbAdddSurvey UseCase', () => {
 
   test('Should throw if AddSurveyRepository throws', async () => {
     const { sut, addSurveyRepositoryStub } = makeSut()
-    jest.spyOn(addSurveyRepositoryStub, 'add').mockImplementationOnce(async () => {
-      await Promise.reject(new Error())
-    })
+    jest
+      .spyOn(addSurveyRepositoryStub, 'add')
+      .mockImplementationOnce(async () => {
+        await Promise.reject(new Error())
+      })
     const promise = sut.add(makeFakeSurveyData())
     await expect(promise).rejects.toThrow()
   })
 
   test('Should return an Error if Survey creation fails', async () => {
     const { sut } = makeSut()
-    jest.spyOn(Survey, 'create').mockReturnValueOnce(
-      left(new Error())
-    )
+    jest.spyOn(Survey, 'create').mockReturnValueOnce(left(new Error()))
     const result = await sut.add(makeFakeSurveyData())
     expect(result).toEqual(left(new Error()))
   })

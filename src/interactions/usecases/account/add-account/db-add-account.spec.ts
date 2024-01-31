@@ -4,8 +4,11 @@ import { AccountModel } from '@/domain/models/account'
 import { AccountData, UpdateAccessToken } from '@/domain/contracts'
 import { left, right } from '@/shared/either'
 import { EmailInUseError } from '@/domain/errors'
-import { Hasher } from '@/interactions/protocols/criptography'
-import { AddAccountRepository, LoadAccountByEmailRepository } from '@/interactions/protocols/db/account'
+import { Hasher } from '@/interactions/contracts/criptography'
+import {
+  AddAccountRepository,
+  LoadAccountByEmailRepository
+} from '@/interactions/contracts/db/account'
 
 jest.mock('@/domain/entities/account/account', () => ({
   Account: {
@@ -22,7 +25,9 @@ jest.mock('@/domain/entities/account/account', () => ({
 const makeHasher = (): Hasher => {
   class HasherStub implements Hasher {
     async hash (value: string): Promise<string> {
-      return await new Promise((resolve) => { resolve('hashed_password') })
+      return await new Promise((resolve) => {
+        resolve('hashed_password')
+      })
     }
   }
   return new HasherStub()
@@ -46,14 +51,16 @@ const makeUpdateAccessTokenStub = (): UpdateAccessToken => {
   return new UpdateAccessTokenStub()
 }
 
-const makeLoadAccountByEmailRepositoryStub = (): LoadAccountByEmailRepository => {
-  class LoadAccountByEmailRepositoryStub implements LoadAccountByEmailRepository {
-    async loadByEmail (email: string): Promise<null | AccountModel> {
-      return await Promise.resolve(null)
+const makeLoadAccountByEmailRepositoryStub =
+  (): LoadAccountByEmailRepository => {
+    class LoadAccountByEmailRepositoryStub
+    implements LoadAccountByEmailRepository {
+      async loadByEmail (email: string): Promise<null | AccountModel> {
+        return await Promise.resolve(null)
+      }
     }
+    return new LoadAccountByEmailRepositoryStub()
   }
-  return new LoadAccountByEmailRepositoryStub()
-}
 
 const makeFakeAccount = (): AccountModel => ({
   id: 'valid_id',
@@ -78,7 +85,8 @@ interface SutTypes {
 }
 
 const makeSut = (): SutTypes => {
-  const loadAccountByEmailRepositoryStub = makeLoadAccountByEmailRepositoryStub()
+  const loadAccountByEmailRepositoryStub =
+    makeLoadAccountByEmailRepositoryStub()
   const hasherStub = makeHasher()
   const addAccountRepositoryStub = makeAddAccountRepository()
   const updateAccessTokenStub = makeUpdateAccessTokenStub()
@@ -107,34 +115,41 @@ describe('DbAddAccount UseCase', () => {
 
   test('Should return the same Error if Account returns an Error', async () => {
     const { sut } = makeSut()
-    jest.spyOn(Account, 'create').mockReturnValueOnce(
-      left(new Error('any_message'))
-    )
+    jest
+      .spyOn(Account, 'create')
+      .mockReturnValueOnce(left(new Error('any_message')))
     const response = await sut.add(makeFakeAccountData())
     expect(response.value).toEqual(new Error('any_message'))
   })
 
   test('Should call LoadAccountByEmailRepository with correct email', async () => {
     const { sut, loadAccountByEmailRepositoryStub } = makeSut()
-    const loadAccountByEmailSpy = jest.spyOn(loadAccountByEmailRepositoryStub, 'loadByEmail')
+    const loadAccountByEmailSpy = jest.spyOn(
+      loadAccountByEmailRepositoryStub,
+      'loadByEmail'
+    )
     await sut.add(makeFakeAccountData())
     expect(loadAccountByEmailSpy).toHaveBeenCalledWith('valid_email@mail.com')
   })
 
   test('Should return EmailInUseError if an account with the email already exists', async () => {
     const { sut, loadAccountByEmailRepositoryStub } = makeSut()
-    jest.spyOn(loadAccountByEmailRepositoryStub, 'loadByEmail').mockReturnValueOnce(
-      Promise.resolve(makeFakeAccount())
-    )
+    jest
+      .spyOn(loadAccountByEmailRepositoryStub, 'loadByEmail')
+      .mockReturnValueOnce(Promise.resolve(makeFakeAccount()))
     const addResult = await sut.add(makeFakeAccountData())
-    expect(addResult.value).toEqual(new EmailInUseError('valid_email@mail.com'))
+    expect(addResult.value).toEqual(
+      new EmailInUseError('valid_email@mail.com')
+    )
   })
 
   test('Should throw if LoadAccountByEmailRepository throws', async () => {
     const { sut, loadAccountByEmailRepositoryStub } = makeSut()
-    jest.spyOn(loadAccountByEmailRepositoryStub, 'loadByEmail').mockImplementationOnce(async () => {
-      return await Promise.reject(new Error())
-    })
+    jest
+      .spyOn(loadAccountByEmailRepositoryStub, 'loadByEmail')
+      .mockImplementationOnce(async () => {
+        return await Promise.reject(new Error())
+      })
     const promise = sut.add(makeFakeAccountData())
     await expect(promise).rejects.toThrow()
   })
@@ -149,7 +164,9 @@ describe('DbAddAccount UseCase', () => {
   test('Should throw if Hasher throws', async () => {
     const { sut, hasherStub } = makeSut()
     jest.spyOn(hasherStub, 'hash').mockReturnValueOnce(
-      new Promise((resolve, reject) => { reject(new Error()) })
+      new Promise((resolve, reject) => {
+        reject(new Error())
+      })
     )
     const promise = sut.add(makeFakeAccountData())
     await expect(promise).rejects.toThrow()
@@ -170,7 +187,9 @@ describe('DbAddAccount UseCase', () => {
   test('Should throws if AddAccountRepository throws', async () => {
     const { sut, addAccountRepositoryStub } = makeSut()
     jest.spyOn(addAccountRepositoryStub, 'add').mockReturnValueOnce(
-      new Promise((resolve, reject) => { reject(new Error()) })
+      new Promise((resolve, reject) => {
+        reject(new Error())
+      })
     )
     const promise = sut.add(makeFakeAccountData())
     await expect(promise).rejects.toThrow()
@@ -185,9 +204,11 @@ describe('DbAddAccount UseCase', () => {
 
   test('Should throw if UpdateAccessToken throw', async () => {
     const { sut, updateAccessTokenStub } = makeSut()
-    jest.spyOn(updateAccessTokenStub, 'update').mockImplementationOnce(async () => {
-      return await Promise.reject(new Error())
-    })
+    jest
+      .spyOn(updateAccessTokenStub, 'update')
+      .mockImplementationOnce(async () => {
+        return await Promise.reject(new Error())
+      })
     const promise = sut.add(makeFakeAccountData())
     await expect(promise).rejects.toThrow()
   })

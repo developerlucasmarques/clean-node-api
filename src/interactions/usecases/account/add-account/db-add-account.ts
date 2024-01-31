@@ -1,9 +1,17 @@
 import { left, right } from '@/shared/either'
 import { Account } from '@/domain/entities/account'
-import { AddAccountRepository, LoadAccountByEmailRepository } from '@/interactions/protocols/db/account'
-import { AccountData, AddAccount, AddAccountResponse, UpdateAccessToken } from '@/domain/contracts'
+import {
+  AddAccountRepository,
+  LoadAccountByEmailRepository
+} from '@/interactions/contracts/db/account'
+import {
+  AccountData,
+  AddAccount,
+  AddAccountResponse,
+  UpdateAccessToken
+} from '@/domain/contracts'
 import { EmailInUseError } from '@/domain/errors'
-import { Hasher } from '@/interactions/protocols/criptography'
+import { Hasher } from '@/interactions/contracts/criptography'
 import { AccountRole } from '@/domain/models'
 
 export class DbAddAccount implements AddAccount {
@@ -19,7 +27,8 @@ export class DbAddAccount implements AddAccount {
     if (accountOrError.isLeft()) {
       return left(accountOrError.value)
     }
-    const loadAccountResult = await this.loadAccountByEmailRepository.loadByEmail(accountData.email)
+    const loadAccountResult =
+      await this.loadAccountByEmailRepository.loadByEmail(accountData.email)
     if (loadAccountResult) {
       return left(new EmailInUseError(accountData.email))
     }

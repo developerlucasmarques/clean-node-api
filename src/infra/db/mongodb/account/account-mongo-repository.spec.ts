@@ -1,5 +1,5 @@
 import { Collection } from 'mongodb'
-import { AccountDataRepository } from '@/interactions/protocols/db/account'
+import { AccountDataRepository } from '@/interactions/contracts/db/account'
 import { MongoHelper } from '../helpers/mongo-helper'
 import { AccountMongoRepository } from './account-mongo-repository'
 
@@ -46,7 +46,10 @@ describe('Account Mongo Repository', () => {
     test('Should return an account if loadByEmail on success', async () => {
       const sut = makeSut()
       const result = await accountCollection.insertOne(makeFakeAccountData())
-      const accountEnteredWithId = MongoHelper.mapAddAccount(result, makeFakeAccountData())
+      const accountEnteredWithId = MongoHelper.mapAddAccount(
+        result,
+        makeFakeAccountData()
+      )
       const account = await sut.loadByEmail('any_email@mail.com')
       expect(account).toEqual(accountEnteredWithId)
     })
@@ -62,13 +65,17 @@ describe('Account Mongo Repository', () => {
     test('Should update the account accessToken if updateAccessToken success', async () => {
       const sut = makeSut()
       const result = await accountCollection.insertOne(makeFakeAccountData())
-      const accountWithoutAccessToken = await accountCollection.findOne({ _id: result.insertedId })
+      const accountWithoutAccessToken = await accountCollection.findOne({
+        _id: result.insertedId
+      })
       expect(accountWithoutAccessToken?.accessToken).toBeFalsy()
       await sut.updateAccessToken({
         accountId: result.insertedId.toHexString(),
         accessToken: 'any_token'
       })
-      const account = await accountCollection.findOne({ _id: result.insertedId })
+      const account = await accountCollection.findOne({
+        _id: result.insertedId
+      })
       expect(account?.accessToken).toBe('any_token')
     })
   })
@@ -81,7 +88,10 @@ describe('Account Mongo Repository', () => {
         accessToken: 'any_token'
       }
       const result = await accountCollection.insertOne(accountData)
-      const accountEnteredWithId = MongoHelper.mapAddAccount(result, accountData)
+      const accountEnteredWithId = MongoHelper.mapAddAccount(
+        result,
+        accountData
+      )
       const account = await sut.loadByToken('any_token')
       expect(account).toEqual(accountEnteredWithId)
     })

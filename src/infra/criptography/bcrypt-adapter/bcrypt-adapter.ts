@@ -1,6 +1,9 @@
-import { Hasher } from '@/interactions/protocols/criptography/hasher'
+import { Hasher } from '@/interactions/contracts/criptography/hasher'
 import bcrypt from 'bcrypt'
-import { HashComparer, HashCompareData } from '@/interactions/protocols/criptography'
+import {
+  HashComparer,
+  HashCompareData
+} from '@/interactions/contracts/criptography'
 
 export class BcryptAdapter implements Hasher, HashComparer {
   constructor (private readonly salt: number) {}
@@ -11,7 +14,10 @@ export class BcryptAdapter implements Hasher, HashComparer {
   }
 
   async compare (hashCompareData: HashCompareData): Promise<boolean> {
-    const comparer = await bcrypt.compare(hashCompareData.value, hashCompareData.hash)
+    const comparer = await bcrypt.compare(
+      hashCompareData.value,
+      hashCompareData.hash
+    )
     return comparer
   }
 }

@@ -1,10 +1,12 @@
 import bcrypt from 'bcrypt'
 import { BcryptAdapter } from './bcrypt-adapter'
-import { HashCompareData } from '@/interactions/protocols/criptography'
+import { HashCompareData } from '@/interactions/contracts/criptography'
 
 jest.mock('bcrypt', () => ({
   async hash (): Promise<string> {
-    return await new Promise(resolve => { resolve('hash') })
+    return await new Promise((resolve) => {
+      resolve('hash')
+    })
   },
 
   async compare (): Promise<boolean> {
@@ -45,7 +47,9 @@ describe('Bcrypt Adapter', () => {
       Parameters<(key: Error) => Promise<Error>>
       >
       hashSpy.mockReturnValueOnce(
-        new Promise((resolve, reject) => { reject(new Error()) })
+        new Promise((resolve, reject) => {
+          reject(new Error())
+        })
       )
       const promise = sut.hash('any_value')
       await expect(promise).rejects.toThrow()
@@ -78,7 +82,9 @@ describe('Bcrypt Adapter', () => {
       Parameters<(key: Error) => Promise<Error>>
       >
       compareSpy.mockReturnValueOnce(
-        new Promise((resolve, reject) => { reject(new Error()) })
+        new Promise((resolve, reject) => {
+          reject(new Error())
+        })
       )
       const promise = sut.compare(makeHashCompareData())
       await expect(promise).rejects.toThrow()

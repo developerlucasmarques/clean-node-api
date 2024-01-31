@@ -1,6 +1,6 @@
 import { UpdateAccessToken } from '@/domain/contracts'
-import { Encrypter } from '@/interactions/protocols/criptography'
-import { UpdateAccessTokenRepository } from '@/interactions/protocols/db/account'
+import { Encrypter } from '@/interactions/contracts/criptography'
+import { UpdateAccessTokenRepository } from '@/interactions/contracts/db/account'
 
 export class DbUpdateAccessToken implements UpdateAccessToken {
   constructor (
@@ -10,7 +10,10 @@ export class DbUpdateAccessToken implements UpdateAccessToken {
 
   async update (accountId: string): Promise<string> {
     const accessToken = await this.encrypter.encrypt(accountId)
-    await this.updateAccessTokenRepository.updateAccessToken({ accountId, accessToken })
+    await this.updateAccessTokenRepository.updateAccessToken({
+      accountId,
+      accessToken
+    })
     return accessToken
   }
 }
