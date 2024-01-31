@@ -57,4 +57,10 @@ describe('DbLoadSurveyById UseCase', () => {
     const promise = sut.loadById('any_survey_id')
     await expect(promise).rejects.toThrow()
   })
+
+  test('Should return an SurveyModel on success', async () => {
+    const { sut } = makeSut()
+    const result = await sut.loadById('any_survey_id')
+    expect(result).toEqual(makeFakeSurvey())
+  })
 })
