@@ -1,6 +1,6 @@
 import { Either } from '@/shared/either'
-import { InvalidAnswerError, InvalidSurveyError } from '../errors'
-import { SurveyResultModel } from '../models'
+import { InvalidAnswerError, InvalidSurveyError } from '../../errors'
+import { SurveyResultModel } from '../../models'
 
 export type SaveSurveyResultData = Omit<SurveyResultModel, 'id'>
 
