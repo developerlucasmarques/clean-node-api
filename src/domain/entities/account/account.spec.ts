@@ -1,7 +1,7 @@
 import { left, right } from '@/shared/either'
 import { Email, Name, Password } from './value-objects'
 import { InvalidEmailError, InvalidNameError, InvalidPasswordError } from './errors'
-import { AccountData } from '@/domain/contracts/add-account'
+import { AccountData } from '@/domain/contracts/account/add-account'
 import { Account } from './account'
 
 jest.mock('@/domain/entities/account/value-objects/name', () => ({
