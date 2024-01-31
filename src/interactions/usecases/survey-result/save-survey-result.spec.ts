@@ -2,7 +2,7 @@ import { LoadSurveyByIdRepository } from '@/interactions/contracts/db/survey'
 import { SurveyModel } from '@/domain/models'
 import { DbSaveSurveyResult } from './save-survey-result'
 import { SaveSurveyResultData } from '@/domain/contracts'
-import { InvalidSurveyError } from '@/domain/errors'
+import { InvalidAnswerError, InvalidSurveyError } from '@/domain/errors'
 
 const makeFakeSaveSurveyResultData = (): SaveSurveyResultData => ({
   accountId: 'any_account_id',
@@ -65,5 +65,13 @@ describe('DbSaveSurveyResult UseCase', () => {
     )
     const promise = sut.save(makeFakeSaveSurveyResultData())
     await expect(promise).rejects.toThrow()
+  })
+
+  test('Should return InvalidAnswerError if answer does not exist', async () => {
+    const { sut } = makeSut()
+    const fakeData = makeFakeSaveSurveyResultData()
+    fakeData.answer = 'invalid_answer'
+    const result = await sut.save(fakeData)
+    expect(result.value).toEqual(new InvalidAnswerError('invalid_answer'))
   })
 })
