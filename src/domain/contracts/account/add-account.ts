@@ -1,6 +1,6 @@
 import { EmailInUseError } from '@/domain/errors'
 import { Either } from '@/shared/either'
-import { InvalidEmailError, InvalidNameError, InvalidPasswordError } from '../../entities/account/errors'
+import { InvalidEmailError, InvalidNameError, InvalidPasswordError } from '@/domain/entities/account/errors'
 
 export interface AccountData {
   name: string
