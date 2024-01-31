@@ -1,5 +1,5 @@
-import { LoadSurveyByIdRepository } from '@/interactions/contracts/db/survey'
-import { SurveyModel } from '@/domain/models'
+import { LoadSurveyByIdRepository, SaveSurveyResultRepository } from '@/interactions/contracts/db/survey'
+import { SurveyModel, SurveyResultModel } from '@/domain/models'
 import { DbSaveSurveyResult } from './save-survey-result'
 import { SaveSurveyResultData } from '@/domain/contracts'
 import { InvalidAnswerError, InvalidSurveyError } from '@/domain/errors'
@@ -21,6 +21,18 @@ const makeFakeSurvey = (): SurveyModel => ({
   date: new Date()
 })
 
+const makeFakeSurveyResult = (): SurveyResultModel =>
+  Object.assign({}, makeFakeSaveSurveyResultData(), { id: 'any_survey_result_id' })
+
+const makeSaveSurveyResulRepository = (): SaveSurveyResultRepository => {
+  class SaveSurveyResultRepositoryStub implements SaveSurveyResultRepository {
+    async save (data: SaveSurveyResultData): Promise<SurveyResultModel> {
+      return await Promise.resolve(makeFakeSurveyResult())
+    }
+  }
+  return new SaveSurveyResultRepositoryStub()
+}
+
 const makeLoadSurveyByIdRepository = (): LoadSurveyByIdRepository => {
   class LoadSurveyByIdRepositoryStub implements LoadSurveyByIdRepository {
     async loadById (): Promise<SurveyModel | null> {
@@ -33,12 +45,18 @@ const makeLoadSurveyByIdRepository = (): LoadSurveyByIdRepository => {
 interface SutTypes {
   sut: DbSaveSurveyResult
   loadSurveyByIdRepositoryStub: LoadSurveyByIdRepository
+  saveSurveyResultRepositoryStub: SaveSurveyResultRepository
 }
 
 const makeSut = (): SutTypes => {
   const loadSurveyByIdRepositoryStub = makeLoadSurveyByIdRepository()
-  const sut = new DbSaveSurveyResult(loadSurveyByIdRepositoryStub)
-  return { sut, loadSurveyByIdRepositoryStub }
+  const saveSurveyResultRepositoryStub = makeSaveSurveyResulRepository()
+  const sut = new DbSaveSurveyResult(
+    loadSurveyByIdRepositoryStub, saveSurveyResultRepositoryStub
+  )
+  return {
+    sut, loadSurveyByIdRepositoryStub, saveSurveyResultRepositoryStub
+  }
 }
 
 describe('DbSaveSurveyResult UseCase', () => {
@@ -73,5 +91,12 @@ describe('DbSaveSurveyResult UseCase', () => {
     fakeData.answer = 'invalid_answer'
     const result = await sut.save(fakeData)
     expect(result.value).toEqual(new InvalidAnswerError('invalid_answer'))
+  })
+
+  test('Should call SaveSurveyResultRepository with correct values', async () => {
+    const { sut, saveSurveyResultRepositoryStub } = makeSut()
+    const saveSpy = jest.spyOn(saveSurveyResultRepositoryStub, 'save')
+    await sut.save(makeFakeSaveSurveyResultData())
+    expect(saveSpy).toHaveBeenCalledWith(makeFakeSaveSurveyResultData())
   })
 })
