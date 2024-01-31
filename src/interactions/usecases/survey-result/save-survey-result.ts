@@ -1,5 +1,5 @@
 import { SaveSurveyResult, SaveSurveyResultData, SaveSurveyResultResponse } from '@/domain/contracts'
-import { InvalidSurveyError } from '@/domain/errors'
+import { InvalidAnswerError, InvalidSurveyError } from '@/domain/errors'
 import { LoadSurveyByIdRepository } from '@/interactions/contracts/db/survey'
 import { left } from '@/shared/either'
 
@@ -11,7 +11,10 @@ export class DbSaveSurveyResult implements SaveSurveyResult {
     if (!survey) {
       return left(new InvalidSurveyError(data.surveyId))
     }
-    const value: any = ''
-    return value
+    const answers = survey.answers.map(a => a.answer)
+    if (!answers.includes(data.answer)) {
+      return left(new InvalidAnswerError(data.answer))
+    }
+    return '' as any
   }
 }
