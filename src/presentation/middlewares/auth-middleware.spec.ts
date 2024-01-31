@@ -5,7 +5,7 @@ import { LoadAccountByToken, LoadAccountByTokenData, LoadAccountByTokenResponse 
 import { left, right } from '@/shared/either'
 import { AccessTokenNotInformedError } from '../errors'
 import { forbidden, ok, serverError, unauthorized } from '../helpers/http/http-helper'
-import { HttpRequest } from '../protocols'
+import { HttpRequest } from '../contracts'
 import { AuthMiddleware } from './auth-middleware'
 
 const makeLoadAccountByToken = (): LoadAccountByToken => {

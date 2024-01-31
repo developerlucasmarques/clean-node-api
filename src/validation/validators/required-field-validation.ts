@@ -1,5 +1,5 @@
 import { MissingParamError } from '@/presentation/errors'
-import { Validation } from '@/presentation/protocols'
+import { Validation } from '@/presentation/contracts'
 import { Either, left, right } from '@/shared/either'
 
 export class RequiredFieldValidation implements Validation {

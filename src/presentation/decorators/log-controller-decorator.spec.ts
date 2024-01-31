@@ -5,7 +5,7 @@ import {
   Controller,
   HttpRequest,
   HttpResponse
-} from '@/presentation/protocols'
+} from '@/presentation/contracts'
 import { LogControllerDecorator } from './log-controller-decorator'
 
 const makeController = (): Controller => {

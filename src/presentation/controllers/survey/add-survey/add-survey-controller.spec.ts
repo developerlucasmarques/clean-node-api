@@ -1,6 +1,6 @@
 import { AddSurvey, AddSurveyData, AddSurveyResponse } from '@/domain/contracts'
 import { badRequest, noContent, serverError } from '@/presentation/helpers/http/http-helper'
-import { HttpRequest, Validation } from '@/presentation/protocols'
+import { HttpRequest, Validation } from '@/presentation/contracts'
 import { Either, left, right } from '@/shared/either'
 import MockDate from 'mockdate'
 import { AddSurveyController } from './add-survey-controller'

@@ -3,8 +3,8 @@ import { LoadAccountByToken } from '@/domain/contracts'
 import { AccountRole } from '@/domain/models/account-role'
 import { AccessTokenNotInformedError } from '../errors'
 import { forbidden, ok, serverError, unauthorized } from '../helpers/http/http-helper'
-import { HttpRequest, HttpResponse } from '../protocols'
-import { Middleware } from '../protocols/middleware'
+import { HttpRequest, HttpResponse } from '../contracts'
+import { Middleware } from '../contracts/middleware'
 
 export class AuthMiddleware implements Middleware {
   constructor (

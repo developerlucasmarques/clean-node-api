@@ -1,5 +1,5 @@
 import { InvalidEmailError } from '@/presentation/errors'
-import { EmailValidator, Validation } from '@/presentation/protocols'
+import { EmailValidator, Validation } from '@/presentation/contracts'
 import { Either, left, right } from '@/shared/either'
 
 export class EmailValidation implements Validation {

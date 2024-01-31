@@ -1,6 +1,6 @@
 import { AddAccount } from '@/domain/contracts'
 import { badRequest, ok, serverError } from '@/presentation/helpers/http/http-helper'
-import { Controller, HttpRequest, HttpResponse, Validation } from '@/presentation/protocols'
+import { Controller, HttpRequest, HttpResponse, Validation } from '@/presentation/contracts'
 
 export class SignUpController implements Controller {
   constructor (

@@ -3,7 +3,7 @@ import {
   Controller,
   HttpRequest,
   HttpResponse
-} from '@/presentation/protocols'
+} from '@/presentation/contracts'
 
 export class LogControllerDecorator implements Controller {
   constructor (

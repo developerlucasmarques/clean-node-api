@@ -1,4 +1,4 @@
-import { Validation } from '@/presentation/protocols'
+import { Validation } from '@/presentation/contracts'
 import { ValidationComposite } from '.'
 import { Either, left, right } from '@/shared/either'
 import { MissingParamError } from '@/presentation/errors'

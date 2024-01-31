@@ -3,7 +3,7 @@ import { MissingParamError, ServerError } from '@/presentation/errors'
 import { badRequest, ok, serverError } from '@/presentation/helpers/http/http-helper'
 import { SignUpController } from './signup-controller'
 import { AccountData, AddAccount, AddAccountResponse } from '@/domain/contracts'
-import { HttpRequest, Validation } from '@/presentation/protocols'
+import { HttpRequest, Validation } from '@/presentation/contracts'
 
 const makeFakeRequest = (): HttpRequest => ({
   body: {

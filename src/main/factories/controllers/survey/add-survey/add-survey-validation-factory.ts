@@ -1,4 +1,4 @@
-import { Validation } from '@/presentation/protocols'
+import { Validation } from '@/presentation/contracts'
 import { ListWithRequiredFields, OnlyRequiredFieldsValidation, PrimitiveTypeValidation, RequiredFieldValidation, ValidationComposite } from '@/validation/validators'
 
 export const makeAddSurveyValidation = (): ValidationComposite => {
