@@ -8,10 +8,10 @@ import { AccountRole } from '@/domain/models'
 
 export class DbAddAccount implements AddAccount {
   constructor (
+    private readonly loadAccountByEmailRepository: LoadAccountByEmailRepository,
     private readonly hasher: Hasher,
     private readonly addAccountRepository: AddAccountRepository,
-    private readonly updateAccessToken: UpdateAccessToken,
-    private readonly loadAccountByEmailRepository: LoadAccountByEmailRepository
+    private readonly updateAccessToken: UpdateAccessToken
   ) {}
 
   async add (accountData: AccountData): Promise<AddAccountResponse> {

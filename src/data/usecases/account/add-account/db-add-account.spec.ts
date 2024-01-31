@@ -78,11 +78,16 @@ interface SutTypes {
 }
 
 const makeSut = (): SutTypes => {
+  const loadAccountByEmailRepositoryStub = makeLoadAccountByEmailRepositoryStub()
   const hasherStub = makeHasher()
   const addAccountRepositoryStub = makeAddAccountRepository()
   const updateAccessTokenStub = makeUpdateAccessTokenStub()
-  const loadAccountByEmailRepositoryStub = makeLoadAccountByEmailRepositoryStub()
-  const sut = new DbAddAccount(hasherStub, addAccountRepositoryStub, updateAccessTokenStub, loadAccountByEmailRepositoryStub)
+  const sut = new DbAddAccount(
+    loadAccountByEmailRepositoryStub, 
+    hasherStub, 
+    addAccountRepositoryStub, 
+    updateAccessTokenStub
+  )
   return {
     sut,
     hasherStub,
