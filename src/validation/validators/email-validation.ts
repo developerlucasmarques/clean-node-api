@@ -1,6 +1,7 @@
 import { InvalidEmailError } from '@/presentation/errors'
-import { EmailValidator, Validation } from '@/presentation/contracts'
+import { Validation } from '@/presentation/contracts'
 import { Either, left, right } from '@/shared/either'
+import { EmailValidator } from '../contracts/email-validator'
 
 export class EmailValidation implements Validation {
   constructor (

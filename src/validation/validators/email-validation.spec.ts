@@ -1,5 +1,5 @@
 import { InvalidEmailError } from '@/presentation/errors'
-import { EmailValidator } from '../protocols/email-validator'
+import { EmailValidator } from '../contracts/email-validator'
 import { EmailValidation } from './email-validation'
 
 const makeEmailValidatorStub = (): EmailValidator => {
