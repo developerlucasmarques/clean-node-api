@@ -1,9 +1,5 @@
 import { DbLoadAccountByToken } from '.'
-import {
-  AccessDeniedError,
-  AccountNotFoundError,
-  InvalidTokenError
-} from '@/domain/errors'
+import { AccessDeniedError, AccountNotFoundError, InvalidTokenError } from '@/domain/errors'
 import { AccountModel } from '@/domain/models'
 import { LoadAccountByTokenData } from '@/domain/contracts'
 import { left, right } from '@/shared/either'
