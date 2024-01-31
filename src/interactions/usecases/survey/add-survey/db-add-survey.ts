@@ -1,7 +1,7 @@
 import { Survey } from '@/domain/entities/survey'
 import { AddSurvey, AddSurveyData, AddSurveyResponse } from '@/domain/usecases'
 import { left, right } from '@/shared/either'
-import { AddSurveyRepository } from '@/data/protocols/db/survey'
+import { AddSurveyRepository } from '@/interactions/protocols/db/survey'
 
 export class DbAddSurvey implements AddSurvey {
   constructor (private readonly addSurveyRepository: AddSurveyRepository) {}

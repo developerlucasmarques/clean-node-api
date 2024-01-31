@@ -1,6 +1,6 @@
 import { UpdateAccessToken } from '@/domain/usecases'
-import { Encrypter } from '@/data/protocols/criptography'
-import { UpdateAccessTokenRepository } from '@/data/protocols/db/account'
+import { Encrypter } from '@/interactions/protocols/criptography'
+import { UpdateAccessTokenRepository } from '@/interactions/protocols/db/account'
 
 export class DbUpdateAccessToken implements UpdateAccessToken {
   constructor (

@@ -3,8 +3,8 @@ import { AccessDeniedError, AccountNotFoundError, InvalidTokenError } from '@/do
 import { AccountModel } from '@/domain/models'
 import { LoadAccountByTokenData } from '@/domain/usecases'
 import { left, right } from '@/shared/either'
-import { Decrypter } from '@/data/protocols/criptography'
-import { LoadAccountByTokenRepository } from '@/data/protocols/db/account'
+import { Decrypter } from '@/interactions/protocols/criptography'
+import { LoadAccountByTokenRepository } from '@/interactions/protocols/db/account'
 
 const makeDecrypter = (): Decrypter => {
   class DecrypterStub implements Decrypter {

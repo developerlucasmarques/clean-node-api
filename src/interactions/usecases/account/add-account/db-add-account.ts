@@ -1,9 +1,9 @@
 import { left, right } from '@/shared/either'
 import { Account } from '@/domain/entities/account'
-import { AddAccountRepository, LoadAccountByEmailRepository } from '@/data/protocols/db/account'
+import { AddAccountRepository, LoadAccountByEmailRepository } from '@/interactions/protocols/db/account'
 import { AccountData, AddAccount, AddAccountResponse, UpdateAccessToken } from '@/domain/usecases'
-import { EmailInUseError } from '@/data/errors'
-import { Hasher } from '@/data/protocols/criptography'
+import { EmailInUseError } from '@/interactions/errors'
+import { Hasher } from '@/interactions/protocols/criptography'
 import { AccountRole } from '@/domain/models'
 
 export class DbAddAccount implements AddAccount {

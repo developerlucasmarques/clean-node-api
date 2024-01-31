@@ -3,9 +3,9 @@ import { Account } from '@/domain/entities/account'
 import { AccountModel } from '@/domain/models/account'
 import { AccountData, UpdateAccessToken } from '@/domain/usecases'
 import { left, right } from '@/shared/either'
-import { EmailInUseError } from '@/data/errors'
-import { Hasher } from '@/data/protocols/criptography'
-import { AddAccountRepository, LoadAccountByEmailRepository } from '@/data/protocols/db/account'
+import { EmailInUseError } from '@/interactions/errors'
+import { Hasher } from '@/interactions/protocols/criptography'
+import { AddAccountRepository, LoadAccountByEmailRepository } from '@/interactions/protocols/db/account'
 
 jest.mock('@/domain/entities/account/account', () => ({
   Account: {
@@ -83,9 +83,9 @@ const makeSut = (): SutTypes => {
   const addAccountRepositoryStub = makeAddAccountRepository()
   const updateAccessTokenStub = makeUpdateAccessTokenStub()
   const sut = new DbAddAccount(
-    loadAccountByEmailRepositoryStub, 
-    hasherStub, 
-    addAccountRepositoryStub, 
+    loadAccountByEmailRepositoryStub,
+    hasherStub,
+    addAccountRepositoryStub,
     updateAccessTokenStub
   )
   return {
