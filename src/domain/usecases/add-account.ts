@@ -1,4 +1,4 @@
-import { EmailInUseError } from '@/interactions/errors'
+import { EmailInUseError } from '@/domain/errors'
 import { Either } from '@/shared/either'
 import { InvalidEmailError, InvalidNameError, InvalidPasswordError } from '../entities/account/errors'
 

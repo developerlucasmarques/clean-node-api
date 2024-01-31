@@ -3,7 +3,7 @@ import { Account } from '@/domain/entities/account'
 import { AccountModel } from '@/domain/models/account'
 import { AccountData, UpdateAccessToken } from '@/domain/usecases'
 import { left, right } from '@/shared/either'
-import { EmailInUseError } from '@/interactions/errors'
+import { EmailInUseError } from '@/domain/errors'
 import { Hasher } from '@/interactions/protocols/criptography'
 import { AddAccountRepository, LoadAccountByEmailRepository } from '@/interactions/protocols/db/account'
 
