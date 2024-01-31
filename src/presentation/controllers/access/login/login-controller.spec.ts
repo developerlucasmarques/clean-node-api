@@ -1,5 +1,5 @@
 import { Either, left, right } from '@/shared/either'
-import { badRequest, ok, serverError, unauthorized } from '@/presentation/helpers/http/http-helper'
+import { badRequest, ok, serverError, unauthorized } from '@/presentation/helpers/http-helper'
 import { LoginController } from './login-controller'
 import { HttpRequest, Validation } from '@/presentation/contracts'
 import { Authentication, AuthenticationData } from '@/domain/contracts'

@@ -2,7 +2,7 @@ import { InvalidTokenError } from '@/domain/errors'
 import { LoadAccountByToken } from '@/domain/contracts'
 import { AccountRole } from '@/domain/models/account-role'
 import { AccessTokenNotInformedError } from '../errors'
-import { forbidden, ok, serverError, unauthorized } from '../helpers/http/http-helper'
+import { forbidden, ok, serverError, unauthorized } from '../helpers/http-helper'
 import { HttpRequest, HttpResponse } from '../contracts'
 import { Middleware } from '../contracts/middleware'
 

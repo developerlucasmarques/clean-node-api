@@ -4,7 +4,7 @@ import { AccountRole } from '@/domain/models/account-role'
 import { LoadAccountByToken, LoadAccountByTokenData, LoadAccountByTokenResponse } from '@/domain/contracts'
 import { left, right } from '@/shared/either'
 import { AccessTokenNotInformedError } from '../errors'
-import { forbidden, ok, serverError, unauthorized } from '../helpers/http/http-helper'
+import { forbidden, ok, serverError, unauthorized } from '../helpers/http-helper'
 import { HttpRequest } from '../contracts'
 import { AuthMiddleware } from './auth-middleware'
 

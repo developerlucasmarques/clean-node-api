@@ -1,6 +1,6 @@
 import { LogErrorRepository } from '@/interactions/contracts/db/log/log-error-repository'
 import { AccountModel } from '@/domain/models/account'
-import { ok, serverError } from '@/presentation/helpers/http/http-helper'
+import { ok, serverError } from '@/presentation/helpers/http-helper'
 import {
   Controller,
   HttpRequest,
