@@ -1,10 +1,11 @@
 import { AddSurvey } from '@/domain/contracts'
 import { badRequest, noContent, serverError } from '@/presentation/helpers/http-helper'
 import { Controller, HttpRequest, HttpResponse, Validation } from '@/presentation/contracts'
+import { AddSurveyDataController } from '@/presentation/types'
 
 export class AddSurveyController implements Controller {
   constructor (
-    private readonly validation: Validation,
+    private readonly validation: Validation<AddSurveyDataController>,
     private readonly addSurvey: AddSurvey
   ) {}
 

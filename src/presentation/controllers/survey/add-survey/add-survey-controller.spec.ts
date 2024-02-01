@@ -4,9 +4,10 @@ import { HttpRequest, Validation } from '@/presentation/contracts'
 import { Either, left, right } from '@/shared/either'
 import MockDate from 'mockdate'
 import { AddSurveyController } from './add-survey-controller'
+import { AddSurveyDataController } from '@/presentation/types'
 
-const makeValidationStub = (): Validation => {
-  class ValidationStub implements Validation {
+const makeValidationStub = (): Validation<AddSurveyDataController> => {
+  class ValidationStub implements Validation<AddSurveyDataController> {
     validate (input: any): Either<Error, null> {
       return right(null)
     }
@@ -35,7 +36,7 @@ const makeFakeRequest = (): HttpRequest => ({
 
 interface SutTypes {
   sut: AddSurveyController
-  validationStub: Validation
+  validationStub: Validation<AddSurveyDataController>
   addSurveyStub: AddSurvey
 }
 

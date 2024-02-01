@@ -3,16 +3,16 @@ import { Validation } from '@/presentation/contracts'
 import { Either, left, right } from '@/shared/either'
 import { EmailValidator } from '../contracts/email-validator'
 
-export class EmailValidation implements Validation {
+export class EmailValidation<T> implements Validation<T> {
   constructor (
-    private readonly fieldName: string,
+    private readonly fieldName: keyof T,
     private readonly emailValidator: EmailValidator
   ) {}
 
-  validate (input: any): Either<Error, null> {
-    const isValid = this.emailValidator.isValid(input[this.fieldName])
+  validate (input: T): Either<Error, null> {
+    const isValid = this.emailValidator.isValid(String(input[this.fieldName]))
     if (!isValid) {
-      return left(new InvalidEmailError(input[this.fieldName]))
+      return left(new InvalidEmailError(String(input[this.fieldName])))
     }
     return right(null)
   }

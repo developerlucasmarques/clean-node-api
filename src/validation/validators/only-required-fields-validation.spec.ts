@@ -2,7 +2,13 @@ import { left, right } from '@/shared/either'
 import { UnnecessaryFieldError } from '@/presentation/errors/unnecessary-field-error'
 import { OnlyRequiredFieldsValidation } from './only-required-fields-validation'
 
-const makeSut = (): OnlyRequiredFieldsValidation => {
+interface OnlyRequiredFieldsValidationType {
+  role?: string
+  name: string
+  email: string
+}
+
+const makeSut = (): OnlyRequiredFieldsValidation<OnlyRequiredFieldsValidationType> => {
   return new OnlyRequiredFieldsValidation(['name', 'email'])
 }
 

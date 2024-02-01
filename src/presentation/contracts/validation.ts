@@ -1,5 +1,5 @@
 import { Either } from '@/shared/either'
 
-export interface Validation {
-  validate: (input: any) => Either<Error, null>
+export interface Validation<T> {
+  validate: (input: T) => Either<Error, null>
 }

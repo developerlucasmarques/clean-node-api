@@ -1,10 +1,11 @@
 import { AddAccount } from '@/domain/contracts'
-import { badRequest, ok, serverError } from '@/presentation/helpers/http-helper'
 import { Controller, HttpRequest, HttpResponse, Validation } from '@/presentation/contracts'
+import { badRequest, ok, serverError } from '@/presentation/helpers/http-helper'
+import { SignUpDataController } from '@/presentation/types'
 
 export class SignUpController implements Controller {
   constructor (
-    private readonly validation: Validation,
+    private readonly validation: Validation<SignUpDataController>,
     private readonly addAccount: AddAccount
   ) {}
 

@@ -4,6 +4,7 @@ import { MongoHelper } from '@/infra/db/mongodb/helpers/mongo-helper'
 import app from '../config/app'
 import { sign } from 'jsonwebtoken'
 import env from '../config/env'
+import { AccountModel } from '@/domain/models'
 
 let surveyCollection: Collection
 let accountCollection: Collection
@@ -16,7 +17,7 @@ const makeAccessToken = async (): Promise<string> => {
     role: 'admin'
   }
   const result = await accountCollection.insertOne(accountData)
-  const account = MongoHelper.mapAddAccount(result, accountData)
+  const account = MongoHelper.mapAdd<AccountModel>(result, accountData)
   const accessToken = sign(account.id, env.jwtSecretKey)
   await accountCollection.updateOne({ _id: result.insertedId }, { $set: { accessToken } })
   return accessToken

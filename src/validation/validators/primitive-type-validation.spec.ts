@@ -4,7 +4,7 @@ import { PrimitiveTypeValidation } from './primitive-type-validation'
 
 describe('PrimitiveType Validation', () => {
   test('Should return ValidationTypeError if validation fails', () => {
-    const sut = new PrimitiveTypeValidation('name', 'string')
+    const sut = new PrimitiveTypeValidation<{ name: number, email: string }>('name', 'string')
     const result = sut.validate({
       name: 0,
       email: 'any_email@mail.com'
@@ -13,7 +13,7 @@ describe('PrimitiveType Validation', () => {
   })
 
   test('Should return null if validation success', () => {
-    const sut = new PrimitiveTypeValidation('name', 'string')
+    const sut = new PrimitiveTypeValidation<{ name: string, email: string }>('name', 'string')
     const result = sut.validate({
       name: 'any name',
       email: 'any_email@mail.com'
@@ -22,7 +22,7 @@ describe('PrimitiveType Validation', () => {
   })
 
   test('Should return ValidationTypeError if field type is array and validation fails', () => {
-    const sut = new PrimitiveTypeValidation('messages', 'array')
+    const sut = new PrimitiveTypeValidation<{ name: string, messages: string }>('messages', 'array')
     const result = sut.validate({
       name: 'any name',
       messages: 'invalid_field'
@@ -31,7 +31,7 @@ describe('PrimitiveType Validation', () => {
   })
 
   test('Should return null if fieldType is array and validation success', () => {
-    const sut = new PrimitiveTypeValidation('messages', 'array')
+    const sut = new PrimitiveTypeValidation<{ name: string, messages: any[] }>('messages', 'array')
     const result = sut.validate({
       name: 'any name',
       messages: []

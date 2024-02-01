@@ -2,6 +2,7 @@ import { EmailValidation, OnlyRequiredFieldsValidation, PrimitiveTypeValidation,
 import { Validation } from '@/presentation/contracts'
 import { EmailValidator } from '@/validation/contracts/email-validator'
 import { makeLoginValidation } from './login-validation-factory'
+import { AuthenticationData } from '@/domain/contracts'
 
 jest.mock('@/validation/validators/validation-composite')
 
@@ -17,8 +18,8 @@ const makeEmailValidatorStub = (): EmailValidator => {
 describe('LoginValidation Factory', () => {
   test('Should call ValidationComposite with all validations', () => {
     makeLoginValidation()
-    const validations: Validation[] = []
-    const requiredFields = ['email', 'password']
+    const validations: Array<Validation<AuthenticationData>> = []
+    const requiredFields: Array<keyof AuthenticationData> = ['email', 'password']
     for (const field of requiredFields) {
       validations.push(
         new RequiredFieldValidation(field),

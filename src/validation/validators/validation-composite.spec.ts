@@ -3,8 +3,13 @@ import { ValidationComposite } from '.'
 import { Either, left, right } from '@/shared/either'
 import { MissingParamError } from '@/presentation/errors'
 
-const makeValidationStub = (): Validation => {
-  class ValidationStub implements Validation {
+interface ValidationCompositeType {
+  name?: string
+  field?: string
+}
+
+const makeValidationStub = (): Validation<ValidationCompositeType> => {
+  class ValidationStub implements Validation<ValidationCompositeType> {
     validate (input: any): Either<Error, null> {
       return right(null)
     }
@@ -13,8 +18,8 @@ const makeValidationStub = (): Validation => {
 }
 
 interface SutTypes {
-  sut: ValidationComposite
-  validationStubs: Validation[]
+  sut: ValidationComposite<ValidationCompositeType>
+  validationStubs: Array<Validation<ValidationCompositeType>>
 }
 
 const makeSut = (): SutTypes => {

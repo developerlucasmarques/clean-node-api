@@ -1,10 +1,10 @@
-import { Authentication } from '@/domain/contracts'
+import { Authentication, AuthenticationData } from '@/domain/contracts'
 import { badRequest, ok, serverError, unauthorized } from '@/presentation/helpers/http-helper'
 import { Controller, HttpRequest, HttpResponse, Validation } from '@/presentation/contracts'
 
 export class LoginController implements Controller {
   constructor (
-    private readonly validation: Validation,
+    private readonly validation: Validation<AuthenticationData>,
     private readonly authentication: Authentication
   ) {}
 
@@ -14,8 +14,7 @@ export class LoginController implements Controller {
       if (result.isLeft()) {
         return badRequest(result.value)
       }
-      const { email, password } = httpRequest.body
-      const accessToken = await this.authentication.auth({ email, password })
+      const accessToken = await this.authentication.auth(httpRequest.body)
       if (accessToken.isLeft()) {
         return unauthorized(accessToken.value)
       }

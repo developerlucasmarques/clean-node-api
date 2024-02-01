@@ -5,8 +5,8 @@ import { HttpRequest, Validation } from '@/presentation/contracts'
 import { Authentication, AuthenticationData } from '@/domain/contracts'
 import { AuthenticationError } from '@/domain/errors'
 
-const makeValidationStub = (): Validation => {
-  class ValidationStub implements Validation {
+const makeValidationStub = (): Validation<AuthenticationData> => {
+  class ValidationStub implements Validation<AuthenticationData> {
     validate (input: any): Either<Error, null> {
       return right(null)
     }
@@ -25,7 +25,7 @@ const makeAuthenticationStub = (): Authentication => {
 
 interface SutTypes {
   sut: LoginController
-  validationStub: Validation
+  validationStub: Validation<AuthenticationData>
   authenticationStub: Authentication
 }
 

@@ -14,8 +14,8 @@ const makeFakeRequest = (): HttpRequest => ({
   }
 })
 
-const makeValidation = (): Validation => {
-  class ValidationStub implements Validation {
+const makeValidation = (): Validation<AccountData> => {
+  class ValidationStub implements Validation<AccountData> {
     validate (input: any): Either<Error, null> {
       return right(null)
     }
@@ -34,7 +34,7 @@ const makeAddAccount = (): AddAccount => {
 
 interface SutTypes {
   sut: SignUpController
-  validationStub: Validation
+  validationStub: Validation<AccountData>
   addAccountStub: AddAccount
 }
 

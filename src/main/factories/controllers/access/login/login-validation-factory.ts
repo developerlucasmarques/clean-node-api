@@ -1,10 +1,11 @@
 import { EmailValidation, RequiredFieldValidation, ValidationComposite, OnlyRequiredFieldsValidation, PrimitiveTypeValidation } from '@/validation/validators'
 import { EmailValidatorAdapter } from '@/infra/validators/email-validator-adapter'
 import { Validation } from '@/presentation/contracts'
+import { AuthenticationData } from '@/domain/contracts'
 
-export const makeLoginValidation = (): ValidationComposite => {
-  const validations: Validation[] = []
-  const requiredFields = ['email', 'password']
+export const makeLoginValidation = (): ValidationComposite<AuthenticationData> => {
+  const validations: Array<Validation<AuthenticationData>> = []
+  const requiredFields: Array<keyof AuthenticationData> = ['email', 'password']
   for (const field of requiredFields) {
     validations.push(
       new RequiredFieldValidation(field),

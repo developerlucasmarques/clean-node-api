@@ -1,9 +1,12 @@
 import { Validation } from '@/presentation/contracts'
+import { SignUpDataController } from '@/presentation/types'
 import { CompareFieldsValidation, RequiredFieldValidation, ValidationComposite, OnlyRequiredFieldsValidation, PrimitiveTypeValidation } from '@/validation/validators'
 
-export const makeSignUpValidation = (): ValidationComposite => {
-  const validations: Validation[] = []
-  const requiredFields = ['name', 'email', 'password', 'passwordConfirmation']
+export const makeSignUpValidation = (): ValidationComposite<SignUpDataController> => {
+  const validations: Array<Validation<SignUpDataController>> = []
+  const requiredFields: Array<keyof SignUpDataController> = [
+    'name', 'email', 'password', 'passwordConfirmation'
+  ]
   for (const field of requiredFields) {
     validations.push(
       new RequiredFieldValidation(field),
