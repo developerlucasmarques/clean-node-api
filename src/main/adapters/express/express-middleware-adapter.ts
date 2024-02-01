@@ -4,7 +4,9 @@ import { HttpRequest, Middleware } from '@/presentation/contracts'
 export const adaptMiddleware = (middleare: Middleware) => {
   return async (req: Request, res: Response, next: NextFunction) => {
     const httpRequest: HttpRequest = {
-      headers: req.headers
+      headers: req.headers,
+      params: req.params,
+      body: req.body
     }
     const httpResponse = await middleare.handle(httpRequest)
     if (httpResponse.statusCode >= 200 && httpResponse.statusCode <= 299) {

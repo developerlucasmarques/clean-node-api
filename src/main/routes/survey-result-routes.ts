@@ -4,5 +4,5 @@ import { makeSaveSurveyResultController } from '../factories/controllers/survey-
 import { auth } from '../middlewares/auth'
 
 export default async (router: Router): Promise<void> => {
-  router.put('/survey/:surveyId/results', auth, adaptRoute(makeSaveSurveyResultController()))
+  router.put('/survey/:surveyId/result', auth, adaptRoute(makeSaveSurveyResultController()))
 }
