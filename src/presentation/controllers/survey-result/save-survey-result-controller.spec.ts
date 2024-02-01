@@ -3,7 +3,7 @@ import { SaveSurveyResultDataController } from '@/presentation/types'
 import { Either, left, right } from '@/shared/either'
 import MockDate from 'mockdate'
 import { SaveSurveyResultController } from './save-survey-result-controller'
-import { badRequest } from '@/presentation/helpers/http-helper'
+import { badRequest, serverError } from '@/presentation/helpers/http-helper'
 
 const makeValidationStub = (): Validation<SaveSurveyResultDataController> => {
   class ValidationStub implements Validation<SaveSurveyResultDataController> {
@@ -53,5 +53,14 @@ describe('SaveSurveyResult Controller', () => {
     )
     const httpResponse = await sut.handle(makeFakeRequest())
     expect(httpResponse).toEqual(badRequest(new Error('any_message')))
+  })
+
+  test('Should return 500 if Validation throws', async () => {
+    const { sut, validationStub } = makeSut()
+    jest.spyOn(validationStub, 'validate').mockImplementationOnce(() => {
+      throw new Error('any_message')
+    })
+    const httpResponse = await sut.handle(makeFakeRequest())
+    expect(httpResponse).toEqual(serverError(new Error('any_message')))
   })
 })
