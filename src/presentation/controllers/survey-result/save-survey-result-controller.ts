@@ -18,7 +18,12 @@ export class SaveSurveyResultController implements Controller {
       const { answer } = httpRequest.body
       const { surveyId } = httpRequest.params
       const { accountId } = httpRequest.headers
-      await this.saveSurveyResult.save({ answer, surveyId, accountId, date: new Date() })
+      const saveSurveyResult = await this.saveSurveyResult.save({
+        answer, surveyId, accountId, date: new Date()
+      })
+      if (saveSurveyResult.isLeft()) {
+        return badRequest(saveSurveyResult.value)
+      }
       return { statusCode: 9, body: '' }
     } catch (error: any) {
       return serverError(error)
