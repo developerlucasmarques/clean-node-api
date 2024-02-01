@@ -2,6 +2,7 @@ import { Collection } from 'mongodb'
 import { AccountDataRepository } from '@/interactions/contracts/db'
 import { MongoHelper } from '../helpers/mongo-helper'
 import { AccountMongoRepository } from './account-mongo-repository'
+import { AccountModel } from '@/domain/models'
 
 let accountCollection: Collection
 
@@ -46,9 +47,8 @@ describe('Account Mongo Repository', () => {
     test('Should return an account if loadByEmail on success', async () => {
       const sut = makeSut()
       const result = await accountCollection.insertOne(makeFakeAccountData())
-      const accountEnteredWithId = MongoHelper.mapAddAccount(
-        result,
-        makeFakeAccountData()
+      const accountEnteredWithId = MongoHelper.mapAdd<AccountModel>(
+        result, makeFakeAccountData()
       )
       const account = await sut.loadByEmail('any_email@mail.com')
       expect(account).toEqual(accountEnteredWithId)
@@ -88,9 +88,8 @@ describe('Account Mongo Repository', () => {
         accessToken: 'any_token'
       }
       const result = await accountCollection.insertOne(accountData)
-      const accountEnteredWithId = MongoHelper.mapAddAccount(
-        result,
-        accountData
+      const accountEnteredWithId = MongoHelper.mapAdd<AccountModel>(
+        result, accountData
       )
       const account = await sut.loadByToken('any_token')
       expect(account).toEqual(accountEnteredWithId)

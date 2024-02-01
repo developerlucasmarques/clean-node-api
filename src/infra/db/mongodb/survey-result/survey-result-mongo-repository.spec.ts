@@ -35,12 +35,12 @@ const makeFakeSaveSurveyResultData = (accountId: string, surveyId: string): Save
 
 const makeSurvey = async (): Promise<SurveyModel> => {
   const survey = await surveyCollection.insertOne(makeFakeSurveyData())
-  return MongoHelper.mapAddAccount(survey, makeFakeSurveyData()) as unknown as SurveyModel
+  return MongoHelper.mapAdd<SurveyModel>(survey, makeFakeSurveyData())
 }
 
 const makeAccount = async (): Promise<AccountModel> => {
   const account = await accountCollection.insertOne(makeFakeAccountData())
-  return MongoHelper.mapAddAccount(account, makeFakeAccountData())
+  return MongoHelper.mapAdd<AccountModel>(account, makeFakeAccountData())
 }
 
 const makeSut = (): SurveyResultMongoRepository => {

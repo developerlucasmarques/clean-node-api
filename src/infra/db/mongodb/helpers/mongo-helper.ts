@@ -1,5 +1,4 @@
-import { MongoClient, Collection, InsertOneResult, ObjectId } from 'mongodb'
-import { AccountModel } from '@/domain/models'
+import { Collection, InsertOneResult, MongoClient, ObjectId } from 'mongodb'
 
 export const MongoHelper = {
   client: null as unknown as MongoClient | null,
@@ -29,7 +28,7 @@ export const MongoHelper = {
     return this.client.db().collection(name)
   },
 
-  mapAddAccount (result: InsertOneResult<Document>, data: any): AccountModel {
+  mapAdd <T>(result: InsertOneResult<Document>, data: any): T {
     if (data._id) {
       delete data._id
     }
