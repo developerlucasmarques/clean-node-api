@@ -1,6 +1,6 @@
 import { SaveSurveyResult } from '@/domain/contracts'
 import { Controller, HttpRequest, HttpResponse, Validation } from '@/presentation/contracts'
-import { badRequest, serverError } from '@/presentation/helpers/http-helper'
+import { badRequest, ok, serverError } from '@/presentation/helpers/http-helper'
 import { SaveSurveyResultDataController } from '@/presentation/types'
 
 export class SaveSurveyResultController implements Controller {
@@ -24,7 +24,7 @@ export class SaveSurveyResultController implements Controller {
       if (saveSurveyResult.isLeft()) {
         return badRequest(saveSurveyResult.value)
       }
-      return { statusCode: 9, body: '' }
+      return ok(saveSurveyResult.value)
     } catch (error: any) {
       return serverError(error)
     }
