@@ -2,6 +2,7 @@ import { Collection } from 'mongodb'
 import { AddSurveyData } from '@/domain/contracts'
 import { MongoHelper } from '../helpers/mongo-helper'
 import { SurveyMongoRepository } from './survey-mongo-repository'
+import MockDate from 'mockdate'
 
 let surveyCollection: Collection
 
@@ -10,8 +11,7 @@ const makeFakeSurveyData = (): AddSurveyData => ({
   answers: [{
     image: 'any_image',
     answer: 'any_answer'
-  },
-  {
+  }, {
     answer: 'other_answer'
   }],
   date: new Date()
@@ -23,10 +23,12 @@ const makeSut = (): SurveyMongoRepository => {
 
 describe('Survey Mongo Repository', () => {
   beforeAll(async () => {
+    MockDate.set(new Date())
     await MongoHelper.connect(process.env.MONGO_URL)
   })
 
   afterAll(async () => {
+    MockDate.reset()
     await MongoHelper.disconnect()
   })
 
@@ -47,24 +49,16 @@ describe('Survey Mongo Repository', () => {
   describe('loadAll()', () => {
     test('Should load all surveys on success', async () => {
       const sut = makeSut()
-      await surveyCollection.insertMany([
-        {
-          question: 'any_question',
-          answers: [{
-            image: 'any_image',
-            answer: 'any_answer'
-          }],
-          date: new Date()
-        },
-        {
-          question: 'other_question',
-          answers: [{
-            image: 'any_image',
-            answer: 'any_answer'
-          }],
-          date: new Date()
-        }
-      ])
+      await surveyCollection.insertMany([{
+        ...makeFakeSurveyData()
+      }, {
+        question: 'other_question',
+        answers: [{
+          image: 'any_image',
+          answer: 'any_answer'
+        }],
+        date: new Date()
+      }])
       const surveys = await sut.loadAll()
       expect(surveys.length).toBe(2)
       expect(surveys[0].question).toBe('any_question')
@@ -75,6 +69,16 @@ describe('Survey Mongo Repository', () => {
       const sut = makeSut()
       const surveys = await sut.loadAll()
       expect(surveys.length).toBe(0)
+    })
+  })
+
+  describe('loadById()', () => {
+    test('Should load an survey on success', async () => {
+      const sut = makeSut()
+      const surveyResult = await surveyCollection.insertOne(makeFakeSurveyData())
+      const id = surveyResult.insertedId.toHexString()
+      const survey = await sut.loadById(id)
+      expect(survey).toEqual({ id, ...makeFakeSurveyData() })
     })
   })
 })
