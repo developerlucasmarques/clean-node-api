@@ -1,4 +1,4 @@
-import { Collection } from 'mongodb'
+import { Collection, ObjectId } from 'mongodb'
 import { AddSurveyData } from '@/domain/contracts'
 import { MongoHelper } from '../helpers/mongo-helper'
 import { SurveyMongoRepository } from './survey-mongo-repository'
@@ -79,6 +79,13 @@ describe('Survey Mongo Repository', () => {
       const id = surveyResult.insertedId.toHexString()
       const survey = await sut.loadById(id)
       expect(survey).toEqual({ id, ...makeFakeSurveyData() })
+    })
+
+    test('Should return null if survey not found', async () => {
+      const sut = makeSut()
+      const id = new ObjectId().toHexString()
+      const survey = await sut.loadById(id)
+      expect(survey).toBe(null)
     })
   })
 })
