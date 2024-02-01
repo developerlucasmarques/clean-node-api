@@ -1,7 +1,7 @@
 import { SaveSurveyResult, SaveSurveyResultData, SaveSurveyResultResponse } from '@/domain/contracts'
 import { SurveyResultModel } from '@/domain/models'
 import { HttpRequest, Validation } from '@/presentation/contracts'
-import { badRequest, serverError } from '@/presentation/helpers/http-helper'
+import { badRequest, ok, serverError } from '@/presentation/helpers/http-helper'
 import { SaveSurveyResultDataController } from '@/presentation/types'
 import { Either, left, right } from '@/shared/either'
 import MockDate from 'mockdate'
@@ -110,5 +110,11 @@ describe('SaveSurveyResult Controller', () => {
     })
     const httpResponse = await sut.handle(makeFakeRequest())
     expect(httpResponse).toEqual(serverError(new Error('any_message')))
+  })
+
+  test('Should return 200 on success', async () => {
+    const { sut } = makeSut()
+    const httpResponse = await sut.handle(makeFakeRequest())
+    expect(httpResponse).toEqual(ok(makeFakeSurveyResult()))
   })
 })
